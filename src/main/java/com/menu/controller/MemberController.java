@@ -24,7 +24,8 @@ public class MemberController {
 	MemberDAO memberDAO;
 	//test
 
-	final String path = "C:\\Users\\jihyun\\Desktop\\egov\\eGovFrameDev-3.6.0-64bit\\workspace\\InGeeFanClub\\src\\main\\webapp\\resources";
+	//final String path = "C:\\Users\\jihyun\\Desktop\\egov\\eGovFrameDev-3.6.0-64bit\\workspace\\InGeeFanClub\\src\\main\\webapp\\resources";
+	final String path = "C:\\Users\\뢰후니\\git\\Ingee\\src\\main\\webapp\\resources";
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login() {
