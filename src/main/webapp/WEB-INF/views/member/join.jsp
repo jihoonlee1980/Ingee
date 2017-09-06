@@ -33,15 +33,15 @@
 	
 	function idValidCheck(){
 		$.ajax({
-			url : "/check/id",
+			url : "/member/check/id",
 			type : "get",
 			data : {"id" : $("#id").val()},
 			dataType : "json",
 			success : function(data){
 				if(data.isValid){
-					alert("사용가능한 아이디 입니다.");
+					alert("You're almost done — just click the link below to verify your email address and you’re all set. Then, you can use your email address as your InGeefanclub username to log in to your account online.");
 				} else {
-					alert("이미 사용중인 아이디 입니다.");
+					alert($("#id").val() + " is in use by others");
 				}
 			},
 			statusCode : {

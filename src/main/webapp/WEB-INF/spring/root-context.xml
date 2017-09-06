@@ -24,6 +24,10 @@
 		<property name="dataSource" ref="mydataSource" />
 		<property name="configLocation" value="classpath:spring/SqlMapConfig.xml" />
 	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="mydataSource"/>
+	</bean>
 
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="smtp.gmail.com" />

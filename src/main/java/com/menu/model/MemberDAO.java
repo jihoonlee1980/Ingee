@@ -4,40 +4,14 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 
 public class MemberDAO extends SqlSessionDaoSupport {
 	public void insert(MemberDTO memberDTO) {
-		try {
-			getSqlSession().insert("inserMember", memberDTO);
-			getSqlSession().commit();
-		} catch (Exception e) {
-			// TODO: handle exception
-			getSqlSession().rollback();
-		} finally {
-			getSqlSession().close();
-		}
+		getSqlSession().insert("inserMember", memberDTO);
 	}
-	
-	public int checkMemberUsername(String username){
-		int count = -1;
-		try {
-			count = getSqlSession().selectOne("checkMemberUsername", username);
-			getSqlSession().commit();
-		} catch (Exception e) {
-			getSqlSession().rollback();
-		} finally {
-			getSqlSession().close();
-		}
-		return count;
+
+	public int checkMemberUsername(String username) {
+		return getSqlSession().selectOne("checkMemberUsername", username);
 	}
 
 	public int checkMemberFilename(String saved_filename) {
-		int count = -1;
-		try {
-			count = getSqlSession().selectOne("checkMemberFilename", saved_filename);
-			getSqlSession().commit();
-		} catch (Exception e) {
-			getSqlSession().rollback();
-		} finally {
-			getSqlSession().close();
-		}
-		return count;
+		return getSqlSession().selectOne("checkMemberFilename", saved_filename);
 	}
 }
