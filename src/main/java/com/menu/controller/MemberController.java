@@ -22,6 +22,7 @@ import com.menu.model.MemberDTO;
 public class MemberController {
 	@Autowired
 	MemberDAO memberDAO;
+	//test
 
 	final String path = "C:\\Users\\jihyun\\Desktop\\egov\\eGovFrameDev-3.6.0-64bit\\workspace\\InGeeFanClub\\src\\main\\webapp\\resources";
 
