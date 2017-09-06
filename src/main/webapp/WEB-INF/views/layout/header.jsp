@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
-<%@ page session="false" %>
+<%@ page session="true" %>
 <style>
 @media (max-width : 768px){
 	ul.nav>li {
@@ -26,7 +26,14 @@
 		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			    <nav>
 					<ul class="nav navbar-nav navbar-right">
-						<li class="current"><a href="/member/login">LOGIN</a></li>
+						<li>
+							<c:if test="${isLogin eq null }">
+								<a href="/member/login">LOGIN</a>
+							</c:if>
+							<c:if test="${isLogin ne null }">
+								<a href="/member/logout">LOGOUT</a>
+							</c:if>
+						</li>
 						<li><a href="/ingee">INGEE</a></li>
 						<li><a href="/board">NOTICE</a></li>
 						<li><a href="/photo">PHOTO</a></li>

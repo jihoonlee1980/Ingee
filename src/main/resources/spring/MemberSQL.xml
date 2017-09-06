@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com">
+	<select id="getMemberNum" parameterType="int" resultType="com.menu.model.MemberDTO">
+		select * from member where num = #{num}
+	</select>
+	<select id="getMemberID" parameterType="String" resultType="com.menu.model.MemberDTO">
+		select * from member where id = #{id}
+	</select>
 	<insert id="inserMember">
 		insert into member values(0, #{nick}, #{name}, #{id}, md5(#{pass}), #{zipcode}, #{state}, #{city}, #{detailed_address}, #{hp}, #{saved_filename}, #{origin_filename}, #{authority}, now())
 	</insert>
@@ -9,5 +15,8 @@
 	</select>
 	<select id="checkMemberUsername" parameterType="String" resultType="int">
 		select count(*) from member where id = #{id}
+	</select>
+	<select id="loginMember" parameterType="com.menu.model.MemberDTO" resultType="com.menu.model.MemberDTO">
+		select * from member where id = #{id} and pass = md5(#{pass})
 	</select>
 </mapper>

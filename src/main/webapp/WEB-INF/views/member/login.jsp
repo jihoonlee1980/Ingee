@@ -12,13 +12,8 @@
 	function loginCheck(){
 		var check = true;
 		
-		if($("#id").val() == ""){
-			alert("ID가 공백입니다.")
-			check = false;
-		}
-		
-		if($("#pass").val() == ""){
-			alert("비밀번호가 공백입니다.")
+		if($("#id").val() == "" || $("#pass").val() == ""){
+			alert("username or password is blank")
 			check = false;
 		}
 		
@@ -30,17 +25,16 @@
 		
 		return check;
 	}
-	
 
 	function findPass() {
 		swal({
-			title : "비밀번호 찾기",
+			title : "Forgot your password.",
 			text : "아이디를 입력해 주세요.\n회원가입시 등록한 이메일로 비밀번호가 발송됩니다.",
 			type : "input",
 			showCancelButton : true,
 			closeOnConfirm : false,
 			animation : "slide-from-top",
-			inputPlaceholder : "아이디"
+			inputPlaceholder : "username(email)"
 		}, function(inputValue) {
 			var idCheck = true;
 			var email;
@@ -49,12 +43,12 @@
 				return false;
 
 			if (inputValue === "") {
-				swal.showInputError("아이디를 써주세요!");
+				swal.showInputError("Please input your username(email)");
 				return false
 			}
 			
 			$.ajax({
-				url : "/sendmail",
+				url : "/initpass",
 				type : "get",
 				data : {"id" : inputValue},
 				dataType : "json",
@@ -65,10 +59,10 @@
 				},
 				statusCode : {
 					404 : function() {
-						alert("해당 데이터 존재X");
+						alert("No data.");
 					},
 					500 : function() {
-						alert("서버 혹은 문법적 오류");
+						alert("Server or grammatical error.");
 					}
 				}
 			});
@@ -85,32 +79,29 @@
  <c:if test="${not empty result }">
    	<c:if test="${result == 2 }">
    		<script type="text/javascript">
-   			swal({
-   				title : "일치하는 정보가 없습니다!",
-   				text : "ID나 비밀번호를 확인해 주세요.<br><a href='/join'>아직 회원이 아니시라면 지금 가입하세요!<a>",
-   				type : "error",
-   				html : true,
-   				confirmButtonText: "확인"
-   			});
+   			alert("일치하는 정보가 없습니다. id나 비밀번호를 확인해 주세요.");
    		</script>
    	</c:if>
 </c:if>
-<c:if test="${not empty result }">
-   	<c:if test="${result == 3 }">
-   		<script type="text/javascript">
-   			swal({
-   				title : "로그인 거부",
-   				text : "관리자에게 문의하세요.&nbsp\;<a href='mailto:seun80@hanmail.net'>메일 보내기</a>",
-   				type : "warning",
-   				confirmButtonText: "확인",
-   				html : true
-   			});
-   		</script>
-   	</c:if>
-</c:if>
-<div class="content-section-a" style="margin-top:200px; margin-bottom: 140px;">
+<div class="content-section-a" style="margin-bottom: 140px;">
 	<div class="container">
 		<div class="row" style="margin:0;">
+			<c:if test="${not empty result }">
+			   	<c:if test="${result == 2 }">
+			   		<div style="width: 80%; padding-top: 30px; margin-left: 10%; white-space: pre-line; word-break: break-all;">
+			   			<h1 style="font-weight: bold;">Welcome to InGee fanclub.com</h1>
+						<p>We welcome you to be a member of InGee Fan Club website where fans of In​Gee gather to share stories and photos and encourage her with our supports. It's a fun site full of In Gee's smiles and comments with room reserved for your participation. 
+			
+						Let’s thoroughly enjoy this fanclub website and root for InGee whenever and wherever she plays. Have fun!</p>
+			   		</div>			   		
+			   	</c:if>
+			   	<c:if test="${result != 2 }">
+			   		<div style="height: 150px"></div>
+			   	</c:if>
+			</c:if>
+			<c:if test="${empty result }">
+		   		<div style="height: 150px"></div>
+		   	</c:if>		   		
 		    <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-12">
 		        <h1 style="text-align: center" >Login</h3>
 		    </div>
@@ -118,20 +109,20 @@
 		    <hr class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-12" />
 		
 		    <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-12">
-		        <form class="" action="/login/proc" autocomplete="off" method="post" onsubmit="return loginCheck();">
+		        <form class="" action="/member/login/proc" autocomplete="off" method="post" onsubmit="return loginCheck();">
 		            <div class="input-group">
 		                <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
 		                <c:choose>
 		                	<c:when test="${not empty loginID }">
-		                		<input type="text" class="form-control" id="id" name="id" placeholder="E-mail" value="${loginID }" autofocus="autofocus">
+		                		<input type="email" class="form-control" id="id" name="id" placeholder="username(eamil address)" value="${loginID }" autofocus="autofocus">
 		                	</c:when>
 		                	<c:when test="${empty loginID}">
 		                		<c:choose>
 		                			<c:when test="${isSave eq 'YES' }">
-		                				<input type="text" class="form-control" id="id" name="id" placeholder="E-mail" value="${loggedInID }" autofocus="autofocus">		                				
+		                				<input type="email" class="form-control" id="id" name="id" placeholder="username(eamil address)" value="${loggedInID }" autofocus="autofocus">		                				
 		                			</c:when>
 		                			<c:otherwise>
-		                				<input type="text" class="form-control" id="id" name="id" placeholder="E-mail" autofocus="autofocus">
+		                				<input type="email" class="form-control" id="id" name="id" placeholder="username(eamil address)" autofocus="autofocus">
 		                			</c:otherwise>
 		                		</c:choose>
 		                	</c:when>
@@ -140,12 +131,14 @@
 		            <span class="help-block"></span>
 		            <div class="input-group">
 		                <span class="input-group-addon"><i class="fa fa-lock fa-fw"></i></span>
-		                <input type="password" id="pass" class="form-control" name="pass" placeholder="PASSWORD">
+		                <input type="password" id="pass" class="form-control" name="pass" placeholder="password">
 		            </div>
 		            <span class="help-block" style="padding-left: 2%; color: red;">
 		            	<c:if test="${not empty result }">
 		            		<c:if test="${result == 1 }">
-		            			비밀번호를 ${failCount }회 틀렸습니다.
+		            			<script type="text/javascript">
+		            				alert("id 또는 비밀번호 확인");
+		            			</script>
 		            		</c:if>
 		            	</c:if>
 		            </span>
