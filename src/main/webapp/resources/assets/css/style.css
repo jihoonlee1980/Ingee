@@ -1109,6 +1109,21 @@ a.socialIcon:hover, .socialHoverClass {
 	margin-bottom:30px;
 }
 
+.content h1 {
+	text-align: center;
+}
+.content .content-footer p {
+	color: #6d6d6d;
+    font-size: 12px;
+    text-align: center;
+}
+.content .content-footer p a {
+	color: inherit;
+	font-weight: bold;
+}
+
+
+
 
 /* ==== media screen queries ==== */
 

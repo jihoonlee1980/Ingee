@@ -33,8 +33,8 @@
 						<li><a href="/video">VIDEO</a></li>
 						<li><a href="/tour">TOUR</a></li>
 						<li><a href="/network">NETWORK</a></li>
-						<li><a href="/message">MESSAGE</a></li>
-						<li><a href="/chat">CHAT</a></li>
+						<li><a href="/message/">MESSAGE</a></li>
+						<li><a href="/chat/">CHAT</a></li>
 					</ul>
 				</nav>
 			</div><!-- /.navbar-collapse -->

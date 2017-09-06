@@ -20,13 +20,11 @@
     <link href="/assets/css/font-awesome.min.css?ver=3" rel="stylesheet" type="text/css">
 <!--     <script src="/assets/jquery-3.2.1.min.js"></script> -->
     <script src="/assets/js/bootstrap.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-    
-    <link rel="stylesheet" href="/assets/css/fancybox/jquery.fancybox.css">
-	<link href="/assets/css/bootstrap.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>    
+    <link rel="stylesheet" href="/assets/css/fancybox/jquery.fancybox.css">	
 	<link href="/assets/css/bootstrap-theme.css" rel="stylesheet" />
 	<link rel="stylesheet" href="/assets/css/slippry.css">
-	<link href="/assets/css/style.css" rel="stylesheet" />
+	<link href="/assets/css/style.css?ver=4" rel="stylesheet" />
 	<link rel="stylesheet" href="/assets/color/default.css">
 	<link rel="shortcut icon" href="/images/favicon.png">
 	<!-- =======================================================
