@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com">
+	<insert id="inserMember">
+		insert into member values(0, #{nick}, #{name}, #{id}, md5(#{pass}), #{zipcode}, #{state}, #{city}, #{detailed_address}, #{hp}, #{saved_filename}, #{origin_filename}, #{authority}, now())
+	</insert>
+	<select id="checkMemberFilename" parameterType="String" resultType="int">
+		select count(*) from member where saved_filename = #{saved_filename}
+	</select>
+	<select id="checkMemberUsername" parameterType="String" resultType="int">
+		select count(*) from member where id = #{id}
+	</select>
+</mapper>

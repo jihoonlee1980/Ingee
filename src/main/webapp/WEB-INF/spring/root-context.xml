@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<value>WEB-INF/db.properties</value>
+		</property>
+	</bean>
+	<context:annotation-config />
+
+	<bean id="mydataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${mydriver}" />
+		<property name="url" value="${myurl}" />
+		<property name="username" value="${myusername}" />
+		<property name="password" value="${mypassword}" />
+	</bean>
+
+	<bean id="mysqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="mydataSource" />
+		<property name="configLocation" value="classpath:spring/SqlMapConfig.xml" />
+	</bean>
+
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" />
+		<property name="username" value="sunnyfactory21@gmail.com" />
+		<property name="password" value="sunny9917042" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="mysqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="mysqlSessionFactory" />
+	</bean>
+	
+	<bean id="memberDAO" class="com.menu.model.MemberDAO">
+		<property name="sqlSessionTemplate" ref="mysqlSessionTemplate" />
+	</bean>
+</beans>
