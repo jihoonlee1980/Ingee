@@ -21,7 +21,7 @@
 	</bean>
 
 	<bean id="mysqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="mydataSource" />
+		<property name="dataSource" ref="mydataSource" />		
 		<property name="configLocation" value="classpath:spring/SqlMapConfig.xml" />
 	</bean>
 	
@@ -47,6 +47,10 @@
 	</bean>
 	
 	<bean id="memberDAO" class="com.menu.model.MemberDAO">
+		<property name="sqlSessionTemplate" ref="mysqlSessionTemplate" />
+	</bean>
+	
+	<bean id="messageDAO" class="com.menu.model.MessageDAO">
 		<property name="sqlSessionTemplate" ref="mysqlSessionTemplate" />
 	</bean>
 </beans>
