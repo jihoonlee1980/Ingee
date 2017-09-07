@@ -1,12 +1,15 @@
 package com.menu.controller;
 
+import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,15 +19,18 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.ingee.util.MailSender;
 import com.ingee.util.UploadFileWriter;
 import com.menu.model.MemberDAO;
 import com.menu.model.MemberDTO;
 
-@RequestMapping("/member")
 @Controller
+@RequestMapping("/member")
 public class MemberController {
 	@Autowired
 	MemberDAO memberDAO;
+	@Autowired
+	JavaMailSenderImpl mailSender;
 	// test
 
 //	final String path = "C:\\Users\\jihyun\\Desktop\\egov\\eGovFrameDev-3.6.0-64bit\\workspace\\InGeeFanClub\\src\\main\\webapp\\resources";
@@ -67,8 +73,20 @@ public class MemberController {
 		return map;
 	}
 
+	@RequestMapping(value = "/check/pass", method = RequestMethod.POST)
+	public @ResponseBody Map<String, Object> checkPss(@RequestParam(value = "num", required = true) int num,
+			@RequestParam(value = "pass", required = true) String pass) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("result", memberDAO.checkPass(num, pass.toLowerCase()));
+
+		ModelAndView modelAndView = new ModelAndView("jsonView", map);
+
+		return map;
+	}
+
 	@RequestMapping(value = "/join/proc", method = RequestMethod.POST)
-	public ModelAndView joinProc(MemberDTO memberDTO) {
+	public String joinProc(MemberDTO memberDTO, RedirectAttributes redirectAttributes) {
 		MultipartFile profile_file = memberDTO.getProfile_file();
 
 		if (!"".equals(profile_file.getOriginalFilename())) {
@@ -92,12 +110,9 @@ public class MemberController {
 
 		memberDAO.insert(memberDTO);
 
-		ModelAndView modelAndView = new ModelAndView();
+		redirectAttributes.addFlashAttribute("result", 2);
 
-		modelAndView.addObject("result", 2);
-		modelAndView.addObject("/1/member/login");
-
-		return modelAndView;
+		return "redirect:/member/login";
 	}
 
 	@RequestMapping(value = "/login/proc", method = RequestMethod.POST)
@@ -156,6 +171,217 @@ public class MemberController {
 		if (session.getAttribute("loginID") != null)
 			session.removeAttribute("loginID");
 
+		if (session.getAttribute("isAdmin") != null)
+			session.removeAttribute("isAdmin");
+
 		return "redirect:/";
+	}
+
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	public ModelAndView searchMembers(@RequestParam(value = "search_type", required = true) String search_type,
+			@RequestParam(value = "keyword", required = true) String keyword,
+			@RequestParam(value = "page", defaultValue = "1") int page,
+			@RequestParam(value = "sort", defaultValue = "name") String sort, HttpSession session) {
+		// String id = (String) session.getAttribute("loggedInID");
+		int perPage = 15;
+		int totalCount = memberDAO.getCount(search_type, keyword);
+		int perBlock = 5;
+		int totalPage = totalCount % perPage > 0 ? totalCount / perPage + 1 : totalCount / perPage;
+		int startPage;
+		int endPage;
+		List<MemberDTO> memberDTOs = memberDAO.searchList((page - 1) * perPage, perPage, sort, search_type, keyword);
+		ModelAndView modelAndView = new ModelAndView();
+
+		startPage = (page - 1) / perBlock * perBlock + 1;
+		endPage = startPage + perBlock - 1;
+
+		if (endPage > totalPage)
+			endPage = totalPage;
+
+		// MemberDTO memberDTO = memberDAO.get(id);
+		// modelAndView.addObject("loggedInAuthority",
+		// memberDTO.getAuthority());
+
+		modelAndView.addObject("currentPage", page);
+		modelAndView.addObject("totalCount", totalCount);
+		modelAndView.addObject("totalPage", totalPage);
+		modelAndView.addObject("startPage", startPage);
+		modelAndView.addObject("endPage", endPage);
+		modelAndView.addObject("memberList", memberDTOs);
+		modelAndView.setViewName("/1/member/admin");
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/admin")
+	public ModelAndView admin(@RequestParam(value = "page", defaultValue = "1") int page,
+			@RequestParam(value = "sort", defaultValue = "name") String sort, HttpSession session) {
+		// String id = (String) session.getAttribute("loggedInID");
+		int perPage = 20;
+		int totalCount = memberDAO.getCount();
+		int perBlock = 10;
+		int totalPage = totalCount % perPage > 0 ? totalCount / perPage + 1 : totalCount / perPage;
+		int startPage;
+		int endPage;
+		List<MemberDTO> memberDTOs = memberDAO.list((page - 1) * perPage, perPage, sort);
+		ModelAndView modelAndView = new ModelAndView();
+
+		startPage = (page - 1) / perBlock * perBlock + 1;
+		endPage = startPage + perBlock - 1;
+
+		if (endPage > totalPage)
+			endPage = totalPage;
+
+		// MemberDTO memberDTO = memberDAO.get(id);
+		// modelAndView.addObject("loggedInAuthority",
+		// memberDTO.getAuthority());
+
+		modelAndView.addObject("currentPage", page);
+		modelAndView.addObject("totalCount", totalCount);
+		modelAndView.addObject("totalPage", totalPage);
+		modelAndView.addObject("startPage", startPage);
+		modelAndView.addObject("endPage", endPage);
+		modelAndView.addObject("memberList", memberDTOs);
+		modelAndView.setViewName("/1/member/admin");
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/mypage")
+	public ModelAndView mypage(HttpSession session) {
+		ModelAndView modelAndView = new ModelAndView();
+		MemberDTO memberDTO = memberDAO.get((String) session.getAttribute("loggedInID"));
+
+		modelAndView.addObject("memberDTO", memberDTO);
+		modelAndView.setViewName("/1/member/mypage");
+
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public ModelAndView profileUpdate(MemberDTO memberDTO) {
+		MultipartFile profile_file = memberDTO.getProfile_file();
+
+		if (!"".equals(profile_file.getOriginalFilename())) {
+			String profilePath = path + "/profile";
+			File file = new File(profilePath + "/" + memberDAO.get(memberDTO.getNum()).getSaved_filename());
+
+			if (file != null)
+				file.delete();
+
+			String originFileName = profile_file.getOriginalFilename();
+			String extension = originFileName.substring(originFileName.lastIndexOf("."));
+			String savedFileName = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000
+					+ extension;
+
+			while (memberDAO.checkMemberFilename(savedFileName) > 0) {
+				savedFileName = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000;
+			}
+
+			memberDTO.setOrigin_filename(originFileName);
+			memberDTO.setSaved_filename(savedFileName);
+
+			UploadFileWriter uploadFileWriter = new UploadFileWriter();
+			uploadFileWriter.writeFile(profile_file, profilePath, savedFileName);
+		} else {
+			memberDTO.setSaved_filename(memberDAO.get(memberDTO.getNum()).getSaved_filename());
+			memberDTO.setOrigin_filename(memberDAO.get(memberDTO.getNum()).getOrigin_filename());
+		}
+
+		ModelAndView modelAndView = new ModelAndView();
+
+		memberDTO = memberDAO.update(memberDTO, "profile");
+		modelAndView.addObject("memberDTO", memberDTO);
+		modelAndView.setViewName("redirect:/member/mypage");
+
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/update/pass", method = RequestMethod.POST)
+	public ModelAndView updatePass(MemberDTO memberDTO, HttpSession session) {
+		ModelAndView modelAndView = new ModelAndView();
+
+		session.removeAttribute("isLogin");
+
+		if (!"YES".equals(session.getAttribute("isSave"))) {
+			session.removeAttribute("loggedInID");
+		}
+
+		memberDTO.setPass(memberDTO.getPass().toLowerCase());
+
+		memberDTO = memberDAO.update(memberDTO, "pass");
+		modelAndView.addObject("memberDTO", memberDTO);
+		modelAndView.setViewName("redirect:/member/mypage");
+
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public String deleteMember(@RequestParam(value = "num", required = true) int num,
+			@RequestParam(value = "id", required = true) String id, HttpSession session) {
+		// List<HashMap<String, Object>> list1 =
+		// commentDAO.getCommentCountOnDeleteMember(id);
+		// List<HashMap<String, Object>> list2 =
+		// commentDAO.getReplyCountOnDeleteMember(id);
+
+		// for (HashMap<String, Object> hashMap : list1) {
+		// Integer board_num = (Integer) hashMap.get("board_num");
+		// Long countValue = (Long) hashMap.get("count");
+		// erpBoardDAO.updateCommentCount(board_num, (-1) *
+		// countValue.intValue());
+		// }
+		//
+		// for (HashMap<String, Object> hashMap : list2) {
+		// Integer comment_num = (Integer) hashMap.get("comment_num");
+		// Long countValue = (Long) hashMap.get("count");
+		// commentDAO.updateReplyCount(comment_num.intValue(), (-1) *
+		// countValue.intValue());
+		// }
+
+		String profilePath = path + "/profile";
+		File file = new File(profilePath + "/" + memberDAO.get(id).getSaved_filename());
+
+		if (file.exists())
+			file.delete();
+
+		memberDAO.delete(num, id);
+
+		session.removeAttribute("isLogin");
+		session.removeAttribute("loggedInID");
+
+		return "redirect:/";
+	}
+
+	@RequestMapping(value = "/initpass")
+	public @ResponseBody Map<String, Object> sendMail(@RequestParam(value = "id", required = true) String id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		boolean isValid = true;
+
+		if (memberDAO.checkMemberUsername(id) > 0) {
+			isValid = false;
+
+			MemberDTO memberDTO = memberDAO.get(id);
+			MailSender mailController = new MailSender();
+			String receiver = memberDTO.getId();
+			String subject = "[InGee Fan Club]" + id + "님 비밀번호 찾기 메일입니다.";
+			String pass = UUID.randomUUID().toString().split("-")[0];
+			String content = "새로운 비밀번호를 발급해 드렸습니다.\n\n새로운 비밀번호는 " + pass + " 입니다.\n\n로그인후 비밀번호를 다시 변경해주세요.";
+
+			memberDTO.setPass(pass);
+			memberDAO.update(memberDTO, "pass");
+
+			map.put("email", memberDTO.getId());
+
+			try {
+				mailController.sendEmail(mailSender, subject, content, receiver);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				isValid = true;
+				e.printStackTrace();
+			}
+		}
+		map.put("isValid", isValid);
+
+		ModelAndView modelAndView = new ModelAndView("jsonView", map);
+
+		return map;
 	}
 }

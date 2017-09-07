@@ -7,6 +7,10 @@
 <%@ page session="true"%>
 <c:set var="root_" value="<%=request.getContextPath() %>" />
 <c:set var="root" value="${root_}/resources" />
+<script src="/assets/jquery-3.2.1.min.js"></script>
+<link href="${root }/css/sweetalert.css" rel="stylesheet">
+<script src="${root }/js/sweetalert-dev.js"></script>
+<script src="${root }/js/sweetalert.min.js"></script>
 <!-- Header -->
 <script type="text/javascript">
 	function loginCheck(){
@@ -29,7 +33,7 @@
 	function findPass() {
 		swal({
 			title : "Forgot your password.",
-			text : "아이디를 입력해 주세요.\n회원가입시 등록한 이메일로 비밀번호가 발송됩니다.",
+			text : "Please enter your username.\n The password will be sent shortly to the email you registered.",
 			type : "input",
 			showCancelButton : true,
 			closeOnConfirm : false,
@@ -48,7 +52,7 @@
 			}
 			
 			$.ajax({
-				url : "/initpass",
+				url : "/member/initpass",
 				type : "get",
 				data : {"id" : inputValue},
 				dataType : "json",
@@ -68,18 +72,18 @@
 			});
 			
 			if (idCheck){
-				swal.showInputError("아이디가 틀렸거나 메일 발송중 문제가 생겼습니다.");
+				swal.showInputError("The problem occurs due to a wrong username being used or an error in sending email.");
 				return false;
 			}
 			
-			swal("메일발송", email + "로\n메일이 발송되었습니다.", "success");
+			swal("", "An email is sent to " + email, "success");
 		});
 	}
 </script>
  <c:if test="${not empty result }">
-   	<c:if test="${result == 2 }">
+   	<c:if test="${result == 1 }">
    		<script type="text/javascript">
-   			alert("일치하는 정보가 없습니다. id나 비밀번호를 확인해 주세요.");
+   			alert("There is no matching information. Please check username or password.");
    		</script>
    	</c:if>
 </c:if>
@@ -133,15 +137,14 @@
 		                <span class="input-group-addon"><i class="fa fa-lock fa-fw"></i></span>
 		                <input type="password" id="pass" class="form-control" name="pass" placeholder="password">
 		            </div>
-		            <span class="help-block" style="padding-left: 2%; color: red;">
-		            	<c:if test="${not empty result }">
-		            		<c:if test="${result == 1 }">
-		            			<script type="text/javascript">
-		            				alert("id 또는 비밀번호 확인");
-		            			</script>
-		            		</c:if>
-		            	</c:if>
-		            </span>
+<!-- 		            <span class="help-block" style="padding-left: 2%; color: red;"> -->
+<%-- 		            	<c:if test="${not empty result }"> --%>
+<%-- 		            		<c:if test="${result == 1 }"> --%>
+<!-- 								Please check username or password. -->
+<%-- 		            		</c:if> --%>
+<%-- 		            	</c:if> --%>
+<!-- 		            </span> -->
+					<span class="help-block"></span>
 		            <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
 		            <input type="hidden" id="saveID" name="saveID">
 		        </form>
