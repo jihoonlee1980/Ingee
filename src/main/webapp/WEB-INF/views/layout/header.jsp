@@ -34,12 +34,22 @@
 								<a href="/member/logout">LOGOUT</a>
 							</c:if>
 						</li>
-						<li><a href="/ingee">INGEE</a></li>
-						<li><a href="/board">NOTICE</a></li>
-						<li><a href="/photo">PHOTO</a></li>
-						<li><a href="/video">VIDEO</a></li>
-						<li><a href="/tour">TOUR</a></li>
-						<li><a href="/network">NETWORK</a></li>
+						<c:if test="${isLogin ne null }">
+							<c:if test="${isAdmin ne null && isAdmin == 'YES'}">
+								<li>
+									<a href="/member/admin">ADMIN</a>
+								</li>
+							</c:if>
+							<li>
+								<a href="/member/mypage">MYPAGE</a>
+							</li>
+						</c:if>
+						<li><a href="/board/ingee/list">INGEE</a></li>
+						<li><a href="/board/notice/list">NOTICE</a></li>
+						<li><a href="/board/photo/list">PHOTO</a></li>
+						<li><a href="/board/video/list">VIDEO</a></li>
+						<li><a href="/board/tour/list">TOUR</a></li>
+						<li><a href="/board/network/list">NETWORK</a></li>
 						<li><a href="/message/">MESSAGE</a></li>
 						<li><a href="/chat/">CHAT</a></li>
 					</ul>

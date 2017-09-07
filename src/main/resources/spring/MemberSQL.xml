@@ -1,15 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com">
+	<select id="countMember" resultType="int">
+		select count(*) from member
+	</select>
+	<select id="countSearchMember" resultType="int" parameterType="HashMap">
+		select count(*) from member where
+		<choose>
+			<when test="search_type == 'id'">
+				id 
+			</when>
+			<when test="search_type == 'name'">
+				name 
+			</when>
+		</choose>
+		like CONCAT('%',#{keyword},'%')
+	</select>
 	<select id="getMemberNum" parameterType="int" resultType="com.menu.model.MemberDTO">
 		select * from member where num = #{num}
 	</select>
 	<select id="getMemberID" parameterType="String" resultType="com.menu.model.MemberDTO">
 		select * from member where id = #{id}
 	</select>
+	<select id="memberList" resultType="com.menu.model.MemberDTO">
+		select * from member order by
+		<choose>
+			<when test="sort == 'id'">
+				id
+			</when>
+			<when test="sort == 'name'">
+				name
+			</when>
+		</choose>
+		limit #{start}, #{perPage}
+	</select>
+	<select id="searchMemberList" resultType="com.menu.model.MemberDTO" parameterType="HashMap">
+		select * from member where
+		<choose>
+			<when test="search_type == 'id'">
+				id
+			</when>
+			<when test="search_type == 'name'">
+				name
+			</when>
+		</choose>
+		like CONCAT('%',#{keyword},'%')
+		order by
+		<choose>
+			<when test="sort == 'id'">
+				id
+			</when>
+			<when test="sort == 'name'">
+				name
+			</when>
+		</choose>
+		limit #{start}, #{perPage}
+	</select>
 	<insert id="inserMember">
 		insert into member values(0, #{nick}, #{name}, #{id}, md5(#{pass}), #{zipcode}, #{state}, #{city}, #{detailed_address}, #{hp}, #{saved_filename}, #{origin_filename}, #{authority}, now())
 	</insert>
+	<delete id="deleteMember" parameterType="int">
+		delete from member where num = #{num}
+	</delete>
+	<delete id="deleteWriterCascade">
+	</delete>
 	<select id="checkMemberFilename" parameterType="String" resultType="int">
 		select count(*) from member where saved_filename = #{saved_filename}
 	</select>
@@ -19,4 +73,13 @@
 	<select id="loginMember" parameterType="com.menu.model.MemberDTO" resultType="com.menu.model.MemberDTO">
 		select * from member where id = #{id} and pass = md5(#{pass})
 	</select>
+	<select id="checkPass" parameterType="HashMap" resultType="com.menu.model.MemberDTO">
+		select * from member where num = #{num} and pass = md5(#{pass})
+	</select>
+	<update id="updateProfile" parameterType="com.menu.model.MemberDTO">
+		update member set name = #{name}, nick = #{nick}, zipcode = #{zipcode}, city = #{city}, state = #{state}, detailed_address = #{detailed_address}, hp = #{hp}, saved_filename = #{saved_filename}, origin_filename = #{origin_filename} where num = #{num}
+	</update>
+	<update id="updatePass" parameterType="com.menu.model.MemberDTO">
+		update member set pass = md5(#{pass}) where num = #{num}
+	</update>
 </mapper>

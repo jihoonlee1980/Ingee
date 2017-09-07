@@ -110,7 +110,7 @@
 		<div class="row">
 			<div class="col-md-3">
 				<div class="team-box">
-					<a href="/network/west/list"> <img src="${root}/img/main/ingee.png" alt="" class="img-responsive" />
+					<a href="/board/network/west/list"> <img src="${root}/img/main/ingee.png" alt="" class="img-responsive" />
 						<div class="roles">
 							<h5>
 								<strong>West</strong>
@@ -121,7 +121,7 @@
 			</div>
 			<div class="col-md-3">
 				<div class="team-box">
-					<a href="/network/midwest/list"> <img src="${root}/img/main/ingee1.png" alt="" class="img-responsive" />
+					<a href="/board/network/midwest/list"> <img src="${root}/img/main/ingee1.png" alt="" class="img-responsive" />
 						<div class="roles">
 							<h5>
 								<strong>MidWest</strong>
@@ -132,7 +132,7 @@
 			</div>
 			<div class="col-md-3">
 				<div class="team-box">
-					<a href="/network/northeast/list"> <img src="${root}/img/main/ingee2.png" alt="" class="img-responsive" />
+					<a href="/board/network/northeast/list"> <img src="${root}/img/main/ingee2.png" alt="" class="img-responsive" />
 						<div class="roles">
 							<h5>
 								<strong>NorthEast</strong>
@@ -143,7 +143,7 @@
 			</div>
 			<div class="col-md-3">
 				<div class="team-box">
-					<a href="/network/south/list"> <img src="${root}/img/main/ingee3.png" alt="" class="img-responsive" />
+					<a href="/board/network/south/list"> <img src="${root}/img/main/ingee3.png" alt="" class="img-responsive" />
 						<div class="roles">
 							<h5>
 								<strong>South</strong>

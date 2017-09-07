@@ -49,4 +49,8 @@
 	<bean id="memberDAO" class="com.menu.model.MemberDAO">
 		<property name="sqlSessionTemplate" ref="mysqlSessionTemplate" />
 	</bean>
+	
+	<bean id="boardDAO" class="com.menu.model.BoardDAO">
+		<property name="sqlSessionTemplate" ref="mysqlSessionTemplate" />
+	</bean>
 </beans>

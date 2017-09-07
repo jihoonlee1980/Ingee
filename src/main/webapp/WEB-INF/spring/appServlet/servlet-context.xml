@@ -61,24 +61,29 @@
 		<beans:property name="contentType" value="text/html;charset=UTF-8" />
 	</beans:bean>
 
-<!-- 	<beans:bean id="adminInterceptor" class="com.erp.interceptor.AdminInterceptor" /> -->
-<!-- 	<beans:bean id="mypageInterceptor" class="com.erp.interceptor.MypageInterceptor" /> -->
+	<beans:bean id="adminInterceptor" class="com.ingee.interceptor.AdminInterceptor" />
+	<beans:bean id="loginInterceptor" class="com.ingee.interceptor.LoginInterceptor" />
+	<beans:bean id="ingeeInterceptor" class="com.ingee.interceptor.IngeeInterceptor" />
 
-<!-- 	<interceptors> -->
-<!-- 		<interceptor> -->
-<!-- 			<mapping path="/admin" /> -->
-<!-- 			<mapping path="/members/delete"/> -->
-<!-- 			<mapping path="/lock/update"/> -->
-<!-- 			<mapping path="/auth/update"/>			 -->
-<!-- 			<beans:ref bean="adminInterceptor" /> -->
-<!-- 		</interceptor> -->
-<!-- 	</interceptors> -->
+	<interceptors>
+		<interceptor>
+			<mapping path="/member/admin" />
+			<mapping path="/member/search" />
+			<beans:ref bean="adminInterceptor" />
+		</interceptor>
+	</interceptors>
 	
-<!-- 	<interceptors> -->
-<!-- 		<interceptor> -->
-<!-- 			<mapping path="/mypage" /> -->
-<!-- 			<beans:ref bean="mypageInterceptor" /> -->
-<!-- 		</interceptor> -->
-<!-- 	</interceptors> -->
+	<interceptors>
+		<interceptor>
+			<mapping path="/member/mypage" />
+			<mapping path="/member/update" />
+			<mapping path="/member/delete" />
+			<mapping path="/member/update/**" />
+			<mapping path="/comment/**"/>
+			<mapping path="/reply/**"/>
+			<exclude-mapping path="/reply/list"/>
+			<beans:ref bean="loginInterceptor" />
+		</interceptor>
+	</interceptors>
 
 </beans:beans>

@@ -8,6 +8,18 @@
 <script src="/assets/jquery-3.2.1.min.js"></script>
 <c:set var="root_" value="<%=request.getContextPath() %>" />
 <c:set var="root" value="${root_}/resources" />
+<style>
+@media(min-width : 768px){
+	div.input-group .join_text{
+		width: 40%;
+	}
+}
+@media(max-width : 768px){
+	div.input-group .zipcode{
+		width: 100%;
+	}
+}
+</style>
 <script type="text/javascript">
 	$(function(){
 		$("#zipcode_btn").click(function() {
@@ -23,7 +35,7 @@
 						$("input[name='state']").val(data.places[0].state);
 						$("input[name='city']").val(data.places[0]["place name"]);
 					} else if (client.status == 403 || client.status == 404){
-						alert("fail");
+						alert("Check your zip code.");
 					}
 				}
 			};
@@ -41,7 +53,7 @@
 		}
 		
 		if(!reg_email.test(id)){
-			alert("이메일형식이 아닙니다.");
+			alert("It’s not a valid email form.");
 			return;
 		}
 		
@@ -72,7 +84,7 @@
 	function submitCheck(){
 		var reg_id = /[a-zA-Z0-9]{8,16}$/g;
 		var reg_pass = /[a-zA-Z0-9]{8,20}$/g;
-		var reg_hp = /^((010-\d{4})|(01[1|6|7|8|9]-\d{3,4}))-\d{4}$/g;
+		var reg_hp = /\d{3}-\d{3}-\d{4}/g;
 		var check = true;
 		
 		if(!reg_pass.test($("#pass").val())){
@@ -81,17 +93,17 @@
 		}
 		
 		if($("#pass").val() != $("#checkPass").val()){
-			alert("비밀번호가 서로 다릅니다.");
+			alert("The password is not matching");
 			check = false;
 		}
 		
 		if(!reg_hp.test($("#hp").val().replace(" ",""))){
-			alert("Please check your mobile number.(ex.010-1234-1234)");
+			alert("Please check your mobile number.(ex.123-1234-1234)");
 			check = false;
 		}
 		
 		if(!$("#IDcheckBtn").is(":disabled")){
-			alert("아이디 중복체크를 해주세요.")
+			alert("Please check your username to avoid duplicate use.")
 			check = false;
 		}
 		
@@ -105,27 +117,30 @@
 			<div class="col-md-2"> </div>
 			<div class="col-md-8">
 				<h1>Sing up</h1>
-				<p class="lead">서비스 이용에는 로그인이 필요합니다.</p>
-				<p>회원가입을 위해 다음과 같은 항목들을 입력해주세요.</p> <br> 
+				<p class="lead">This service is requiring your login.</p>
+				<p>Please enter the following items for joining.</p> <br> 
 			        <!-- BEGIN DOWNLOAD PANEL -->
 				<div class="panel panel-default well">
 					<div class="panel-body">
 						<form action="/member/join/proc" class="form-horizontal track-event-form bv-form" method="post" enctype="multipart/form-data" onsubmit="return submitCheck();" autocomplete="off">
 							<div class="form-group">
-			              		<div class="col-sm-6">
+			              		<div class="col-sm-12">
 									<div class="input-group">
 										<div class="input-group-addon">
 											<i class="fa fa-user"></i>
 			                            </div>
-			                    			<input type="text" class="form-control" id="name" placeholder="name" name="name" required="required" autofocus="autofocus">
+		                    			<input type="text" class="form-control join_text" id="name" placeholder="name" name="name" required="required" autofocus="autofocus">
 			                    	</div>
 								</div>          
-								<div class="col-sm-6">
+							</div>
+							<div class="form-group">
+								<div class="col-sm-12">
 									<div class="input-group">
 										<div class="input-group-addon">
 											<i class="fa fa-briefcase"></i>
 			                            </div>
-			                            <input type="text" class="form-control" id="nick" placeholder="nick" name="nick" required="required">
+			                            <input type="text" class="form-control join_text" id="nick" placeholder="nick" name="nick" required="required">
+			                            <button type="button" id="IDcheckBtn" class="btn btn-success" onclick="nickValidCheck();">Verify</button>
 									</div>
 								</div>
 							</div>
@@ -135,7 +150,7 @@
 										<div class="input-group-addon">
 											<i class="fa fa-id-card"></i>
 										</div>
-										<input type="email" class="form-control" id="id" placeholder="username(email)" name="id" required="required" style="width:72.5%">
+										<input type="email" class="form-control join_text" id="id" placeholder="username(email)" name="id" required="required" style="width:72.5%">
 										<button type="button" id="IDcheckBtn" class="btn btn-success" onclick="idValidCheck();">Verify my email address</button>
 									</div>
 			                    </div>
@@ -183,11 +198,11 @@
 										<div class="input-group-addon">
 											<i class="fa fa-address-card-o"></i>
 										</div>
-										<input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="zipcode" style="width: 25%;">
-										<input type="button" class="btn btn-success form-control" id="zipcode_btn" value="Search" onclick="daumPostcode()" style="width: 10%">
-										<input type="text" class="form-control" id="city" placeholder="city" name="city" style="width: 20%;" required="required" readonly="readonly">
-										<input type="text" class="form-control" id="state" placeholder="state" name="state" style="width: 20%;" required="required" readonly="readonly">
-										<input type="text" class="form-control" id="detailed_address" placeholder="detailed_address" name="detailed_address" style="width: 100%;" required="required">
+										<input type="text" class="form-control zipcode" id="zipcode" name="zipcode" placeholder="zipcode" style="width: 25%;">
+										<input type="button" class="btn btn-success form-control zipcode" id="zipcode_btn" value="Search" onclick="daumPostcode()" style="width: 10%">
+										<input type="text" class="form-control zipcode" id="city" placeholder="city" name="city" style="width: 20%;" required="required" readonly="readonly">
+										<input type="text" class="form-control zipcode" id="state" placeholder="state" name="state" style="width: 20%;" required="required" readonly="readonly">
+										<input type="text" class="form-control zipcode" id="detailed_address" placeholder="detailed_address" name="detailed_address" style="width: 100%;" required="required">
 									</div>
 								</div>
 							</div>

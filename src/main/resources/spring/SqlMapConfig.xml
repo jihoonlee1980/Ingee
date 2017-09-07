@@ -4,5 +4,6 @@
 <configuration>
 	<mappers>
 		<mapper resource="spring/MemberSQL.xml" />
+		<mapper resource="spring/BoardSQL.xml" />
 	</mappers>
 </configuration>
