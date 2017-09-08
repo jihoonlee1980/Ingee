@@ -8,6 +8,7 @@
 <script src="/assets/jquery-3.2.1.min.js"></script>
 <c:set var="root_" value="<%=request.getContextPath() %>" />
 <c:set var="root" value="${root_}/resources" />
+<link href="/assets/css/bootstrap.css?ver=2" rel="stylesheet">
 <style>
 a.list-group-item {
     height:auto;
@@ -16,15 +17,14 @@ a.list-group-item {
 a.list-group-item.active small {
     color:#fff;
 }
-div.radio-inline input{
-	color: #555;
-	font-weight: 600;
+div.input-group{
+	width: 100% !important;
 }
 </style>
 <script type="text/javascript">
 	$(function(){
 		document.getElementById("list_div").oncontextmenu = function(e){
-			alert("우클릭은 제한되어 있습니다.");
+			alert("Right-click is restricted.");
 			return false;
 		}
 	});
@@ -38,12 +38,14 @@ div.radio-inline input{
 		        	<c:if test="${totalCount > 0 }">
 			        	<c:forEach items="${boardList}" var="boardDTO" varStatus="status">
 			        		<a href="/board/ingee/${boardDTO.num }?page=${currentPage}" class="list-group-item">
-			                	<div class="media col-md-3" style="margin-top: 2%">
-				                    <figure class="pull-left">
-			                        	<img class="media-object img-rounded img-responsive" src="${root}/board/${boardDTO.saved_filename}" alt="${boardDTO.subject}" style="max-height: 180px; max-width: 250px;">
-			                    	</figure>
-			                	</div>
-			                	<div class="col-md-6" style="margin-top: 2%">
+			        			<c:if test="${boardDTO.saved_filename != 'NO' }">
+				                	<div class="media col-md-3" style="margin-top: 2%">
+					                    <figure class="pull-left">
+				                        	<img class="media-object img-rounded img-responsive" src="${root}/board/${boardDTO.saved_filename}" alt="${boardDTO.subject}" style="max-height: 180px; max-width: 250px;">
+				                    	</figure>
+				                	</div>
+			                	</c:if>
+			                	<div class="col-md-${boardDTO.saved_filename != 'NO' ? 6 : 9}" style="margin-top: 2%">
 				                    <h4 class="list-group-item-heading"><span style="font-size: 10pt; font-weight: 600; color: #e69b0b"></span><c:out value="${boardDTO.subject}"/><span style="font-size: 10pt; font-weight: 600; color: red">&nbsp;&nbsp;&nbsp;[ ${boardDTO.comment_count } ]</span></h4>
 			                    	<hr style="width: 100%; height: 2px; background: #777; margin-top: 5px 5px;">
 			                    	 <p class="list-group-item-text" style="max-height: 70px; word-break: break-all; white-space: pre-line; overflow: hidden;"> <c:out value="${boardDTO.content}"/> </p>
@@ -82,63 +84,52 @@ div.radio-inline input{
 					</ul>
 				</div>
 				<c:if test="${not empty isLogin }">
+<%-- 					<c:if test="${isIngee ne null}"> --%>
 					<c:if test="${isAdmin ne null}">
 						<div align="right">
-							<a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#write" data-original-title>글쓰기</a>
+							<a class="btn btn-default btn-sm" data-toggle="modal" data-target="#write" data-original-title>write</a>
 						</div>
 					</c:if>
 				</c:if>
 			</div>
 		</div>
-			
 		<div class="modal fade" id="write" tabindex="-1" role="dialog" aria-labelledby="contactLabel" aria-hidden="true">
 			<div class="modal-dialog">
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-							<h4 class="panel-title" id="contactLabel"><span class="glyphicon glyphicon-info-sign"></span> 행사소식 글쓰기</h4>
-					</div>
-					<form action="/event/insert" method="post" enctype="multipart/form-data">
-						<div class="modal-body" style="padding: 5px;">
-							<div class="row">
-								<div class="col-lg-12 col-md-12 col-sm-12" style="padding-bottom: 10px;">
-									<input class="form-control" name="subject" placeholder="제     목" type="text" required="required" />
+				<div class="well well-sm">
+					<form class="form-horizontal" action="/board/ingee/insert" method="post" enctype="multipart/form-data">
+						<fieldset>
+							<legend class="text-center"><h1>In Gee Chun</h1></legend>
+							<div class="form-group">
+								<div class="input-group">
+									<label class="col-md-2 control-label">Subject</label>
+									<div class="col-md-9">
+										<input id="subject" name="subject" type="text" placeholder="subject" class="form-control" required="required">
+									</div>
 								</div>
 							</div>
-							<div class="row">
-								<div class="col-lg-12 col-md-12 col-sm-12" style="padding-left:20px; padding-bottom: 10px;">
-                                	<span style="color: #999">카테고리&nbsp;&nbsp;&nbsp;</span>
-                                	<div class="radio-inline">
-                                    	<input type="radio" name="category" value="알림" required="required">알림
-                                    </div>
-                                    <div class="radio-inline">
-                                    	<input type="radio" name="category" value="수상">수상
-                                    </div>
-                                    <div class="radio-inline">
-                                    	<input type="radio" name="category" value="신제품">신제품
-                                    </div>
-                                    <div class="radio-inline">
-                                    	<input type="radio" name="category" value="특허">특허
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12">
-                                    <textarea style="resize:vertical;" class="form-control" placeholder="내   용..." rows="6" name="content" required></textarea>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12">
-                                    <input class="form-control" name="attached_file" type="file">
-                                </div>
+							<div class="form-group">
+								<div class="input-group">
+									<label class="col-md-2 control-label">Content</label>
+									<div class="col-md-9">
+										<textarea class="form-control" rows="10" cols="" name="content" required="required" style="width: 100%;"></textarea>
+									</div>
+								</div>
 							</div>
-						</div>  
-						<div class="panel-footer" style="margin-bottom:-14px;">
-							<input type="hidden" name="writer" value="admin">
-                            <input type="submit" class="btn btn-success" value="OK"/>
-                            <input type="reset" class="btn btn-danger" value="Clear" />
-                            <button style="float: right;" type="button" class="btn btn-default btn-close" data-dismiss="modal">Close</button>
-						</div>
+							<div class="form-group">
+								<div class="input-group">
+									<label class="col-md-2 control-label">Image</label>
+									<div class="col-md-9">
+										<input type="file" class="form-control" name="upload_file" id="upload_file">
+									</div>
+								</div>
+							</div>
+							<div class="panel-footer">
+								<input type="hidden" name="writer" value="${loginNick }">
+	                            <input type="submit" class="btn btn-success" value="OK"/>
+	                            <input type="reset" class="btn btn-danger" value="Clear" />
+	                            <button style="float: right;" type="button" class="btn btn-default btn-close" data-dismiss="modal">Close</button>
+							</div>
+						</fieldset>
 					</form>
 				</div>
 			</div>

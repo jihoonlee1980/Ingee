@@ -6,5 +6,6 @@
 		<mapper resource="spring/MemberSQL.xml" />
 		<mapper resource="spring/BoardSQL.xml" />
 		<mapper resource="spring/MessageSQL.xml" />
+		<mapper resource="spring/CommentSQL.xml" />
 	</mappers>
 </configuration>

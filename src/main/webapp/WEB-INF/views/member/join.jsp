@@ -266,11 +266,11 @@
 										<div class="input-group-addon">
 											<i class="fa fa-address-card-o"></i>
 										</div>
-										<input type="text" class="form-control zipcode" id="zipcode" name="zipcode" placeholder="zipcode" style="width: 25%;">
-										<input type="button" class="btn btn-success form-control zipcode" id="zipcode_btn" value="Search" onclick="daumPostcode()" style="width: 10%">
+										<input type="text" class="form-control zipcode" id="detailed_address" placeholder="detailed_address" name="detailed_address" style="width: 100%;" required="required">
 										<input type="text" class="form-control zipcode" id="city" placeholder="city" name="city" style="width: 20%;" required="required" readonly="readonly">
 										<input type="text" class="form-control zipcode" id="state" placeholder="state" name="state" style="width: 20%;" required="required" readonly="readonly">
-										<input type="text" class="form-control zipcode" id="detailed_address" placeholder="detailed_address" name="detailed_address" style="width: 100%;" required="required">
+										<input type="text" class="form-control zipcode" id="zipcode" name="zipcode" placeholder="zipcode" style="width: 25%;">
+										<input type="button" class="btn btn-success form-control zipcode" id="zipcode_btn" value="Search" style="width: 10%">
 									</div>
 								</div>
 							</div>

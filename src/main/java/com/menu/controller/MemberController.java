@@ -175,9 +175,9 @@ public class MemberController {
 		// session.invalidate();
 		session.removeAttribute("isLogin");
 
-		if (!"YES".equals(session.getAttribute("isSave"))) {
+		if (!"YES".equals(session.getAttribute("isSave")))
 			session.removeAttribute("loggedInID");
-		}
+
 		if (session.getAttribute("loginID") != null)
 			session.removeAttribute("loginID");
 
@@ -270,8 +270,14 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public ModelAndView profileUpdate(MemberDTO memberDTO) {
+	public ModelAndView profileUpdate(MemberDTO memberDTO, HttpSession session) {
 		MultipartFile profile_file = memberDTO.getProfile_file();
+		MemberDTO currentDTO = memberDAO.get(memberDTO.getNum());
+
+		if (!currentDTO.getNick().equals(memberDTO.getNick())) {
+			memberDAO.updateNick(currentDTO.getNick(), memberDTO.getNick());
+			session.setAttribute("loginNick", memberDTO.getNick());
+		}
 
 		if (!"".equals(profile_file.getOriginalFilename())) {
 			String profilePath = path + "/profile";
@@ -314,9 +320,8 @@ public class MemberController {
 
 		session.removeAttribute("isLogin");
 
-		if (!"YES".equals(session.getAttribute("isSave"))) {
+		if (!"YES".equals(session.getAttribute("isSave")))
 			session.removeAttribute("loggedInID");
-		}
 
 		if (session.getAttribute("loginID") != null)
 			session.removeAttribute("loginID");
@@ -383,9 +388,10 @@ public class MemberController {
 			MemberDTO memberDTO = memberDAO.get(id);
 			MailSender mailController = new MailSender();
 			String receiver = memberDTO.getId();
-			String subject = "[InGee Fan Club]" + id + "님 비밀번호 찾기 메일입니다.";
+			String subject = "[InGee Fan Club]" + id + ", this is a password search email.";
 			String pass = UUID.randomUUID().toString().split("-")[0];
-			String content = "새로운 비밀번호를 발급해 드렸습니다.\n\n새로운 비밀번호는 " + pass + " 입니다.\n\n로그인후 비밀번호를 다시 변경해주세요.";
+			String content = "We have just issued a new password.\n\nNew password is " + pass
+					+ ".\n\nAfter login, please change your password.";
 
 			try {
 				mailController.sendEmail(mailSender, subject, content, receiver);

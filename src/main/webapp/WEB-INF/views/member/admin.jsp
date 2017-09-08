@@ -8,6 +8,7 @@
 <script src="/assets/jquery-3.2.1.min.js"></script>
 <c:set var="root_" value="<%=request.getContextPath() %>" />
 <c:set var="root" value="${root_}/resources" />
+<link href="/assets/css/bootstrap.css?ver=2" rel="stylesheet">
 <script type="text/javascript">
 	$(function(){
 		$('.search-panel .dropdown-menu').find('a').click(function(e) {
@@ -26,15 +27,16 @@
 <!-- Header -->
 <style>
 table.admin {
-	margin-top: 20px;
+	margin-top: 30px;
 	font-size: 10.5pt;
 	border: 1px solid #e3e3e3;
     border-radius: 4px;
     box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
 }
 
-table caption {
+table.admin caption {
 	text-align: left;
+	margin-bottom: 10px;
 }
 
 table.admin thead tr th{

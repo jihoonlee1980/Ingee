@@ -32,7 +32,7 @@
 				name
 			</when>
 		</choose>
-		limit #{start}, #{perPage}
+		limit #{start}, #{perPage};
 	</select>
 	<select id="searchMemberList" resultType="com.menu.model.MemberDTO" parameterType="HashMap">
 		select * from member where
@@ -64,12 +64,6 @@
 	</delete>
 	<delete id="deleteWriterCascade">
 	</delete>
-<!-- 	<select id="checkMemberFilename" parameterType="String" resultType="int"> -->
-<!-- 		select count(*) from member where saved_filename = #{saved_filename} -->
-<!-- 	</select> -->
-<!-- 	<select id="checkMemberUsername" parameterType="String" resultType="int"> -->
-<!-- 		select count(*) from member where id = #{id} -->
-<!-- 	</select> -->
 	<select id="loginMember" parameterType="com.menu.model.MemberDTO" resultType="com.menu.model.MemberDTO">
 		select * from member where id = #{id} and pass = md5(#{pass})
 	</select>
@@ -78,6 +72,9 @@
 	</select>
 	<update id="updateProfile" parameterType="com.menu.model.MemberDTO">
 		update member set name = #{name}, nick = #{nick}, zipcode = #{zipcode}, city = #{city}, state = #{state}, detailed_address = #{detailed_address}, hp = #{hp}, saved_filename = #{saved_filename}, origin_filename = #{origin_filename} where num = #{num}
+	</update>
+	<update id="updateNickCascade" parameterType="HashMap">
+		update board set writer = #{new_nick} where writer = #{current_nick}
 	</update>
 	<update id="updatePass" parameterType="com.menu.model.MemberDTO">
 		update member set pass = md5(#{pass}) where num = #{num}

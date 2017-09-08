@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 public class MemberDAO extends SqlSessionDaoSupport {
 	public int getCount() {
 		return getSqlSession().selectOne("countMember");
@@ -54,6 +56,15 @@ public class MemberDAO extends SqlSessionDaoSupport {
 		return getSqlSession().selectOne("getMemberID", id);
 	}
 
+	public void updateNick(String current_nick, String new_nick){
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("current_nick", current_nick);
+		map.put("new_nick", new_nick);
+		
+		getSqlSession().update("updateNickCascade", map);
+	}
+
 	public MemberDTO update(MemberDTO memberDTO, String type) {
 		if ("profile".equals(type))
 			getSqlSession().update("updateProfile", memberDTO);
@@ -67,14 +78,6 @@ public class MemberDAO extends SqlSessionDaoSupport {
 		// getSqlSession().delete("deleteWriterCascade", id);
 		getSqlSession().delete("deleteMember", num);
 	}
-
-//	public int checkMemberUsername(String username) {
-//		return getSqlSession().selectOne("checkMemberUsername", username);
-//	}
-//
-//	public int checkMemberFilename(String saved_filename) {
-//		return getSqlSession().selectOne("checkMemberFilename", saved_filename);
-//	}
 
 	public MemberDTO login(MemberDTO memberDTO) {
 		return getSqlSession().selectOne("loginMember", memberDTO);

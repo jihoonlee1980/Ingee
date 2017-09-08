@@ -18,8 +18,20 @@ public class BoardDAO extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("boardList", map);
 	}
 
+	public void insert(BoardDTO boardDTO) {
+		getSqlSession().insert("insertBoard", boardDTO);
+	}
+
 	public BoardDTO get(int board_num) {
 		return getSqlSession().selectOne("getBoard", board_num);
+	}
+
+	public void update(BoardDTO boardDTO) {
+		getSqlSession().delete("updateBoard", boardDTO);
+	}
+
+	public void delete(int board_num) {
+		getSqlSession().delete("deleteBoard", board_num);
 	}
 
 	public int getCount(String b_category, String s_category) {
@@ -34,5 +46,14 @@ public class BoardDAO extends SqlSessionDaoSupport {
 	public BoardDTO updateReadCount(int board_num) {
 		getSqlSession().update("updateReadCount", board_num);
 		return getSqlSession().selectOne("getBoard", board_num);
+	}
+
+	public boolean find(String column, Object value) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("column", column);
+		map.put("value", value);
+
+		return getSqlSession().selectOne("findBoard", map) != null;
 	}
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com">
 	<insert id="insertBoard" parameterType="com.menu.model.BoardDTO">
-		insert into board values(0, #{writer}, #{b_category}, #{s_category}, #{subject}, #{subject}, #{content}, 0, 0, #{origin_filename}, #{saved_filename}, now())
+		insert into board values(0, #{writer}, #{b_category}, #{s_category}, #{subject}, #{content}, 0, 0, #{origin_filename}, #{saved_filename}, now())
 	</insert>
 	<select id="boardCount" parameterType="HashMap" resultType="int">
 		select count(*) from board where b_category = #{b_category} and s_category = #{s_category}
@@ -16,4 +16,16 @@
 	<update id="updateReadCount" parameterType="int">
 		update board set readcount = readcount + 1 where num = #{num}
 	</update>
+	<select id="findBoard" parameterType="HashMap" resultType="com.menu.model.MemberDAO">
+		select * from board where ${column} = #{value}
+	</select>
+	<update id="updateBoard">
+		update board set subject = #{subject}, content = #{content}, origin_filename = #{origin_filename}, saved_filename = #{saved_filename} where num = #{num}
+	</update>
+	<update id="updateCommentCount">
+		update board set comment_count = (select count(*) from comment where board_num = #{board_num} and comment_num = 0)
+	</update>
+	<delete id="deleteBoard" parameterType="int">
+		delete from board where num = #{board_num}
+	</delete>
 </mapper>

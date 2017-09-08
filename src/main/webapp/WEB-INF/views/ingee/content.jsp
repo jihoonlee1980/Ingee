@@ -6,6 +6,10 @@
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
 <%@ page session="true"%>
 <script src="/assets/jquery-3.2.1.min.js"></script>
+<link href="${root }/css/sweetalert.css" rel="stylesheet">
+<script src="${root }/js/sweetalert-dev.js"></script>
+<script src="${root }/js/sweetalert.min.js"></script>
+<link href="/assets/css/bootstrap.css?ver=2" rel="stylesheet">
 <c:set var="root_" value="<%=request.getContextPath() %>" />
 <c:set var="root" value="${root_}/resources" />
 <style>
@@ -40,11 +44,14 @@
 	display : inline !important;
 }
 
+div.input-group{
+	width: 100% !important;
+}
 </style>
 <script type="text/javascript">
 	$(function(){
 		document.getElementById("content_img_div").oncontextmenu = function(e){
-			swal("", "우클릭은 제한되어 있습니다.", "warning", "확인");
+			alert("Right-click is restricted.");
 			return false;
 		}
 		
@@ -66,16 +73,16 @@
 				var html = "<textarea rows='4' cols='' style='width: 100%'>";
 				html += current_content;
 				html += "</textarea>";
-				html += "<div style='width: 100%' align='right'><button type='button' class='btn btn-sm btn-success updateBtn'>수정</button><button type='button' class='btn btn-sm btn-default updateCancel'>취소</button></div>";
+				html += "<div style='width: 100%' align='right'><button type='button' class='btn btn-sm btn-success updateBtn'>edit</button><button type='button' class='btn btn-sm btn-default updateCancel'>cancel</button></div>";
 				$(document).on("click", ".updateBtn", function(){
 					var update_btn = $(this);
 					swal({
-						title : "댓글을 수정 하시겠습니까?",
+						title : "Are you sure you want to edit the comment?",
 						type : "warning",
 						showCancelButton : true,
 						confirmButtonColor : "#DD6B55",
-						confirmButtonText : "네",
-						cancelButtonText : "아니요",
+						confirmButtonText : "YES",
+						cancelButtonText : "NO",
 						closeOnConfirm : false,
 						closeOnCancel : false
 					}, function(isConfirm) {
@@ -83,7 +90,7 @@
 							var new_content = update_btn.parents().siblings("textarea").val();
 							location.href = "/comment/update?num=" + num + "&content=" + new_content + "&board_num=" + board_num + "&page=" + page + "&type=ingee";
 						} else {
-							swal("취소", "댓글 수정을 취소하였습니다.", "error");
+							swal("Cancel", "The editing the comment is cancelled.", "error");
 						}
 					});
 				});
@@ -100,7 +107,7 @@
 		});
 	});
 	
-	function showComment(obj, perPage, perBlock, totalPage){
+	function commnetPagination(obj, perPage, perBlock, totalPage){
 		var liLength = $("#comments-list li").length;
 		$(obj).siblings().removeClass("active");
 		$(obj).addClass("active");
@@ -132,55 +139,55 @@
 		$("#comment-pagination>li").slice(startIndex, endIndex).addClass("show")
 	}
 	
-	function updateModal(num){
-		$.ajax({
-			url : "/event/update/preproc",
-			type : "get",
-			data : {"num" : num},
-			dataType : "json",
-			success : function(data){
-				var subject = data.boardDTO.subject;
-				var content = data.boardDTO.content;
-				var category = data.boardDTO.category;
+// 	function updateModal(num){
+// 		$.ajax({
+// 			url : "/board/ingee/update/preproc",
+// 			type : "get",
+// 			data : {"num" : num},
+// 			dataType : "json",
+// 			success : function(data){
+// 				var subject = data.boardDTO.subject;
+// 				var content = data.boardDTO.content;
+// 				var category = data.boardDTO.category;
 
-				$("#update_subject").val(subject);
-				$("#update_content").val(content);
+// 				$("#update_subject").val(subject);
+// 				$("#update_content").val(content);
 
-				$("input[name='category']").each(function() {
-					if ($(this).val() == category)
-						$(this).prop("checked", true)
-				});
+// 				$("input[name='category']").each(function() {
+// 					if ($(this).val() == category)
+// 						$(this).prop("checked", true)
+// 				});
 				
-			},
-			statusCode : {
-				404 : function() {
-					alert("해당 데이터 존재X");
-				},
-				500 : function() {
-					alert("서버 혹은 문법적 오류");
-				}
-			}
-		});
-	}
+// 			},
+// 			statusCode : {
+// 				404 : function() {
+// 					alert("No data.");
+// 				},
+// 				500 : function() {
+// 					alert("Server or grammatical error.");
+// 				}
+// 			}
+// 		});
+// 	}
 	
 	function deleteCehck(num, page) {
 		swal({
-			title : "게시글을 지우시겠습니까?",
-			text : "삭제된 글은 복구가 불가능합니다.",
+			title : "Are you sure you want to delete the bulletin?",
+			text : "The the bulletin deleted cannot be recovered.",
 			type : "warning",
 			showCancelButton : true,
 			confirmButtonColor : "#DD6B55",
-			confirmButtonText : "네",
-			cancelButtonText : "아니요",
+			confirmButtonText : "YES",
+			cancelButtonText : "NO",
 			closeOnConfirm : false,
 			closeOnCancel : false,
 			allowOutsideClick: true
 		}, function(isConfirm) {
 			if (isConfirm) {
-				swal("삭제 완료", "해당 게시글이 삭제되었습니다.", "success");
-				location.href = "/event/delete?num=" + num + "&page=" + page;
+				swal("Complete", "The bulletin is deleted", "success");
+				location.href = "/board/ingee/delete?num=" + num + "&page=" + page;
 			} else {
-				swal("취소", "게시글 삭제를 취소하였습니다.", "error");
+				swal("Cancel", "The editing the bulletin is cancelled.", "error");
 			}
 		});
 	}
@@ -204,14 +211,14 @@
 				html += "<img src='${root }/profile/" + loggedInProfile + "' alt=''>";
 				html += "</div>";
 				html += "<div class='reply-textarea'>";
-				html += "<textarea rows='3' style='width: 100%;' name='content' required='required' placeholder='깨끗한 댓글 문화를 만들어갑시다.'></textarea>";
+				html += "<textarea rows='3' style='width: 100%;' name='content' required='required' placeholder='  As we all fans of gorgeous InGee, let's encourage all together while keeping netiquette.'></textarea>";
 				html += "</div>";
 				html += "<div style='background: #fff;' align='right'>";
 				html += "<input type='hidden' name='board_num' value='" + board_num + "'>";
 				html += "<input type='hidden' name='comment_num' value='" + comment_num + "'>";
 				html += "<input type='hidden' name='writer' value='" + loggedInID + "'>";
 				html += "<input type='hidden' name='page' value='" + page + "'>";
-				html += "<button type='submit' class='btn btn-default btn-sm'>입력</button>";
+				html += "<button type='submit' class='btn btn-default btn-sm'>input</button>";
 				html += "</div>";
 				html += "</form>";
 				html += "</li>";
@@ -253,10 +260,10 @@
 				},
 				statusCode : {
 					404 : function() {
-						alert("해당 데이터 존재X");
+						alert("No data.");
 					},
 					500 : function() {
-						alert("서버 혹은 문법적 오류");
+						alert("Server or grammatical error.");
 					}
 				}
 			});
@@ -303,17 +310,17 @@
 			var html = "<textarea rows='4' cols='' style='width: 100%'>";
 			html += current_content;
 			html += "</textarea>";
-			html += "<div style='width: 100%' align='right'><button type='button' class='btn btn-sm btn-success' id='updateBtn" + num + "'>수정</button><button type='button' class='btn btn-sm btn-default' id='updateCancel" + num + "''>취소</button></div>";
+			html += "<div style='width: 100%' align='right'><button type='button' class='btn btn-sm btn-success' id='updateBtn" + num + "'>edit</button><button type='button' class='btn btn-sm btn-default' id='updateCancel" + num + "''>cancel</button></div>";
 			
 			$(document).on("click", "#updateBtn" + num, function(){
 				var update_btn = $(this);
 				swal({
-					title : "댓글을 수정 하시겠습니까?",
+					title : "Are you sure you want to edit the comment?",
 					type : "warning",
 					showCancelButton : true,
 					confirmButtonColor : "#DD6B55",
-					confirmButtonText : "네",
-					cancelButtonText : "아니요",
+					confirmButtonText : "YES",
+					cancelButtonText : "NO",
 					closeOnConfirm : false,
 					closeOnCancel : false
 				}, function(isConfirm) {
@@ -321,7 +328,7 @@
 						var new_content = update_btn.parents().siblings("textarea").val();
 						location.href = "/comment/update?num=" + num + "&content=" + new_content + "&board_num=" + board_num + "&page=" + page + "&type=event";
 					} else {
-						swal("취소", "댓글 수정을 취소하였습니다.", "error");
+						swal("Cancel", "The editing the comment is cancelled.", "error");
 					}
 				});
 			});
@@ -339,44 +346,44 @@
 	
 	function deleteComment(num, board_num, page) {
 		swal({
-			title : "댓글을 지우시겠습니까?",
-			text : "삭제된 글은 복구가 불가능합니다.",
+			title : "Are you sure you want to delete the comment?",
+			text : "The comment deleted cannot be recovered.",
 			type : "warning",
 			showCancelButton : true,
 			confirmButtonColor : "#DD6B55",
-			confirmButtonText : "네",
-			cancelButtonText : "아니요",
+			confirmButtonText : "YES",
+			cancelButtonText : "NO",
 			closeOnConfirm : false,
 			closeOnCancel : false,
 			allowOutsideClick: true
 		}, function(isConfirm) {
 			if (isConfirm) {
-				swal("삭제 완료", "해당 댓글이 삭제되었습니다.", "success");
+				swal("Complete", "The comment is deleted.", "success");
 				location.href = "/comment/delete?num=" + num + "&board_num=" + board_num + "&page=" + page;
 			} else {
-				swal("취소", "댓글 삭제를 취소하였습니다.", "error");
+				swal("Cancel", "The deleting the comment is cancelled.", "error");
 			}
 		});
 	}
 	
 	function deleteReply(obj) {
 		swal({
-			title : "댓글을 지우시겠습니까?",
-			text : "삭제된 글은 복구가 불가능합니다.",
+			title : "Are you sure you want to delete the comment?",
+			text : "The comment deleted cannot be recovered.",
 			type : "warning",
 			showCancelButton : true,
 			confirmButtonColor : "#DD6B55",
-			confirmButtonText : "네",
-			cancelButtonText : "아니요",
+			confirmButtonText : "YES",
+			cancelButtonText : "NO",
 			closeOnConfirm : false,
 			closeOnCancel : false,
 			allowOutsideClick: true
 		}, function(isConfirm) {
 			if (isConfirm) {
-				swal("삭제 완료", "해당 댓글이 삭제되었습니다.", "success");
+				swal("Complete", "The comment is deleted.", "success");
 				location.href = "/reply/delete?num=" + $(obj).attr("num") + "&board_num=" + $(obj).attr("board_num")  + "&comment_num=" + $(obj).attr("comment_num") + "&page=" + $(obj).attr("page");
 			} else {
-				swal("취소", "댓글 삭제를 취소하였습니다.", "error");
+				swal("Cancel", "The deleting the comment is cancelled.", "error");
 			}
 		});
 	}
@@ -401,18 +408,20 @@
 					</p>
 	            </div>
 	            <hr style="height: 2px; background: #777; width: 100%;">
-				<div class="content-div" style="width: 30%;" id="content_img_div">
-                   	<img src="${root }/board/${boardDTO.saved_filename}" width="100%">
-                   	<div class="content-div" style="width: 100%; text-align: center;">
-						<c:if test="${not empty isLogin}">
-							<a href="/board/ingee/download?file=${boardDTO.saved_filename }">download : ${boardDTO.origin_filename }</a>
-						</c:if>
-						<c:if test="${empty isLogin }">
-							<span>download : ${boardDTO.origin_filename }</span>
-						</c:if>
+	            <c:if test="${boardDTO.saved_filename != 'NO' }">	            
+					<div class="content-div" style="width: 30%;" id="content_img_div">
+	                   	<img src="${root }/board/${boardDTO.saved_filename}" width="100%">
+	                   	<div class="content-div" style="width: 100%; text-align: center;">
+							<c:if test="${not empty isLogin}">
+								<a href="/board/ingee/download?file=${boardDTO.saved_filename }" style="font-size: 8pt;">download : ${boardDTO.origin_filename }</a>
+							</c:if>
+							<c:if test="${empty isLogin }">
+								<span style="font-size: 8pt;">download : ${boardDTO.origin_filename }</span>
+							</c:if>
+						</div>
 					</div>
-				</div>
-				<div class="content-div" style="width: 70%;">
+				</c:if>
+				<div class="content-div" style="width: ${boardDTO.saved_filename != 'NO' ? '70%' : '100%'};">
 					<p style="margin-left: 20px; word-break: break-all; white-space: pre-line;">
 						${boardDTO.content }
 					</p>
@@ -420,26 +429,27 @@
 				<div class="row" style="margin: 0 auto; width: 100%; display: inline-block;">
 					<div class="content-div" style="width: 100%; text-align: right;">
 						<c:if test="${loginNick eq boardDTO.writer}">
-						    <a class="btn btn-warning btn-responsive btn-sm" id="updateModal" data-toggle="modal" data-target="#update" onClick="javascript:updateModal('${param.num}');">modify</a>
-		       				<a class="btn btn-danger btn-responsive btn-sm" onclick="deleteCehck('${param.num}','${param.page }');">delete</a>
+						    <a class="btn btn-warning btn-responsive btn-sm" data-toggle="modal" data-target="#update" data-original-title>modify</a>
+		       				<a class="btn btn-danger btn-responsive btn-sm" onclick="deleteCehck('${boardDTO.num}','${param.page }');">delete</a>
 	       				</c:if>
 	       				<a class="btn btn-default btn-responsive btn-sm" href="/board/ingee/list?page=${param.page }">list</a>
        				</div>
        				<div class="row" style="margin-top:65px; padding-left: 5px;">
        					<div id="comment" style="width: 100%; height: 0px;"></div>
 						<c:if test="${isLogin ne null }">
-							<form action="/comment/insert" class="comment-input" method="get">
+							<form action="/comment/ingee/insert" class="comment-input" method="get">
 								<div class="comment-input-avatar">
 									<img src="${root }/profile/${loggedInProfile}" alt="">
 								</div>
 								<div class="comment-textarea">
-									<textarea rows="4" style="width: 100%;" name="content" required="required" placeholder="깨끗한 댓글 문화를 만들어 갑시다."></textarea>
+									<textarea rows="4" style="width: 100%;" name="content" required="required" placeholder="  As we all fans of gorgeous InGee, let's encourage all together while keeping netiquette."></textarea>
 								</div>
 								<div style="background: #fff;" align="right">
-									<input type="hidden" name="board_num" value="${param.num }">
-									<input type="hidden" name="writer" value="${loggedInID }">
+									<input type="hidden" name="board_num" value="${boardDTO.num }">
+									<input type="hidden" name="comment_num" value="0">
+									<input type="hidden" name="writer" value="${loginNick }">
 									<input type="hidden" name="page" value="${param.page }">
-									<button type="submit" class="btn btn-default btn-sm">입력</button>
+									<button type="submit" class="btn btn-default btn-sm">input</button>
 								</div>
 							</form>
 						</c:if>
@@ -456,7 +466,7 @@
 						
 						<c:if test="${totalComment > 0}">
 							<div class="comments-container">
-								<h5 style="margin-left: 5px;">댓글 [ ${totalComment } ]</h5>
+								<h5 style="margin-left: 5px;">Comments: [ ${totalComment } ]</h5>
 								<ul class="comments-list" id="comments-list">
 									<c:forEach var="commentDTO" items="${commentList }" varStatus="status">
 										<li class="${status.index < perPage ? 'active' : '' }">
@@ -467,7 +477,7 @@
 														<h6 class="comment-name ${boardDTO.writer == commentDTO.writer ? 'by-author' : '' }">${commentDTO.writer }</h6>
 														<span class="span-date"><fmt:formatDate value="${commentDTO.writetime }" pattern="yy.MM.dd HH:mm"/></span>
 														<i class="fa fa-reply" onclick="getReply(this, '${param.num }', '${commentDTO.num}', '${isLogin }', '${loggedInID }', '${loggedInProfile }','${param.page }')">[${commentDTO.reply_count }]</i>
-														<c:if test="${loggedInID == commentDTO.writer || loggedInID == 'admin'}">
+														<c:if test="${loggedInID == commentDTO.writer || commentDTO.authority >= 5}">
 															<i class="fa fa-trash" onclick="deleteComment(${commentDTO.num}, ${param.num }, ${param.page })"></i>
 														</c:if>
 														<c:if test="${loggedInID == commentDTO.writer }">
@@ -485,7 +495,7 @@
 								<div style="width:100%;" align="center">
 									<ul class="pagination" id="comment-pagination">
 										<c:forEach begin="${startPage}" end="${totalPage}" var="page">
-											<li class="${page eq startPage ? 'active ' : '' } ${page <= perBlock ? 'show' : ''}" onclick="showComment(this, ${perPage }, ${perBlock }, ${totalPage })">						
+											<li class="${page eq startPage ? 'active ' : '' } ${page <= perBlock ? 'show' : ''}" onclick="commnetPagination(this, ${perPage }, ${perBlock }, ${totalPage })">						
 												<a href="#comment"><c:out value="${page}"/></a>
 											</li>
 										</c:forEach>
@@ -497,63 +507,48 @@
 				</div>
 	        </div>
 		</div>
-	</div> <!--  container end -->
-</div>
-
-<div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="contactLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                      <h4 class="panel-title" id="contactLabel"><span class="glyphicon glyphicon-info-sign"></span> 행사소식 수정</h4>
-                  </div>
-                  <form action="/board/ingee/update" method="post" enctype="multipart/form-data">
-					<div class="modal-body" style="padding: 5px;">
-						<div class="row">
-                              <div class="col-lg-12 col-md-12 col-sm-12" style="padding-bottom: 10px;">
-                                  <input class="form-control" id="update_subject" name="subject" placeholder="제     목" type="text" required="required" />
-                              </div>
-						</div>
-						<div class="row">
-							<div class="col-lg-12 col-md-12 col-sm-12" style="padding-left:20px; padding-bottom: 10px;">
-                               	<span style="color: #999">카테고리&nbsp;&nbsp;&nbsp;</span>
-                               	<div class="radio-inline">
-									<input type="radio" name="category" value="알림" required="required">알림
-								</div>
-								<div class="radio-inline">
-									<input type="radio" name="category" value="수상">수상
-								</div>
-								<div class="radio-inline">
-                                   	<input type="radio" name="category" value="신제품">신제품
-								</div>
-								<div class="radio-inline">
-                                   	<input type="radio" name="category" value="특허">특허
+		<div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="contactLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="well well-sm">
+					<form class="form-horizontal" action="/board/ingee/update" method="post" enctype="multipart/form-data">
+						<fieldset>
+							<legend class="text-center"><h1>In Gee Chun</h1></legend>
+							<div class="form-group">
+								<div class="input-group">
+									<label class="col-md-2 control-label">Subject</label>
+									<div class="col-md-9">
+										<input id="subject" name="subject" type="text" placeholder="subject" class="form-control" required="required" value=${boardDTO.subject }>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="row">
-							<div class="col-lg-12 col-md-12 col-sm-12">
-								<textarea style="resize:vertical;" id="update_content" class="form-control" placeholder="내   용..." rows="6" name="content" required></textarea>
+							<div class="form-group">
+								<div class="input-group">
+									<label class="col-md-2 control-label">Content</label>
+									<div class="col-md-9">
+										<textarea class="form-control" rows="10" cols="" name="content" required="required" style="width: 100%;">${boardDTO.content }</textarea>
+									</div>
+								</div>
 							</div>
-						</div>
-						<div class="row">
-							<div class="col-lg-12 col-md-1q2 col-sm-12" >
-								이미지 파일을 바꾸고 싶은 경우에만 눌러주세요.
+							<div class="form-group">
+								<div class="input-group">
+									<label class="col-md-2 control-label">Image</label>
+									<div class="col-md-9">
+										<input type="file" class="form-control" name="upload_file" id="upload_file">
+										<span class="help-block" style="padding-left: 5px; color: red;">※ Please select a file only if you want to change uploaded image.</span>
+									</div>
+								</div>
 							</div>
-							<div class="col-lg-12 col-md-12 col-sm-12">
-								<input class="form-control" name="attached_file" type="file">
+							<div class="panel-footer">
+								<input type="hidden" name="writer" value="${boardDTO.writer }">
+								<input type="hidden" name="num" value="${boardDTO.num }">
+	                            <input type="submit" class="btn btn-success" value="OK"/>
+	                            <input type="reset" class="btn btn-danger" value="Clear" />
+	                            <button style="float: right;" type="button" class="btn btn-default btn-close" data-dismiss="modal">Close</button>
 							</div>
-						</div>
-					</div>  
-					<div class="panel-footer" style="margin-bottom:-14px;">
-						<input type="hidden" name="num" value="${param.num }">
-						<input type="hidden" name="page" value="${param.page }">
-						<input type="hidden" name="writer" value="admin">
-						<input type="submit" class="btn btn-success" value="OK"/>
-						<input type="reset" class="btn btn-danger" value="Clear" />
-						<button style="float: right;" type="button" class="btn btn-default btn-close" data-dismiss="modal">Close</button>
-					</div>
-				</form>
+						</fieldset>
+					</form>
+				</div>
+			</div>
 		</div>
-	</div>
+	</div> <!--  container end -->
 </div>

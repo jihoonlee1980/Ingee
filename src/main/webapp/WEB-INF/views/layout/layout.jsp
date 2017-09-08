@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>InGee Fan Club</title>
+    <title>InGee Fan Club(Test Run)</title>
     <link href="/assets/css/bootstrap.css?ver=2" rel="stylesheet">
     <link href="/assets/css/font-awesome.css?ver=2" rel="stylesheet" type="text/css">
     <link href="/assets/css/font-awesome.min.css?ver=3" rel="stylesheet" type="text/css">
