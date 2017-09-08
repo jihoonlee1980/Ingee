@@ -1,5 +1,6 @@
 package com.menu.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,21 @@ public class MessageDAO extends SqlSessionDaoSupport {
 	}
 	
 	public int sendMessage(Map<String, Object> map) {
-		return getSqlSession().insert("sendMessage", map);
+		int result = 0;
+		if(map.get("DISC").toString().equals("single"))
+			result = getSqlSession().insert("sendMessage", map);
+		else if(map.get("DISC").toString().equals("all")){
+			
+		}
+		else{			
+			String[] recvArr = map.get("recvlist").toString().split(",");
+			for(int i=0; i<recvArr.length; i++){
+			    System.out.println(i+"= "+recvArr[i]);
+			    map.put("receiver",recvArr[i]);
+			    result += getSqlSession().insert("sendMessage", map);
+			}
+		}
+		return result;
 	}
 	
 	public HashMap<String, Object> getMessageContent(int num) {
@@ -27,5 +42,14 @@ public class MessageDAO extends SqlSessionDaoSupport {
 	
 	public int delteMessage(int num) {
 		return getSqlSession().delete("deleteMessage", num);
+	}
+	
+	public List<String> checkId(List<String> id) {
+		List<String> ids = new ArrayList<String>();
+		for (String getId : id) {
+			if(getSqlSession().selectOne("messageIdcheck" , getId)==null)
+				ids.add(getId);
+		}		
+		return ids;
 	}
 }

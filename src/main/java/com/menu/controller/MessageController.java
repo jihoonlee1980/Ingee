@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -41,10 +42,7 @@ public class MessageController {
 		startPage = (page - 1) / perBlock * perBlock + 1;
 		endPage = startPage + perBlock - 1;
 		if (endPage > totalPage)
-			endPage = totalPage;
-		
-		if (page > totalPage)
-			page = totalPage;
+			endPage = totalPage;		
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
@@ -54,7 +52,8 @@ public class MessageController {
 		
 		List<MessageDTO> messageDTOs = messageDAO.getRecvMessageList(map);
 		
-		
+		if (page > totalPage)
+			page = totalPage;
 		modelAndView.addObject("id", id);
 		modelAndView.addObject("totalCount", totalCount);
 		modelAndView.addObject("currentPage", page);
@@ -62,7 +61,6 @@ public class MessageController {
 		modelAndView.addObject("startPage", startPage);
 		modelAndView.addObject("endPage", endPage);
 		modelAndView.addObject("messageDTOs" , messageDTOs);
-		
 		modelAndView.setViewName("/1/message/list");
 		return modelAndView;
 	}
@@ -75,6 +73,12 @@ public class MessageController {
 		String setViewName = "/1/message/send";
 		
 		if(!map.isEmpty()){
+			if(map.get("recvlist").toString().equals(""))
+				map.put("DISC", "single");
+			else if(map.get("recvlist").toString().equals("all"))
+				map.put("DISC", "all");	
+			else
+				map.put("DISC", "multi");	
 			int result = messageDAO.sendMessage(map);
 			if(result > 0){
 				modelAndView.clear();
@@ -112,5 +116,17 @@ public class MessageController {
 		
 		modelAndView.setViewName(setViewName);
 		return modelAndView;
-	};
+	}
+	
+	@RequestMapping(value = "/check/id")
+	public @ResponseBody Map<String, Object> checkID(@RequestParam List<String> arrData) {
+		List<String> resultList = messageDAO.checkId(arrData);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("resultList", resultList);
+
+		ModelAndView modelAndView = new ModelAndView("jsonView", map);
+
+		return map;
+	}
 }
