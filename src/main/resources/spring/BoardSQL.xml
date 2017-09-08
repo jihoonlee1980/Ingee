@@ -23,7 +23,7 @@
 		update board set subject = #{subject}, content = #{content}, origin_filename = #{origin_filename}, saved_filename = #{saved_filename} where num = #{num}
 	</update>
 	<update id="updateCommentCount">
-		update board set comment_count = (select count(*) from comment where board_num = #{board_num} and comment_num = 0)
+		update board set comment_count = (select count(*) from comment where <if test="board_num != null">board_num = #{board_num} and</if> comment_num=<choose><when test="comment_num == null">0</when><when test="comment_num != null">#{comment_num}</when></choose>) where num = #{board_num}
 	</update>
 	<delete id="deleteBoard" parameterType="int">
 		delete from board where num = #{board_num}

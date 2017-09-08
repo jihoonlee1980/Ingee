@@ -61,7 +61,7 @@ public class MemberController {
 	@RequestMapping(value = "/check/id")
 	public @ResponseBody Map<String, Object> checkID(@RequestParam(value = "id", required = true) String id) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		boolean isValid = memberDAO.find("id", id);
+		boolean isValid = memberDAO.find("id", id) != null;
 
 		map.put("isValid", !isValid);
 
@@ -73,7 +73,7 @@ public class MemberController {
 	@RequestMapping(value = "/check/nick")
 	public @ResponseBody Map<String, Object> checkNick(@RequestParam(value = "nick", required = true) String nick) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		boolean isValid = memberDAO.find("nick", nick);
+		boolean isValid = memberDAO.find("nick", nick) != null;
 
 		map.put("isValid", !isValid);
 
@@ -105,7 +105,7 @@ public class MemberController {
 			String saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000
 					+ extension;
 
-			while (memberDAO.find("saved_filename", saved_filename)) {
+			while (memberDAO.find("saved_filename", saved_filename) != null) {
 				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000;
 			}
 
@@ -291,7 +291,7 @@ public class MemberController {
 			String saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000
 					+ extension;
 
-			while (memberDAO.find("saved_filename", saved_filename)) {
+			while (memberDAO.find("saved_filename", saved_filename) != null) {
 				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000;
 			}
 
@@ -382,7 +382,7 @@ public class MemberController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		boolean isValid = true;
 
-		if (memberDAO.find("id", id)) {
+		if (memberDAO.find("id", id) != null) {
 			isValid = false;
 
 			MemberDTO memberDTO = memberDAO.get(id);

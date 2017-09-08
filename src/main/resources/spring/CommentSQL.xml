@@ -4,4 +4,16 @@
 	<insert id="inserComment" parameterType="com.menu.model.CommentDTO">
 		insert into comment values(0, #{board_num}, #{comment_num}, #{writer}, #{content}, 0, now())
 	</insert>
+	<select id="commentList" parameterType="HashMap" resultType="com.menu.model.CommentDTO">
+		select * from comment where <if test="board_num != null">board_num = #{board_num} and</if> comment_num = #{comment_num} order by writetime desc
+	</select>
+	<delete id="deleteComment" parameterType="int">
+		delete from comment where num = #{num}
+	</delete>
+	<update id="updateComment" parameterType="com.menu.model.CommentDTO">
+		update comment set content = #{content} where num = #{num}
+	</update>
+	<update id="updateReplyCount" parameterType="HashMap">
+		update comment set reply_count = (select a.* from (select count(*) from comment where comment_num = #{comment_num}) a) where num = #{comment_num}
+	</update>
 </mapper>

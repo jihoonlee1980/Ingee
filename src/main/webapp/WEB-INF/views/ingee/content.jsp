@@ -47,6 +47,14 @@
 div.input-group{
 	width: 100% !important;
 }
+@media(max-width : 768px){
+	.content-div{
+		width : 100% !important;
+	}
+}
+.remove-file{
+	text-decoration: line-through;
+}
 </style>
 <script type="text/javascript">
 	$(function(){
@@ -73,7 +81,7 @@ div.input-group{
 				var html = "<textarea rows='4' cols='' style='width: 100%'>";
 				html += current_content;
 				html += "</textarea>";
-				html += "<div style='width: 100%' align='right'><button type='button' class='btn btn-sm btn-success updateBtn'>edit</button><button type='button' class='btn btn-sm btn-default updateCancel'>cancel</button></div>";
+				html += "<div style='width: 100%' align='right'><button type='button' class='btn btn-sm btn-success updateBtn'>Edit</button><button type='button' class='btn btn-sm btn-default updateCancel'>Cancel</button></div>";
 				$(document).on("click", ".updateBtn", function(){
 					var update_btn = $(this);
 					swal({
@@ -88,7 +96,7 @@ div.input-group{
 					}, function(isConfirm) {
 						if (isConfirm) {
 							var new_content = update_btn.parents().siblings("textarea").val();
-							location.href = "/comment/update?num=" + num + "&content=" + new_content + "&board_num=" + board_num + "&page=" + page + "&type=ingee";
+							location.href = "/comment/ingee/update?num=" + num + "&content=" + new_content + "&board_num=" + board_num + "&page=" + page;
 						} else {
 							swal("Cancel", "The editing the comment is cancelled.", "error");
 						}
@@ -139,41 +147,10 @@ div.input-group{
 		$("#comment-pagination>li").slice(startIndex, endIndex).addClass("show")
 	}
 	
-// 	function updateModal(num){
-// 		$.ajax({
-// 			url : "/board/ingee/update/preproc",
-// 			type : "get",
-// 			data : {"num" : num},
-// 			dataType : "json",
-// 			success : function(data){
-// 				var subject = data.boardDTO.subject;
-// 				var content = data.boardDTO.content;
-// 				var category = data.boardDTO.category;
-
-// 				$("#update_subject").val(subject);
-// 				$("#update_content").val(content);
-
-// 				$("input[name='category']").each(function() {
-// 					if ($(this).val() == category)
-// 						$(this).prop("checked", true)
-// 				});
-				
-// 			},
-// 			statusCode : {
-// 				404 : function() {
-// 					alert("No data.");
-// 				},
-// 				500 : function() {
-// 					alert("Server or grammatical error.");
-// 				}
-// 			}
-// 		});
-// 	}
-	
-	function deleteCehck(num, page) {
+	function deleteCheck(num, page) {
 		swal({
 			title : "Are you sure you want to delete the bulletin?",
-			text : "The the bulletin deleted cannot be recovered.",
+			text : "The bulletin deleted cannot be recovered.",
 			type : "warning",
 			showCancelButton : true,
 			confirmButtonColor : "#DD6B55",
@@ -192,7 +169,7 @@ div.input-group{
 		});
 	}
 	
-	function getReply(obj, board_num, comment_num, isLogin, loggedInID, loggedInProfile, page){
+	function getReply(obj, board_num, comment_num, isLogin, loginNick, loggedInProfile, page){
 		if($(obj).hasClass("active")){
 			$(obj).removeClass("active");
 			$(obj).css("color", "#a6a6a6");
@@ -204,28 +181,28 @@ div.input-group{
 			var html = "";
 			html += "<ul class='comments-list reply-list'>";
 			
-			if(loggedInID != ""){
+			if(loginNick != ""){
 				html += "<li>";
-				html += "<form action='/reply/insert' class='reply-input' method='get'>";
+				html += "<form action='/comment/ingee/insert' class='reply-input' method='get'>";
 				html += "<div class='reply-input-avatar'>";
 				html += "<img src='${root }/profile/" + loggedInProfile + "' alt=''>";
 				html += "</div>";
-				html += "<div class='reply-textarea'>";
-				html += "<textarea rows='3' style='width: 100%;' name='content' required='required' placeholder='  As we all fans of gorgeous InGee, let's encourage all together while keeping netiquette.'></textarea>";
+				html += "<div class='reply-textarea-div'>";
+				html += "<textarea class='reply-textarea' style='width: 100%; height: 75px' name='content' required='required' placeholder='  As we all fans of gorgeous InGee, let's encourage all together while keeping netiquette.'></textarea>";
 				html += "</div>";
 				html += "<div style='background: #fff;' align='right'>";
 				html += "<input type='hidden' name='board_num' value='" + board_num + "'>";
 				html += "<input type='hidden' name='comment_num' value='" + comment_num + "'>";
-				html += "<input type='hidden' name='writer' value='" + loggedInID + "'>";
+				html += "<input type='hidden' name='writer' value='" + loginNick + "'>";
 				html += "<input type='hidden' name='page' value='" + page + "'>";
-				html += "<button type='submit' class='btn btn-default btn-sm'>input</button>";
+				html += "<button type='submit' class='btn btn-default btn-sm'>Input</button>";
 				html += "</div>";
 				html += "</form>";
 				html += "</li>";
 			}
 	
 			$.ajax({
-				url : "/reply/list",
+				url : "/comment/ingee/reply/list",
 				type : "get",
 				data : {"comment_num" : comment_num},
 				dataType : "json",
@@ -244,11 +221,10 @@ div.input-group{
 						html += "<div class='comment-head'>";
 						html += "<h6 class='comment-name'>" + commentDTO.writer + "</h6>";
 						html += "<span class='span-date'>" + formatDate(commentDTO.writetime) +  "</span>";
-						if(commentDTO.writer == loggedInID){
+						if(commentDTO.writer == loginNick){
 							html += "<i class='fa fa-trash' onclick='deleteReply(this)' num='" + commentDTO.num + "' comment_num='" + comment_num + "' board_num='" + board_num +"' page='" + page + "'></i>";
 							html += "<i class='fa fa-pencil-square-o updateReplyForm' num='" + commentDTO.num + "' board_num='" + board_num + "' page='" + page + "'></i>";
 							html += "<p class='comment-hidden' style='display: none;'>" + commentDTO.content + "</p>";
-							
 						}
 						html += "</div>";
 						html += "<div class='comment-content'><p style= 'word-break: break-all; white-space: pre-line;'>";
@@ -310,7 +286,7 @@ div.input-group{
 			var html = "<textarea rows='4' cols='' style='width: 100%'>";
 			html += current_content;
 			html += "</textarea>";
-			html += "<div style='width: 100%' align='right'><button type='button' class='btn btn-sm btn-success' id='updateBtn" + num + "'>edit</button><button type='button' class='btn btn-sm btn-default' id='updateCancel" + num + "''>cancel</button></div>";
+			html += "<div style='width: 100%' align='right'><button type='button' class='btn btn-sm btn-success' id='updateBtn" + num + "'>Edit</button><button type='button' class='btn btn-sm btn-default' id='updateCancel" + num + "''>Cancel</button></div>";
 			
 			$(document).on("click", "#updateBtn" + num, function(){
 				var update_btn = $(this);
@@ -326,7 +302,7 @@ div.input-group{
 				}, function(isConfirm) {
 					if (isConfirm) {
 						var new_content = update_btn.parents().siblings("textarea").val();
-						location.href = "/comment/update?num=" + num + "&content=" + new_content + "&board_num=" + board_num + "&page=" + page + "&type=event";
+						location.href = "/comment/ingee/update?num=" + num + "&content=" + new_content + "&board_num=" + board_num + "&page=" + page;
 					} else {
 						swal("Cancel", "The editing the comment is cancelled.", "error");
 					}
@@ -359,7 +335,7 @@ div.input-group{
 		}, function(isConfirm) {
 			if (isConfirm) {
 				swal("Complete", "The comment is deleted.", "success");
-				location.href = "/comment/delete?num=" + num + "&board_num=" + board_num + "&page=" + page;
+				location.href = "/comment/ingee/delete?num=" + num + "&board_num=" + board_num + "&page=" + page;
 			} else {
 				swal("Cancel", "The deleting the comment is cancelled.", "error");
 			}
@@ -381,17 +357,24 @@ div.input-group{
 		}, function(isConfirm) {
 			if (isConfirm) {
 				swal("Complete", "The comment is deleted.", "success");
-				location.href = "/reply/delete?num=" + $(obj).attr("num") + "&board_num=" + $(obj).attr("board_num")  + "&comment_num=" + $(obj).attr("comment_num") + "&page=" + $(obj).attr("page");
+				location.href = "/comment/ingee/reply/delete?num=" + $(obj).attr("num") + "&board_num=" + $(obj).attr("board_num")  + "&comment_num=" + $(obj).attr("comment_num") + "&page=" + $(obj).attr("page");
 			} else {
 				swal("Cancel", "The deleting the comment is cancelled.", "error");
 			}
 		});
 	}
+	
+	function removeFile(obj) {
+		if($(obj).span.hasClass("remove-file"))
+			$(obj).siblings("span").removeClass("remove-file");
+		else
+			$(obj).siblings("span").addClass("remove-file");
+	}
 </script>
 <!-- Header -->
 <div class="content-section-a" style="min-height: 750px; margin-top: 10px;">
 	<div class="container">
-		<div class="event-row">
+		<div class="board-row">
 			<div class="col-md-4 well pricing-table" style="width: 100% ">
 	            <div class="pricing-table-holder">
 	                <center>
@@ -404,7 +387,7 @@ div.input-group{
 						posted by : ${loginNick }
 					</span>
 					<p align="right">
-						<fmt:formatDate value="${boardDTO.writedate }" pattern="HH:mm, MM/dd/YYYY"/>
+						<fmt:formatDate value="${boardDTO.writedate }" pattern="HH:mm, MMM dd, YYYY"/>
 					</p>
 	            </div>
 	            <hr style="height: 2px; background: #777; width: 100%;">
@@ -429,10 +412,10 @@ div.input-group{
 				<div class="row" style="margin: 0 auto; width: 100%; display: inline-block;">
 					<div class="content-div" style="width: 100%; text-align: right;">
 						<c:if test="${loginNick eq boardDTO.writer}">
-						    <a class="btn btn-warning btn-responsive btn-sm" data-toggle="modal" data-target="#update" data-original-title>modify</a>
-		       				<a class="btn btn-danger btn-responsive btn-sm" onclick="deleteCehck('${boardDTO.num}','${param.page }');">delete</a>
+						    <a class="btn btn-warning btn-sm" data-toggle="modal" data-target="#update" data-original-title>Modify</a>
+		       				<a class="btn btn-danger btn-sm" onclick="deleteCheck('${boardDTO.num}','${param.page }');">Delete</a>
 	       				</c:if>
-	       				<a class="btn btn-default btn-responsive btn-sm" href="/board/ingee/list?page=${param.page }">list</a>
+	       				<a class="btn btn-default btn-sm" href="/board/ingee/list?page=${param.page }">List</a>
        				</div>
        				<div class="row" style="margin-top:65px; padding-left: 5px;">
        					<div id="comment" style="width: 100%; height: 0px;"></div>
@@ -441,15 +424,15 @@ div.input-group{
 								<div class="comment-input-avatar">
 									<img src="${root }/profile/${loggedInProfile}" alt="">
 								</div>
-								<div class="comment-textarea">
-									<textarea rows="4" style="width: 100%;" name="content" required="required" placeholder="  As we all fans of gorgeous InGee, let's encourage all together while keeping netiquette."></textarea>
+								<div class="comment-textarea-div">
+									<textarea class="comment-textarea" style="min-height: 100px; width: 100%;" name="content" required="required" placeholder="  As we all fans of gorgeous InGee, let's encourage all together while keeping netiquette."></textarea>
 								</div>
 								<div style="background: #fff;" align="right">
 									<input type="hidden" name="board_num" value="${boardDTO.num }">
 									<input type="hidden" name="comment_num" value="0">
 									<input type="hidden" name="writer" value="${loginNick }">
 									<input type="hidden" name="page" value="${param.page }">
-									<button type="submit" class="btn btn-default btn-sm">input</button>
+									<button type="submit" class="btn btn-default btn-sm">Input</button>
 								</div>
 							</form>
 						</c:if>
@@ -476,11 +459,11 @@ div.input-group{
 													<div class="comment-head">
 														<h6 class="comment-name ${boardDTO.writer == commentDTO.writer ? 'by-author' : '' }">${commentDTO.writer }</h6>
 														<span class="span-date"><fmt:formatDate value="${commentDTO.writetime }" pattern="yy.MM.dd HH:mm"/></span>
-														<i class="fa fa-reply" onclick="getReply(this, '${param.num }', '${commentDTO.num}', '${isLogin }', '${loggedInID }', '${loggedInProfile }','${param.page }')">[${commentDTO.reply_count }]</i>
-														<c:if test="${loggedInID == commentDTO.writer || commentDTO.authority >= 5}">
-															<i class="fa fa-trash" onclick="deleteComment(${commentDTO.num}, ${param.num }, ${param.page })"></i>
+														<i class="fa fa-reply" onclick="getReply(this, '${boardDTO.num }', '${commentDTO.num}', '${isLogin }', '${loginNick }', '${loggedInProfile }','${param.page }')">[${commentDTO.reply_count }]</i>
+														<c:if test="${loginNick == commentDTO.writer || isAdmin != null}">
+															<i class="fa fa-trash" onclick="deleteComment(${commentDTO.num}, ${boardDTO.num }, ${param.page })"></i>
 														</c:if>
-														<c:if test="${loggedInID == commentDTO.writer }">
+														<c:if test="${loginNick == commentDTO.writer }">
 															<i class="fa fa-pencil-square-o" onclick="updateCommentForm(this, ${commentDTO.num}, ${commentDTO.board_num }, ${param.page })"></i>
 															<p style="display: none;" class="comment-hidden">${commentDTO.content }</p>
 														</c:if>
@@ -512,7 +495,7 @@ div.input-group{
 				<div class="well well-sm">
 					<form class="form-horizontal" action="/board/ingee/update" method="post" enctype="multipart/form-data">
 						<fieldset>
-							<legend class="text-center"><h1>In Gee Chun</h1></legend>
+							<legend class="text-center"><h1>In Gee</h1></legend>
 							<div class="form-group">
 								<div class="input-group">
 									<label class="col-md-2 control-label">Subject</label>
@@ -534,6 +517,8 @@ div.input-group{
 									<label class="col-md-2 control-label">Image</label>
 									<div class="col-md-9">
 										<input type="file" class="form-control" name="upload_file" id="upload_file">
+										<span class="">${boardDTO.origin_filename }</span>	
+										<button type="button" class="btn btn-sm btn-warning" onclick="removeFile(this);">Remove</button>
 										<span class="help-block" style="padding-left: 5px; color: red;">※ Please select a file only if you want to change uploaded image.</span>
 									</div>
 								</div>

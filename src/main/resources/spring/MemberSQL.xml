@@ -59,7 +59,7 @@
 		</choose>
 		limit #{start}, #{perPage}
 	</select>
-	<insert id="inserMember">
+	<insert id="insertMember">
 		insert into member values(0, #{nick}, #{name}, #{id}, md5(#{pass}), #{zipcode}, #{state}, #{city}, #{detailed_address}, #{hp}, #{saved_filename}, #{origin_filename}, #{authority}, now())
 	</insert>
 	<delete id="deleteMember" parameterType="int">

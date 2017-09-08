@@ -69,17 +69,17 @@ div.input-group{
 		        <div style="width:100%;" align="center">
 					<ul class="pagination">
 						<c:if test="${startPage > 1}">
-							<li><a href="/event?page=${startPage - 1}">&lt;</a></li>
+							<li><a href="/board/ingee/list?page=${startPage - 1}">&lt;</a></li>
 						</c:if>
 						<c:forEach begin="${startPage}" end="${endPage}" var="page">
 							<li ${page eq currentPage ? "class='active'" : "" }>						
-								<a href="/event?page=${page}">
+								<a href="/board/ingee/list?page=${page}">
 									<c:out value="${page}"/>
 								</a>
 							</li>
 						</c:forEach>
 						<c:if test="${totalPage ne endPage}">
-							<li><a href="/event?page=${endPage + 1}">&gt;</a></li>
+							<li><a href="/board/ingee/list?page=${endPage + 1}">&gt;</a></li>
 						</c:if>
 					</ul>
 				</div>
@@ -87,7 +87,7 @@ div.input-group{
 <%-- 					<c:if test="${isIngee ne null}"> --%>
 					<c:if test="${isAdmin ne null}">
 						<div align="right">
-							<a class="btn btn-default btn-sm" data-toggle="modal" data-target="#write" data-original-title>write</a>
+							<a class="btn btn-default btn-sm" data-toggle="modal" data-target="#write" data-original-title>Write</a>
 						</div>
 					</c:if>
 				</c:if>

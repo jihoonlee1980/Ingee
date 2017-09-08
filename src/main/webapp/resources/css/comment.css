@@ -167,7 +167,7 @@ body {
 	height: 100%;
 }
 
-.comment-input .comment-textarea {
+.comment-input .comment-textarea-div {
 	width: 85%;
 	background: #FFF;
     padding: 5px;
@@ -176,7 +176,7 @@ body {
     display: inline-block;
 }
 
-.comment-input .comment-textarea textarea{
+.comment-input .comment-textarea-div .comment-textarea{
 	border: 1px solid black;
 }
 
@@ -210,7 +210,7 @@ body {
 	height: 100%;
 }
 
-.reply-input .reply-textarea {
+.reply-input .reply-textarea-div {
 	width: 85%;
 	background: #FFF;
     padding: 5px;
@@ -219,7 +219,7 @@ body {
     display: inline-block;
 }
 
-.reply-input .reply-textarea textarea{
+.reply-input .reply-textarea-div .reply-textarea{
 	border: 1px solid black;
 }
 
@@ -322,7 +322,7 @@ body {
 
 .comment-box .comment-name.by-author, .comment-box .comment-name.by-author a {color: #03658c;}
 .comment-box .comment-name.by-author:after {
-	content: '작성자';
+	content: 'WRITER';
 	background: #03658c;
 	color: #FFF;
 	font-size: 12px;
@@ -342,12 +342,20 @@ body {
 		width: 100%;
 	}
 	
-	.comment-input .comment-textarea {
-		width: 65%;
+	.comment-input .comment-textarea-div {
+		width: 79%;
 	}
 	
-	.reply-input .reply-textarea {
-		width: 65%;
+	.comment-input .comment-textarea-div .comment-textarea{
+		min-height: 50px;
+	}
+	
+	.reply-input .reply-textarea-div {
+		width: 80%;
+	}
+	
+	.reply-input .reply-textarea-div .reply-textarea{
+		min-height: 50px;
 	}
 
 	.comments-list .comment-box {
@@ -356,5 +364,15 @@ body {
 
 	.reply-list .comment-box {
 		width: 71%;
+	}
+	
+	.comment-input .comment-input-avatar {
+		width: 50px;
+		height: 50px;
+	}
+	
+	.comment-input .reply-input-avatar {
+		width: 50px;
+		height: 50px;
 	}
 }

@@ -45,7 +45,7 @@ public class MemberDAO extends SqlSessionDaoSupport {
 	}
 
 	public void insert(MemberDTO memberDTO) {
-		getSqlSession().insert("inserMember", memberDTO);
+		getSqlSession().insert("insertMember", memberDTO);
 	}
 
 	public MemberDTO get(int num) {
@@ -92,12 +92,12 @@ public class MemberDAO extends SqlSessionDaoSupport {
 		return getSqlSession().selectOne("checkPass", map) != null;
 	}
 
-	public boolean find(String column, Object value) {
+	public MemberDTO find(String column, Object value) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		map.put("column", column);
 		map.put("value", value);
 
-		return getSqlSession().selectOne("findMember", map) != null;
+		return getSqlSession().selectOne("findMember", map);
 	}
 }

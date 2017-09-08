@@ -1,6 +1,7 @@
 package com.menu.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,6 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ingee.util.UploadFileWriter;
 import com.menu.model.BoardDAO;
 import com.menu.model.BoardDTO;
+import com.menu.model.CommentDAO;
+import com.menu.model.CommentDTO;
 import com.menu.model.MemberDAO;
 
 @Controller
@@ -27,6 +30,8 @@ public class BoardController {
 	BoardDAO boardDAO;
 	@Autowired
 	MemberDAO memberDAO;
+	@Autowired
+	CommentDAO commentDAO;
 
 	// final String CATEGORY_INGEE = "ingee";
 	// final String CATEGORY_NOTICE = "notice";
@@ -40,6 +45,7 @@ public class BoardController {
 	// final String CATEGORY_SOUTH = "south";
 	final String CATEGORY_NULL = "";
 	final String path = "C:\\Users\\jihyun\\Desktop\\egov\\eGovFrameDev-3.6.0-64bit\\workspace\\InGeeFanClub\\src\\main\\webapp\\resources";
+	final int ZERO_COMMENT = 0;
 
 	@RequestMapping(value = "/{b_category}/list")
 	public ModelAndView boardList(@PathVariable String b_category, @RequestParam(defaultValue = "1") int page) {
@@ -106,12 +112,13 @@ public class BoardController {
 		String loginID = (String) session.getAttribute("loggedInID");
 		String loginNick = (String) session.getAttribute("loginNick");
 		BoardDTO boardDTO = boardDAO.get(board_num);
-		// List<CommentTO> commentDTOs = commentDAO.commentList(num);
-		// List<String> profile_files = new ArrayList<String>();
+		List<CommentDTO> commentDTOs = commentDAO.list(board_num, ZERO_COMMENT);
+		List<String> profile_files = new ArrayList<String>();
 
-		// for (CommentDTO commentDTO : commentDTOs) {
-		// profile_files.add(memberDAO.get(commentDTO.getWriter()).getSaved_filename());
-		// }
+		for (CommentDTO commentDTO : commentDTOs) {
+			profile_files
+					.add(memberDAO.get(memberDAO.find("nick", commentDTO.getWriter()).getId()).getSaved_filename());
+		}
 
 		if (!boardDTO.getWriter().equals(loginNick))
 			boardDTO = boardDAO.updateReadCount(board_num);
@@ -122,11 +129,9 @@ public class BoardController {
 			modelAndView.addObject("loggedInProfile", memberDAO.get(loginID).getSaved_filename());
 		}
 
-		// modelAndView.addObject("commentList", commentDTOs);
-		// modelAndView.addObject("profile_file", profile_files);
+		modelAndView.addObject("commentList", commentDTOs);
+		modelAndView.addObject("profile_file", profile_files);
 		modelAndView.addObject("boardDTO", boardDTO);
-		modelAndView.setViewName("/1/menu/eventContent");
-
 		modelAndView.setViewName("/1/" + b_category + "/content");
 
 		return modelAndView;
