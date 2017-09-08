@@ -147,7 +147,7 @@ a {
 							<c:forEach var="messageDTO" items="${messageDTOs }" varStatus="status">
 							<li class="clearfix">
 							<c:choose>
-								<c:when test="${DISC == 'recv' }">
+								<c:when test="${DISC == 'sent' }">
 									<img src="${root }/profile/${messageDTO.receiver_profile}" class="avatar" alt="">
 								</c:when>
 								<c:otherwise>
@@ -157,7 +157,7 @@ a {
 							  
 							  <div class="post-comments">
 							      <p class="meta"><fmt:formatDate value="${messageDTO.date_sent}" pattern=" HH:mm MMM dd yyyy" /> &nbsp;
-							      	<a href="#">${messageDTO.sender_nick}(${messageDTO.sender})</a> says : <b style="font-size:16px;">${messageDTO.subject}</b>							      	
+							      	<a href="#">${messageDTO.receiver_nick}(${messageDTO.receiver})</a> says : <b style="font-size:16px;">${messageDTO.subject}</b>							      	
 							      </p>
 							      <p>
 							          ${messageDTO.content}
