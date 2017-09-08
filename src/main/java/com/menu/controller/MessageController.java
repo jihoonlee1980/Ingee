@@ -34,7 +34,10 @@ public class MessageController {
 		ModelAndView modelAndView = new ModelAndView();
 		String id = (String)session.getAttribute("loggedInID");
 		int perPage = 5;
-		int totalCount = messageDAO.getRecvMessageCount(id);
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("DISC", DISC);
+		int totalCount = messageDAO.getRecvMessageCount(map);
 		int perBlock = 5;
 		int totalPage = totalCount % perPage > 0 ? totalCount / perPage + 1 : totalCount / perPage;
 		int startPage;
@@ -44,14 +47,13 @@ public class MessageController {
 		if (endPage > totalPage)
 			endPage = totalPage;		
 		
-		HashMap<String, Object> map = new HashMap<String, Object>();
+		map = new HashMap<String, Object>();
 		map.put("id", id);
 		map.put("startPage", (page - 1) * perPage);
 		map.put("perPage", perPage);
 		map.put("DISC", DISC);
 		
-		List<MessageDTO> messageDTOs = messageDAO.getRecvMessageList(map);
-		
+		List<MessageDTO> messageDTOs = messageDAO.getRecvMessageList(map);	
 		if (page > totalPage)
 			page = totalPage;
 		modelAndView.addObject("id", id);
@@ -61,6 +63,7 @@ public class MessageController {
 		modelAndView.addObject("startPage", startPage);
 		modelAndView.addObject("endPage", endPage);
 		modelAndView.addObject("messageDTOs" , messageDTOs);
+		modelAndView.addObject("DISC" , DISC);
 		modelAndView.setViewName("/1/message/list");
 		return modelAndView;
 	}
@@ -69,14 +72,15 @@ public class MessageController {
 	public ModelAndView MessageSend (HttpSession session , @RequestParam Map<String,Object> map , RedirectAttributes redirectAttributes) {		
 		ModelAndView modelAndView = new ModelAndView();
 		String id = (String)session.getAttribute("loggedInID");
-		modelAndView.addObject("id",id);
+		modelAndView.addObject("id",id);		
 		String setViewName = "/1/message/send";
-		
 		if(!map.isEmpty()){
 			if(map.get("recvlist").toString().equals(""))
 				map.put("DISC", "single");
-			else if(map.get("recvlist").toString().equals("all"))
+			else if(map.get("recvlist").toString().equals("all")){
 				map.put("DISC", "all");	
+				map.put("id",id);
+			}
 			else
 				map.put("DISC", "multi");	
 			int result = messageDAO.sendMessage(map);
@@ -87,6 +91,7 @@ public class MessageController {
 			else
 				redirectAttributes.addFlashAttribute("failed", "insert");
 		}
+		
 		
 		modelAndView.setViewName(setViewName);
 		return modelAndView;

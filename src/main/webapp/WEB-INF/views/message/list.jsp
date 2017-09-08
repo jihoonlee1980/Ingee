@@ -30,222 +30,179 @@ $(document).ready(function () {
  });
 </script>
 <style>
-/*    --------------------------------------------------
-	:: General
-	-------------------------------------------------- */
-body {
-	font-family: 'Open Sans', sans-serif;
-	color: #353535;
-}
-.content h1 {
-	text-align: center;
-}
-.content .content-footer p {
-	color: #6d6d6d;
-    font-size: 12px;
-    text-align: center;
-}
-.content .content-footer p a {
-	color: inherit;
-	font-weight: bold;
+
+body{
+    background:#eee;
 }
 
-/*	--------------------------------------------------
-	:: Table Filter
-	-------------------------------------------------- */
-.panel {
-	border: 1px solid #ddd;
-	background-color: #fcfcfc;
+hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 1px solid #FFFFFF;
 }
-.panel .btn-group {
-	margin: 15px 0 30px;
+a {
+    color: #82b440;
+    text-decoration: none;
 }
-.panel .btn-group .btn {
-	transition: background-color .3s ease;
+.blog-comment::before,
+.blog-comment::after,
+.blog-comment-form::before,
+.blog-comment-form::after{
+    content: "";
+	display: table;
+	clear: both;
 }
-.table-filter {
-	background-color: #fff;
-	border-bottom: 1px solid #eee;
+
+.blog-comment{
+    /* padding-left: 15%;
+	padding-right: 15%; */
 }
-.table-filter tbody tr:hover {
-	cursor: pointer;
-	background-color: #eee;
+
+.blog-comment ul{
+	list-style-type: none;
+	padding: 0;
 }
-.table-filter tbody tr td {
-	padding: 10px;
-	vertical-align: middle;
-	border-top-color: #eee;
+
+.blog-comment img{
+	opacity: 1;
+	filter: Alpha(opacity=100);
+	-webkit-border-radius: 4px;
+	   -moz-border-radius: 4px;
+	  	 -o-border-radius: 4px;
+			border-radius: 4px;
 }
-.table-filter tbody tr.selected td {
-	background-color: #eee;
+
+.blog-comment img.avatar {
+	position: relative;
+	float: left;
+	margin-left: 0;
+	margin-top: 0;
+	width: 65px;
+	height: 65px;
 }
-.table-filter tr td:first-child {
-	width: 38px;
-}
-.table-filter tr td:nth-child(2) {
-	width: 35px;
-}
-.ckbox {
+
+.blog-comment .post-comments{
+	border: 1px solid #eee;
+    margin-bottom: 20px;
+    margin-left: 85px;
+	margin-right: 0px;
+    padding: 10px 20px;
+    position: relative;
+    -webkit-border-radius: 4px;
+       -moz-border-radius: 4px;
+       	 -o-border-radius: 4px;
+    		border-radius: 4px;
+	background: #fff;
+	color: #6b6e80;
 	position: relative;
 }
-.ckbox input[type="checkbox"] {
-	opacity: 0;
+
+.blog-comment .meta {
+	font-size: 13px;
+	color: #aaaaaa;
+	padding-bottom: 8px;
+	margin-bottom: 10px !important;
+	border-bottom: 1px solid #eee;
 }
-.ckbox label {
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
+
+.blog-comment ul.comments ul{
+	list-style-type: none;
+	padding: 0;
+	margin-left: 85px;
 }
-.ckbox label:before {
-	content: '';
-	top: 1px;
-	left: 0;
-	width: 18px;
-	height: 18px;
-	display: block;
-	position: absolute;
-	border-radius: 2px;
-	border: 1px solid #bbb;
-	background-color: #fff;
+
+.blog-comment-form{
+	padding-left: 15%;
+	padding-right: 15%;
+	padding-top: 40px;
 }
-.ckbox input[type="checkbox"]:checked + label:before {
-	border-color: #2BBCDE;
-	background-color: #2BBCDE;
+
+.blog-comment h3,
+.blog-comment-form h3{
+	margin-bottom: 40px;
+	font-size: 26px;
+	line-height: 30px;
+	font-weight: 800;
 }
-.ckbox input[type="checkbox"]:checked + label:after {
-	top: 3px;
-	left: 3.5px;
-	content: '\e013';
-	color: #fff;
-	font-size: 11px;
-	font-family: 'Glyphicons Halflings';
-	position: absolute;
-}
-.table-filter .star {
-	color: #ccc;
-	text-align: center;
-	display: block;
-}
-.table-filter .star.star-checked {
-	color: #F0AD4E;
-}
-.table-filter .star:hover {
-	color: #ccc;
-}
-.table-filter .star.star-checked:hover {
-	color: #F0AD4E;
-}
-.table-filter .media-photo {
-	width: 35px;
-}
-.table-filter .media-body {
-    display: block;
-    /* Had to use this style to force the div to expand (wasn't necessary with my bootstrap version 3.3.6) */
-}
-.table-filter .media-meta {
-	font-size: 11px;
-	color: #999;
-}
-.table-filter .media .title {
-	color: #2BBCDE;
-	font-size: 14px;
-	font-weight: bold;
-	line-height: normal;
-	margin: 0;
-}
-.table-filter .media .title span {
-	font-size: .8em;
-	margin-right: 20px;
-}
-.table-filter .media .title span.pagado {
-	color: #5cb85c;
-}
-.table-filter .media .title span.pendiente {
-	color: #f0ad4e;
-}
-.table-filter .media .title span.cancelado {
-	color: #d9534f;
-}
-.table-filter .media .summary {
-	font-size: 14px;
+.clearfix:hover {
+	border:1px solid #9a7e61
 }
 </style>
 <div class="content-section-a">
-	<div class="container">
-	<div class="row">
-		<section class="content" style="padding-top:0;">
+	<div class="container bootstrap snippet">
+	    <div class="row">
 			<div class="col-md-12">
-				<a href="/message/send">쪽지쓰기</a>
-			</div>
-			<div class="col-md-12">
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<div class="pull-right">
-							<div class="btn-group">
-								<button type="button" class="btn btn-success btn-filter" data-target="pagado">Pagado</button>
-								<button type="button" class="btn btn-warning btn-filter" data-target="pendiente">Pendiente</button>
-								<button type="button" class="btn btn-danger btn-filter" data-target="cancelado">Cancelado</button>
-								<button type="button" class="btn btn-default btn-filter" data-target="all">Todos</button>
-							</div>
-						</div>
-						<div class="table-container">
-							<table class="table table-filter">
-								<tbody>
-								<c:choose>
-								     <c:when test="${totalCount > 0}">
-								         <c:forEach var="messageDTO" items="${messageDTOs }" varStatus="status">
-												<tr data-status="pagado" onclick="javascript:location.href='/message/content?num=${messageDTO.num}&page=${currentPage}'">
-													<td>
-														<div class="ckbox">
-															<input type="checkbox" id="checkbox${status.count }">
-															<label for="checkbox${status.count }"></label>
-														</div>
-													</td>
-													<td>
-													</td>
-													<td>
-														<div class="media">
-															<a href="#" class="pull-left">
-																<img src="https://s3.amazonaws.com/uifaces/faces/twitter/fffabs/128.jpg" class="media-photo">
-															</a>
-															<div class="media-body">
-																<span class="media-meta pull-right"><fmt:formatDate value="${messageDTO.date_sent}" pattern="yyyy-MM-dd HH:mm"/></span>
-																<h4 class="title">																	
-																	<c:out value="${messageDTO.subject}"/>
-																	<span class="pull-right pagado">(Pagado)</span>
-																</h4>
-																<p class="summary"><c:out value="${messageDTO.content}"/></p>
-															</div>
-														</div>
-													</td>
-												</tr>
-											</c:forEach>						
-								     </c:when>
-								     
-								     <c:otherwise>
-								         	<tr><td>없음</td></tr>
-								     </c:otherwise>
-								 </c:choose>								
-								
-									
-								</tbody>
-							</table>
-						</div>
-						<div style="width:100%;" align="center">
-							<ul class="pagination" id="comment-pagination">
-									<c:forEach begin="${startPage}" end="${endPage}" var="page">
-										<li class="${page eq currentPage ? 'active ' : '' } ${page <= perBlock ? 'show' : ''}">						
-											<a href="/message/?page=${page }"><c:out value="${page}"/></a>
+			    <div class="blog-comment">
+					<h3 class="text-success">Message</h3>
+					<div class="btn-group">
+								<button type="button" class="btn btn-success" onclick="javascript:location.href='/message/'">받은쪽지함</button>
+								<button type="button" class="btn btn-warning" onclick="javascript:location.href='/message/?DISC=sent'">보낸쪽지함</button>
+								<button type="button" class="btn btn-primary" onclick="javascript:location.href='/message/send'">쪽지쓰기</button>
+					</div>					
+	                <hr/>
+					<ul class="comments">
+					<c:choose>
+					   <c:when test="${totalCount > 0}">
+							<c:forEach var="messageDTO" items="${messageDTOs }" varStatus="status">
+							<li class="clearfix">
+							<c:choose>
+								<c:when test="${DISC == 'recv' }">
+									<img src="${root }/profile/${messageDTO.receiver_profile}" class="avatar" alt="">
+								</c:when>
+								<c:otherwise>
+									<img src="${root }/profile/${messageDTO.sender_profile}" class="avatar" alt="">
+								</c:otherwise>
+							</c:choose>
+							  
+							  <div class="post-comments">
+							      <p class="meta"><fmt:formatDate value="${messageDTO.date_sent}" pattern=" HH:mm MMM dd yyyy" /> &nbsp;
+							      	<a href="#">${messageDTO.sender_nick}(${messageDTO.sender})</a> says : <b style="font-size:16px;">${messageDTO.subject}</b>							      	
+							      </p>
+							      <p>
+							          ${messageDTO.content}
+							      </p>
+							  </div>
+							</li>
+							</c:forEach>
+						</c:when>
+						<c:otherwise>								         	
+						</c:otherwise>
+					</c:choose>
+					
+					</ul>
+					
+					<nav class="my-4" align="center">
+					    <ul class="pagination pagination-circle pg-blue mb-0">
+					        <li class="page-item"><a class="page-link" href="/message/?page=1&DISC=${DISC}">&laquo;</a></li>
+					        <c:if test="${startPage ne 1 }">
+					        <li class="page-item">
+					            <a class="page-link" href="/message/?page=${startPage-1 }&DISC=${DISC}" aria-label="Previous">
+					                <span aria-hidden="true">&lt;</span>
+					                <span class="sr-only">Previous</span>
+					            </a>
+					        </li>
+					        </c:if>
+							<c:forEach begin="${startPage}" end="${endPage}" var="page">
+										<li class="page-item ${page eq currentPage ? 'active ' : '' }">						
+											<a class="page-link" href="/message/?page=${page }&DISC=${DISC}"><c:out value="${page}"/></a>
 										</li>
-									</c:forEach>					
-							</ul>
-						</div>
-					</div>
-				</div>				
+							</c:forEach>	
+					        <c:if test="${totalPage ne endPage }">
+					        <li class="page-item">
+					            <a class="page-link" href="/message/?page=${endPage+1}&DISC=${DISC}" aria-label="Next">
+					                <span aria-hidden="true">&gt;</span>
+					                <span class="sr-only">Next</span>
+					            </a>
+					        </li>
+					        </c:if>
+					        <li class="page-item"><a class="page-link" href="/message/?page=${totalPage}&DISC=${DISC}">&raquo;</a></li>
+					    </ul>
+					</nav>
+				</div>
 			</div>
-		</section>
-		
-	</div>
+		</div>
+	</div>	
+	
 </div>
 </div>

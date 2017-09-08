@@ -4,9 +4,33 @@ import java.sql.Timestamp;
 
 public class MessageDTO {
 	int num , recv_read ;
-	String sender , receiver , subject , content ;
+	String sender , receiver , subject , content , sender_nick , receiver_nick , receiver_profile , sender_profile;
 	Timestamp date_sent , date_recv ;
 	
+	public String getSender_nick() {
+		return sender_nick;
+	}
+	public void setSender_nick(String sender_nick) {
+		this.sender_nick = sender_nick;
+	}
+	public String getReceiver_nick() {
+		return receiver_nick;
+	}
+	public void setReceiver_nick(String receiver_nick) {
+		this.receiver_nick = receiver_nick;
+	}
+	public String getReceiver_profile() {
+		return receiver_profile;
+	}
+	public void setReceiver_profile(String receiver_profile) {
+		this.receiver_profile = receiver_profile;
+	}
+	public String getSender_profile() {
+		return sender_profile;
+	}
+	public void setSender_profile(String sender_profile) {
+		this.sender_profile = sender_profile;
+	}
 	public int getNum() {
 		return num;
 	}
