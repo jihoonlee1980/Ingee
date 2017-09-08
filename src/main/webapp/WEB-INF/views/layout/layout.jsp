@@ -15,7 +15,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>InGee Fan Club</title>
-    <link href="/assets/css/bootstrap.css" rel="stylesheet">
+    <link href="/assets/css/bootstrap.css?ver=2" rel="stylesheet">
     <link href="/assets/css/font-awesome.css?ver=2" rel="stylesheet" type="text/css">
     <link href="/assets/css/font-awesome.min.css?ver=3" rel="stylesheet" type="text/css">
 <!--     <script src="/assets/jquery-3.2.1.min.js"></script> -->
