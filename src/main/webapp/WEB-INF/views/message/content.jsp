@@ -30,13 +30,6 @@ $(document).ready(function () {
  });
 </script>
 <style>
-/*    --------------------------------------------------
-	:: General
-	-------------------------------------------------- */
-body {
-	font-family: 'Open Sans', sans-serif;
-	color: #353535;
-}
 .content h1 {
 	text-align: center;
 }
@@ -176,76 +169,22 @@ body {
 	<div class="row">
 		<section class="content" style="padding-top:0;">
 			<div class="col-md-12">
-				<a href="/message/send">쪽지쓰기</a>
-			</div>
-			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-body">
-						<div class="pull-right">
-							<div class="btn-group">
-								<button type="button" class="btn btn-success btn-filter" data-target="pagado">Pagado</button>
-								<button type="button" class="btn btn-warning btn-filter" data-target="pendiente">Pendiente</button>
-								<button type="button" class="btn btn-danger btn-filter" data-target="cancelado">Cancelado</button>
-								<button type="button" class="btn btn-default btn-filter" data-target="all">Todos</button>
-							</div>
-						</div>
-						<div class="table-container">
-							<table class="table table-filter">
-								<tbody>
-								<c:choose>
-								     <c:when test="${totalCount > 0}">
-								         <c:forEach var="messageDTO" items="${messageDTOs }" varStatus="status">
-												<tr data-status="pagado" onclick="javascript:location.href='/message/content?num=${messageDTO.num}&page=${currentPage}'">
-													<td>
-														<div class="ckbox">
-															<input type="checkbox" id="checkbox${status.count }">
-															<label for="checkbox${status.count }"></label>
-														</div>
-													</td>
-													<td>
-													</td>
-													<td>
-														<div class="media">
-															<a href="#" class="pull-left">
-																<img src="https://s3.amazonaws.com/uifaces/faces/twitter/fffabs/128.jpg" class="media-photo">
-															</a>
-															<div class="media-body">
-																<span class="media-meta pull-right"><fmt:formatDate value="${messageDTO.date_sent}" pattern="yyyy-MM-dd HH:mm"/></span>
-																<h4 class="title">																	
-																	<c:out value="${messageDTO.subject}"/>
-																	<span class="pull-right pagado">(Pagado)</span>
-																</h4>
-																<p class="summary"><c:out value="${messageDTO.content}"/></p>
-															</div>
-														</div>
-													</td>
-												</tr>
-											</c:forEach>						
-								     </c:when>
-								     
-								     <c:otherwise>
-								         	<tr><td>없음</td></tr>
-								     </c:otherwise>
-								 </c:choose>								
-								
-									
-								</tbody>
-							</table>
-						</div>
-						<div style="width:100%;" align="center">
-							<ul class="pagination" id="comment-pagination">
-									<c:forEach begin="${startPage}" end="${endPage}" var="page">
-										<li class="${page eq currentPage ? 'active ' : '' } ${page <= perBlock ? 'show' : ''}">						
-											<a href="/message/?page=${page }"><c:out value="${page}"/></a>
-										</li>
-									</c:forEach>					
-							</ul>
-						</div>
+						<c:out value="${resultMap['num']}"/>
+						<c:out value="${resultMap['sender']}"/>
+						<c:out value="${resultMap['receiver']}"/>
+						<c:out value="${resultMap['content']}"/>
+						<c:out value="${resultMap['subject']}"/>
+						<fmt:formatDate value="${resultMap['date_sent'] }"/>
+						<fmt:formatDate value="${resultMap['date_recv'] }"/>
+						<c:out value="${resultMap['recv_read']}"/>
+						<a href="/message/modify?num=${resultMap['num']}&page=${param.page}">수정</a>			
+						<a href="/message/delete?num=${resultMap['num']}&page=${param.page}">삭제</a>
 					</div>
 				</div>				
 			</div>
-		</section>
-		
+		</section>		
 	</div>
 </div>
 </div>

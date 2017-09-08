@@ -2,20 +2,25 @@ package com.menu.controller;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.menu.model.MessageDAO;
 import com.menu.model.MessageDTO;
 
-@RequestMapping("/message")
+
 @Controller
+@RequestMapping("/message")
 public class MessageController {
 	
 	@Autowired
@@ -61,4 +66,51 @@ public class MessageController {
 		modelAndView.setViewName("/1/message/list");
 		return modelAndView;
 	}
+	
+	@RequestMapping(value="/send" , method = {RequestMethod.POST , RequestMethod.GET})
+	public ModelAndView MessageSend (HttpSession session , @RequestParam Map<String,Object> map , RedirectAttributes redirectAttributes) {		
+		ModelAndView modelAndView = new ModelAndView();
+		String id = (String)session.getAttribute("loggedInID");
+		modelAndView.addObject("id",id);
+		String setViewName = "/1/message/send";
+		
+		if(!map.isEmpty()){
+			int result = messageDAO.sendMessage(map);
+			if(result > 0){
+				modelAndView.clear();
+				setViewName = "redirect:/message/";
+			}
+			else
+				redirectAttributes.addFlashAttribute("failed", "insert");
+		}
+		
+		modelAndView.setViewName(setViewName);
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/content")
+	public ModelAndView MessageContent (@RequestParam Map<String, Object> map) {
+		ModelAndView modelAndView = new ModelAndView();
+		String setViewName = "/1/message/content";
+		HashMap<String, Object> resultMap = messageDAO.getMessageContent(Integer.parseInt(map.get("num").toString()));
+		modelAndView.addObject("resultMap", resultMap);
+		modelAndView.setViewName(setViewName);
+		return modelAndView;
+	};
+	
+	@RequestMapping(value="/delete")
+	public ModelAndView MessageDelete (@RequestParam Map<String, Object> map , RedirectAttributes redirectAttributes) {
+		ModelAndView modelAndView = new ModelAndView();
+		String setViewName = new String();
+				
+		int result = messageDAO.delteMessage(Integer.parseInt(map.get("num").toString()));
+		if(result > 0)
+			setViewName = "redirect:/message/?page="+Integer.parseInt(map.get("page").toString());		
+		else
+			redirectAttributes.addFlashAttribute("failed", "delete");
+			setViewName = "redirect:/message/";
+		
+		modelAndView.setViewName(setViewName);
+		return modelAndView;
+	};
 }

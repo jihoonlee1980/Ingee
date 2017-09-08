@@ -18,4 +18,27 @@
 		 = #{id} order by date_sent desc limit #{startPage} , #{perPage}
 	</select>
 	
+	<select id="getMessageContent" parameterType="int" resultType="HashMap">
+		select * from message where num = #{num}
+	</select>
+	
+	<insert id="sendMessage" parameterType="HashMap">
+		<selectKey keyProperty="no" resultType="java.lang.Integer">
+		SELECT @@IDENTITY AS no
+		</selectKey>
+		insert into message values (
+		null ,
+		#{sender} ,
+		#{receiver} ,
+		#{subject} ,
+		#{content} ,
+		now() ,
+		null ,
+		0
+		);
+	</insert>
+	
+	<delete id="deleteMessage" parameterType="int">
+		delete from message where num = #{num}
+	</delete>
 </mapper>
