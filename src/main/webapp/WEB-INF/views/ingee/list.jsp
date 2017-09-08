@@ -33,7 +33,7 @@ div.input-group{
 	<div class="container">
 		<div class="event-row" id="div_event">
 			<div class="well">
-		        <h1 class="text-center">In Gee Chun</h1>
+		        <h1 class="text-center">In Gee</h1>
 		        <div class="list-group" id="list_div">
 		        	<c:if test="${totalCount > 0 }">
 			        	<c:forEach items="${boardList}" var="boardDTO" varStatus="status">
