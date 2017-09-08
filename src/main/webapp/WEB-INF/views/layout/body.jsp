@@ -30,7 +30,7 @@
 			</div>
 			<div class="sub-heading">
 				<p>
-					<a href="/ingee/list">In Gee 
+					<a href="/board/ingee/list">In Gee 
 				</p>
 				<img src="${root}/img/main/heart.png" width="50" height="50" alt=""><br> <br>
 			</div>
@@ -166,7 +166,7 @@
 				</div>
 				<div class="sub-heading">
 					<p>
-						<a href="/tour/list">Recent! 
+						<a href="/board/tour/list">Recent! 
 					</p>
 					<img src="${root}/img/main/new3.png" width="50" height="50"
 						alt=""> <br> <br>

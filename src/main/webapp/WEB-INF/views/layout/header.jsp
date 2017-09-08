@@ -26,14 +26,13 @@
 		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			    <nav>
 					<ul class="nav navbar-nav navbar-right">
-						<li>
 							<c:if test="${isLogin eq null }">
-								<a href="/member/login">LOGIN</a>
+								<li><a href="/member/login">LOGIN</a></li>
+								<li><a href="/member/join">JOIN US</a></li>
 							</c:if>
 							<c:if test="${isLogin ne null }">
-								<a href="/member/logout">LOGOUT</a>
+								<li><a href="/member/logout">LOGOUT</a></li>
 							</c:if>
-						</li>
 						<c:if test="${isLogin ne null }">
 							<c:if test="${isAdmin ne null && isAdmin == 'YES'}">
 								<li>
@@ -50,8 +49,10 @@
 						<li><a href="/board/video/list">VIDEO</a></li>
 						<li><a href="/board/tour/list">TOUR</a></li>
 						<li><a href="/board/network/list">NETWORK</a></li>
-						<li><a href="/message/">MESSAGE</a></li>
-						<li><a href="/chat/">CHAT</a></li>
+						<c:if test="${isLogin ne null }">
+							<li><a href="/message/">MESSAGE</a></li>
+							<li><a href="/chat/">CHAT</a></li>
+						</c:if>
 					</ul>
 				</nav>
 			</div><!-- /.navbar-collapse -->

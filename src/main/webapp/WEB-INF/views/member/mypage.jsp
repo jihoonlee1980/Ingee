@@ -28,6 +28,23 @@
      border-top-left-radius: 5px;
      border-top-right-radius: 5px;
 }
+
+@media(min-width : 768px){
+	div.input-group .join_text{
+		width: 40%;
+	}
+}
+@media(max-width : 768px){
+	div.input-group .zipcode{
+		width: 100% !important;
+	}
+	#IDCheckBtn{
+		width: 100% !important;
+	}
+	#nickCheckBtn{
+		width: 100% !important;
+	}
+}
 </style>
 <script type="text/javascript">
 	$(function(){
@@ -50,6 +67,10 @@
 			};
 			client.send();
 		});
+		
+		$("#nick").on('input',function(){
+			$("#nickCheckBtn").prop("disabled", false);
+		});
 	});
 
 	function profileSubmitCheck(){
@@ -57,7 +78,12 @@
 		var reg_hp = /\d{3}-\d{3}-\d{4}/g;
 		
 		if(!reg_hp.test($("#hp").val().replace(" ",""))){
-			alert("Please check your mobile number.(ex.123-1234-1234)");
+			alert("Please check your mobile number.(ex.123-123-1234)");
+			check = false;
+		}
+
+		if(!$("#nickCheckBtn").is(":disabled")){
+			alert("Please check your nickname to avoid duplicate use.")
 			check = false;
 		}
 		
@@ -143,6 +169,92 @@
 		return result;
 	}
 	
+	function validate(obj){
+		var maxSize = 1024 * 1024;
+		var fileSize = obj.files[0].size;
+		
+		if(fileSize > maxSize){
+			alert("Please upload file size less than 1MB.");
+			obj.value = "";
+			return false;
+		}
+	}
+	
+	function idValidCheck(){
+		var id = $("#id").val().replace(" ", "");
+		var reg_email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+
+		if(id == ""){
+			alert("Please enter your username(eamil address)");
+			return;
+		}
+		
+		if(!reg_email.test(id)){
+			alert("It’s not a valid email form.");
+			return;
+		}
+		
+		$.ajax({
+			url : "/member/check/id",
+			type : "get",
+			data : {"id" : id},
+			dataType : "json",
+			success : function(data){
+				if(data.isValid){
+					alert("Important : Please verify your email address\n Verify your email address\n\n You're almost done — just click the link below to verify your email address and you’re all set. Then, you can use your email address as your InGeefanclub username to log in to your account online.");
+					$("#IDCheckBtn").prop("disabled", true);
+				} else {
+					alert(id + " is in use by others");
+				}
+			},
+			statusCode : {
+				404 : function() {
+					alert("No data.");
+				},
+				500 : function() {
+					alert("Server or grammatical error.");
+				}
+			}
+		});
+	}
+	
+	function nickValidCheck(){
+		var nick = $("#nick").val().replace(" ", "");
+		var reg_nick = /[a-zA-Z0-9]{8,16}$/g;
+
+		if(nick == ""){
+			alert("Please enter your nickname");
+			return;
+		}
+		
+		if(!reg_nick.test(nick)){
+			alert("Please make your nickname with 8 ~ 16 letters.(Case insensitve.)");
+			return;
+		}
+		
+		$.ajax({
+			url : "/member/check/nick",
+			type : "get",
+			data : {"nick" : nick},
+			dataType : "json",
+			success : function(data){
+				if(data.isValid){
+					alert("Available nickname.");
+					$("#nickCheckBtn").prop("disabled", true);
+				} else {
+					alert(nick + " is in use by others");
+				}
+			},
+			statusCode : {
+				404 : function() {
+					alert("No data.");
+				},
+				500 : function() {
+					alert("Server or grammatical error.");
+				}
+			}
+		});
+	}
 </script>
 <div class="content-section-a">
 	<div class="container">
@@ -269,7 +381,8 @@
 								<div class="input-group-addon">
 									<i class="fa fa-briefcase"></i>
 								</div>
-								<input type="text" class="form-control" id="nick" name="nick" value="${memberDTO.nick }">
+								<input type="text" class="form-control join_text" id="nick" name="nick" value="${memberDTO.nick }">
+								<button type="button" id="nickCheckBtn" class="btn btn-success" onclick="nickValidCheck();" disabled="disabled">Verify</button>
 							</div>
 						</div>
 					</div>
@@ -279,11 +392,11 @@
 								<div class="input-group-addon">
 									<i class="fa fa-address-card-o"></i>
 								</div>
-								<input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="zipcode" style="width: 25%;" value="${memberDTO.zipcode }">
-								<input type="button" class="btn btn-success form-control" id="zipcode_btn" value="Search" onclick="daumPostcode()" style="width: 15%">
-								<input type="text" class="form-control" id="city" placeholder="city" name="city" style="width: 23%;" required="required" readonly="readonly" value="${memberDTO.city }">
-								<input type="text" class="form-control" id="state" placeholder="state" name="state" style="width: 20%;" required="required" readonly="readonly" value="${memberDTO.state }">
-								<input type="text" class="form-control" id="detailed_address" placeholder="detailed_address" name="detailed_address" style="width: 100%;" required="required" value="${memberDTO.detailed_address }">
+								<input type="text" class="form-control zipcode" id="zipcode" name="zipcode" placeholder="zipcode" style="width: 25%;" value="${memberDTO.zipcode }">
+								<input type="button" class="btn btn-success form-control zipcode" id="zipcode_btn" value="Search" onclick="daumPostcode()" style="width: 15%">
+								<input type="text" class="form-control zipcode" id="city" placeholder="city" name="city" style="width: 23%;" required="required" readonly="readonly" value="${memberDTO.city }">
+								<input type="text" class="form-control zipcode" id="state" placeholder="state" name="state" style="width: 20%;" required="required" readonly="readonly" value="${memberDTO.state }">
+								<input type="text" class="form-control zipcode" id="detailed_address" placeholder="detailed_address" name="detailed_address" style="width: 100%;" required="required" value="${memberDTO.detailed_address }">
 							</div>
 						</div>
 					</div>

@@ -81,6 +81,8 @@
 			<mapping path="/member/update/**" />
 			<mapping path="/comment/**"/>
 			<mapping path="/reply/**"/>
+			<mapping path="/message/**"/>
+			<mapping path="/chat/**"/>
 			<exclude-mapping path="/reply/list"/>
 			<beans:ref bean="loginInterceptor" />
 		</interceptor>

@@ -16,7 +16,13 @@
 }
 @media(max-width : 768px){
 	div.input-group .zipcode{
-		width: 100%;
+		width: 100% !important;
+	}
+	#IDCheckBtn{
+		width: 100% !important;
+	}
+	#nickCheckBtn{
+		width: 100% !important;
 	}
 }
 </style>
@@ -35,13 +41,32 @@
 						$("input[name='state']").val(data.places[0].state);
 						$("input[name='city']").val(data.places[0]["place name"]);
 					} else if (client.status == 403 || client.status == 404){
-						alert("Check your zip code.");
+						alert("Please check your zip code.");
 					}
 				}
 			};
 			client.send();
 		});
+		
+		$("#id").on('input',function(){
+			$("#IDCheckBtn").prop("disabled", false);
+		});
+		
+		$("#nick").on('input',function(){
+			$("#nickCheckBtn").prop("disabled", false);
+		});
 	});
+	
+	function validate(obj){
+		var maxSize = 1024 * 1024;
+		var fileSize = obj.files[0].size;
+		
+		if(fileSize > maxSize){
+			alert("Please upload file size less than 1MB.");
+			obj.value = "";
+			return false;
+		}
+	}
 	
 	function idValidCheck(){
 		var id = $("#id").val().replace(" ", "");
@@ -65,9 +90,47 @@
 			success : function(data){
 				if(data.isValid){
 					alert("Important : Please verify your email address\n Verify your email address\n\n You're almost done — just click the link below to verify your email address and you’re all set. Then, you can use your email address as your InGeefanclub username to log in to your account online.");
-					$("#IDcheckBtn").prop("disabled", true);
+					$("#IDCheckBtn").prop("disabled", true);
 				} else {
 					alert(id + " is in use by others");
+				}
+			},
+			statusCode : {
+				404 : function() {
+					alert("No data.");
+				},
+				500 : function() {
+					alert("Server or grammatical error.");
+				}
+			}
+		});
+	}
+	
+	function nickValidCheck(){
+		var nick = $("#nick").val().replace(" ", "");
+		var reg_nick = /[a-zA-Z0-9]{8,16}$/g;
+
+		if(nick == ""){
+			alert("Please enter your nickname");
+			return;
+		}
+		
+		if(!reg_nick.test(nick)){
+			alert("Please make your nickname with 8 ~ 16 letters.(Case insensitve.)");
+			return;
+		}
+		
+		$.ajax({
+			url : "/member/check/nick",
+			type : "get",
+			data : {"nick" : nick},
+			dataType : "json",
+			success : function(data){
+				if(data.isValid){
+					alert("Available nickname.");
+					$("#nickCheckBtn").prop("disabled", true);
+				} else {
+					alert(nick + " is in use by others");
 				}
 			},
 			statusCode : {
@@ -98,12 +161,17 @@
 		}
 		
 		if(!reg_hp.test($("#hp").val().replace(" ",""))){
-			alert("Please check your mobile number.(ex.123-1234-1234)");
+			alert("Please check your mobile number.(ex.123-123-1234)");
 			check = false;
 		}
 		
-		if(!$("#IDcheckBtn").is(":disabled")){
+		if(!$("#IDCheckBtn").is(":disabled")){
 			alert("Please check your username to avoid duplicate use.")
+			check = false;
+		}
+		
+		if(!$("#nickCheckBtn").is(":disabled")){
+			alert("Please check your nickname to avoid duplicate use.")
 			check = false;
 		}
 		
@@ -116,8 +184,8 @@
 		<div class="row">
 			<div class="col-md-2"> </div>
 			<div class="col-md-8">
-				<h1>Sing up</h1>
-				<p class="lead">This service is requiring your login.</p>
+				<h1>Sing up</h1><br>
+				<p style="font-size: 20pt;">This service is requiring your login.</p><br>
 				<p>Please enter the following items for joining.</p> <br> 
 			        <!-- BEGIN DOWNLOAD PANEL -->
 				<div class="panel panel-default well">
@@ -137,10 +205,10 @@
 								<div class="col-sm-12">
 									<div class="input-group">
 										<div class="input-group-addon">
-											<i class="fa fa-briefcase"></i>
+											<i class="fa fa-smile-o"></i>
 			                            </div>
-			                            <input type="text" class="form-control join_text" id="nick" placeholder="nick" name="nick" required="required">
-			                            <button type="button" id="IDcheckBtn" class="btn btn-success" onclick="nickValidCheck();">Verify</button>
+			                            <input type="text" class="form-control join_text" id="nick" placeholder="nickname(Case insensitive)" name="nick" required="required">
+			                            <button type="button" id="nickCheckBtn" class="btn btn-success" onclick="nickValidCheck();">Verify</button>
 									</div>
 								</div>
 							</div>
@@ -150,8 +218,8 @@
 										<div class="input-group-addon">
 											<i class="fa fa-id-card"></i>
 										</div>
-										<input type="email" class="form-control join_text" id="id" placeholder="username(email)" name="id" required="required" style="width:72.5%">
-										<button type="button" id="IDcheckBtn" class="btn btn-success" onclick="idValidCheck();">Verify my email address</button>
+										<input type="email" class="form-control join_text" id="id" placeholder="username(email)" name="id" required="required">
+										<button type="button" id="IDCheckBtn" class="btn btn-success" onclick="idValidCheck();">Verify my email address</button>
 									</div>
 			                    </div>
 							</div>
@@ -161,7 +229,7 @@
 										<div class="input-group-addon">
 											<i class="fa fa-lock"></i>
 			                            </div>
-			                    		<input type="password" class="form-control" id="pass" placeholder="password" name="pass" required="required" maxlength="20">
+			                    		<input type="password" class="form-control" id="pass" placeholder="password(Case insensitive.)" name="pass" required="required" maxlength="20">
 			                        </div>
 								</div>  
 								 <div class="col-sm-6">
@@ -187,7 +255,7 @@
 										<div class="input-group-addon">
 											<i class="fa fa-file-image-o"></i>
 										</div>
-										<input type="file" class="form-control" id="profile_file" name="profile_file" accept="image/*">
+										<input type="file" class="form-control" id="profile_file" name="profile_file" accept="image/*" onchange='validate(this)'>
 									</div>
 								</div>   
 							</div>

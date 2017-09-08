@@ -27,6 +27,7 @@
 	<link href="/assets/css/style.css?ver=4" rel="stylesheet" />
 	<link rel="stylesheet" href="/assets/color/default.css">
 	<link rel="shortcut icon" href="/images/favicon.png">
+	<link href="/css/comment.css" rel="stylesheet">
 	<!-- =======================================================
 	    Theme Name: Groovin
 	    Theme URL: https://bootstrapmade.com/groovin-free-bootstrap-theme/

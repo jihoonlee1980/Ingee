@@ -31,10 +31,10 @@ public class MemberController {
 	MemberDAO memberDAO;
 	@Autowired
 	JavaMailSenderImpl mailSender;
-	// test
 
-//	final String path = "C:\\Users\\jihyun\\Desktop\\egov\\eGovFrameDev-3.6.0-64bit\\workspace\\InGeeFanClub\\src\\main\\webapp\\resources";
-	 final String path = "C:\\Users\\뢰후니\\git\\Ingee\\src\\main\\webapp\\resources";
+	final String path = "C:\\Users\\jihyun\\Desktop\\egov\\eGovFrameDev-3.6.0-64bit\\workspace\\InGeeFanClub\\src\\main\\webapp\\resources";
+	// final String path =
+	// "C:\\Users\\뢰후니\\git\\Ingee\\src\\main\\webapp\\resources";
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView loginForm(HttpSession session,
@@ -61,12 +61,21 @@ public class MemberController {
 	@RequestMapping(value = "/check/id")
 	public @ResponseBody Map<String, Object> checkID(@RequestParam(value = "id", required = true) String id) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		boolean isValid = true;
+		boolean isValid = memberDAO.find("id", id);
 
-		if (memberDAO.checkMemberUsername(id) > 0)
-			isValid = false;
+		map.put("isValid", !isValid);
 
-		map.put("isValid", isValid);
+		ModelAndView modelAndView = new ModelAndView("jsonView", map);
+
+		return map;
+	}
+
+	@RequestMapping(value = "/check/nick")
+	public @ResponseBody Map<String, Object> checkNick(@RequestParam(value = "nick", required = true) String nick) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		boolean isValid = memberDAO.find("nick", nick);
+
+		map.put("isValid", !isValid);
 
 		ModelAndView modelAndView = new ModelAndView("jsonView", map);
 
@@ -96,7 +105,7 @@ public class MemberController {
 			String saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000
 					+ extension;
 
-			while (memberDAO.checkMemberFilename(saved_filename) > 0) {
+			while (memberDAO.find("saved_filename", saved_filename)) {
 				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000;
 			}
 
@@ -136,6 +145,7 @@ public class MemberController {
 
 		if (memberDTO != null) {
 			session.setAttribute("isLogin", "YES");
+			session.setAttribute("loginNick", memberDTO.getNick());
 			session.setAttribute("loggedInID", memberDTO.getId());
 
 			if (memberDAO.get(memberDTO.getId()).getAuthority() >= 5)
@@ -170,6 +180,9 @@ public class MemberController {
 		}
 		if (session.getAttribute("loginID") != null)
 			session.removeAttribute("loginID");
+
+		if (session.getAttribute("logoutNick") != null)
+			session.removeAttribute("loginNick");
 
 		if (session.getAttribute("isAdmin") != null)
 			session.removeAttribute("isAdmin");
@@ -269,18 +282,18 @@ public class MemberController {
 
 			String originFileName = profile_file.getOriginalFilename();
 			String extension = originFileName.substring(originFileName.lastIndexOf("."));
-			String savedFileName = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000
+			String saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000
 					+ extension;
 
-			while (memberDAO.checkMemberFilename(savedFileName) > 0) {
-				savedFileName = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000;
+			while (memberDAO.find("saved_filename", saved_filename)) {
+				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000;
 			}
 
 			memberDTO.setOrigin_filename(originFileName);
-			memberDTO.setSaved_filename(savedFileName);
+			memberDTO.setSaved_filename(saved_filename);
 
 			UploadFileWriter uploadFileWriter = new UploadFileWriter();
-			uploadFileWriter.writeFile(profile_file, profilePath, savedFileName);
+			uploadFileWriter.writeFile(profile_file, profilePath, saved_filename);
 		} else {
 			memberDTO.setSaved_filename(memberDAO.get(memberDTO.getNum()).getSaved_filename());
 			memberDTO.setOrigin_filename(memberDAO.get(memberDTO.getNum()).getOrigin_filename());
@@ -304,6 +317,15 @@ public class MemberController {
 		if (!"YES".equals(session.getAttribute("isSave"))) {
 			session.removeAttribute("loggedInID");
 		}
+
+		if (session.getAttribute("loginID") != null)
+			session.removeAttribute("loginID");
+
+		if (session.getAttribute("loginNick") != null)
+			session.removeAttribute("loginNick");
+
+		if (session.getAttribute("isAdmin") != null)
+			session.removeAttribute("isAdmin");
 
 		memberDTO.setPass(memberDTO.getPass().toLowerCase());
 
@@ -355,7 +377,7 @@ public class MemberController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		boolean isValid = true;
 
-		if (memberDAO.checkMemberUsername(id) > 0) {
+		if (memberDAO.find("id", id)) {
 			isValid = false;
 
 			MemberDTO memberDTO = memberDAO.get(id);
@@ -365,13 +387,13 @@ public class MemberController {
 			String pass = UUID.randomUUID().toString().split("-")[0];
 			String content = "새로운 비밀번호를 발급해 드렸습니다.\n\n새로운 비밀번호는 " + pass + " 입니다.\n\n로그인후 비밀번호를 다시 변경해주세요.";
 
-			memberDTO.setPass(pass);
-			memberDAO.update(memberDTO, "pass");
-
-			map.put("email", memberDTO.getId());
-
 			try {
 				mailController.sendEmail(mailSender, subject, content, receiver);
+
+				memberDTO.setPass(pass);
+				memberDAO.update(memberDTO, "pass");
+
+				map.put("email", memberDTO.getId());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				isValid = true;

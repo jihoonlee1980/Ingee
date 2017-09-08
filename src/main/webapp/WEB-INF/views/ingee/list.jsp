@@ -5,6 +5,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
 <%@ page session="true"%>
+<script src="/assets/jquery-3.2.1.min.js"></script>
 <c:set var="root_" value="<%=request.getContextPath() %>" />
 <c:set var="root" value="${root_}/resources" />
 <style>
@@ -36,8 +37,7 @@ div.radio-inline input{
 		        <div class="list-group" id="list_div">
 		        	<c:if test="${totalCount > 0 }">
 			        	<c:forEach items="${boardList}" var="boardDTO" varStatus="status">
-			        		<a href="/event/content?num=${boardDTO.num }&page=${currentPage}" class="list-group-item">
-<%-- 							<a href="/event/${boardDTO.num }?page=${currentPage}" class="list-group-item"> --%>
+			        		<a href="/board/ingee/${boardDTO.num }?page=${currentPage}" class="list-group-item">
 			                	<div class="media col-md-3" style="margin-top: 2%">
 				                    <figure class="pull-left">
 			                        	<img class="media-object img-rounded img-responsive" src="${root}/board/${boardDTO.saved_filename}" alt="${boardDTO.subject}" style="max-height: 180px; max-width: 250px;">
@@ -48,7 +48,7 @@ div.radio-inline input{
 			                    	<hr style="width: 100%; height: 2px; background: #777; margin-top: 5px 5px;">
 			                    	 <p class="list-group-item-text" style="max-height: 70px; word-break: break-all; white-space: pre-line; overflow: hidden;"> <c:out value="${boardDTO.content}"/> </p>
 			                	</div>
-			                	<div class="col-md-3 text-center" style="margin-top: 3%">
+			                	<div class="col-md-3 text-center" style="margin-top: 2%">
 				                    <h4> <c:out value="${boardDTO.readcount}"/> <small> Views </small></h4>
 			                    	<br>
 			                    	<p> Posted by: <c:out value="${boardDTO.writer}"/></p>
@@ -82,7 +82,7 @@ div.radio-inline input{
 					</ul>
 				</div>
 				<c:if test="${not empty isLogin }">
-					<c:if test="${loggedInID eq 'admin'}">
+					<c:if test="${isAdmin ne null}">
 						<div align="right">
 							<a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#write" data-original-title>글쓰기</a>
 						</div>

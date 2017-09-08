@@ -6,11 +6,11 @@ import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
-public class MemberDAO extends SqlSessionDaoSupport{
-	public int getCount(){
+public class MemberDAO extends SqlSessionDaoSupport {
+	public int getCount() {
 		return getSqlSession().selectOne("countMember");
 	}
-	
+
 	public int getCount(String search_type, String keyword) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
@@ -19,17 +19,17 @@ public class MemberDAO extends SqlSessionDaoSupport{
 
 		return getSqlSession().selectOne("countSearchMember", map);
 	}
-	
+
 	public List<MemberDTO> list(int startNum, int perPage, String sort) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		
+
 		map.put("start", startNum);
 		map.put("perPage", perPage);
 		map.put("sort", sort);
-		
+
 		return getSqlSession().selectList("memberList", map);
 	}
-	
+
 	public List<MemberDTO> searchList(int start, int perPage, String sort, String search_type, String keyword) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
@@ -64,17 +64,17 @@ public class MemberDAO extends SqlSessionDaoSupport{
 	}
 
 	public void delete(int num, String id) {
-//		getSqlSession().delete("deleteWriterCascade", id);
+		// getSqlSession().delete("deleteWriterCascade", id);
 		getSqlSession().delete("deleteMember", num);
 	}
 
-	public int checkMemberUsername(String username) {
-		return getSqlSession().selectOne("checkMemberUsername", username);
-	}
-
-	public int checkMemberFilename(String saved_filename) {
-		return getSqlSession().selectOne("checkMemberFilename", saved_filename);
-	}
+//	public int checkMemberUsername(String username) {
+//		return getSqlSession().selectOne("checkMemberUsername", username);
+//	}
+//
+//	public int checkMemberFilename(String saved_filename) {
+//		return getSqlSession().selectOne("checkMemberFilename", saved_filename);
+//	}
 
 	public MemberDTO login(MemberDTO memberDTO) {
 		return getSqlSession().selectOne("loginMember", memberDTO);
@@ -86,6 +86,15 @@ public class MemberDAO extends SqlSessionDaoSupport{
 		map.put("num", num);
 		map.put("pass", pass);
 
-		return getSqlSession().selectOne("checkPass", map) != null ? true : false;
+		return getSqlSession().selectOne("checkPass", map) != null;
+	}
+
+	public boolean find(String column, Object value) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("column", column);
+		map.put("value", value);
+
+		return getSqlSession().selectOne("findMember", map) != null;
 	}
 }
