@@ -3,6 +3,7 @@ package com.menu.controller;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
@@ -139,12 +140,28 @@ public class BoardController {
 
 	@RequestMapping(value = "/{b_category}/update")
 	public String boardUpdate(@PathVariable String b_category, BoardDTO boardDTO,
-			@RequestParam(value = "page", defaultValue = "1") int page) {
+			@RequestParam(value = "page", defaultValue = "1") int page,
+			@RequestParam(value = "remove_file", required = false) String remove_file) {
+		String boardPath = path + "\\board";
+		BoardDTO dbDTO = boardDAO.get(boardDTO.getNum());
+		if (remove_file != null) {
+			StringTokenizer remove_files = new StringTokenizer(remove_file, ",");
+
+			while (remove_files.hasMoreTokens()) {
+				String filename = remove_files.nextToken();
+				File file = new File(boardPath + "\\" + filename);
+				if (file.exists())
+					file.delete();
+				dbDTO.setSaved_filename(dbDTO.getSaved_filename().replaceAll(filename, ""));
+			}
+		}
+
 		if (boardDTO.getUpload_file().getOriginalFilename().equals("")) {
-			boardDTO.setOrigin_filename(boardDAO.get(boardDTO.getNum()).getOrigin_filename());
-			boardDTO.setSaved_filename(boardDAO.get(boardDTO.getNum()).getSaved_filename());
+			boardDTO.setSaved_filename(dbDTO.getSaved_filename().equals("") ? "NO" : dbDTO.getSaved_filename());
+			boardDTO.setOrigin_filename(dbDTO.getSaved_filename().equals("") ? "" : dbDTO.getOrigin_filename());
+			// boardDTO.setOrigin_filename(boardDAO.get(boardDTO.getNum()).getOrigin_filename());
+			// boardDTO.setSaved_filename(boardDAO.get(boardDTO.getNum()).getSaved_filename());
 		} else {
-			String boardPath = path + "\\board";
 			MultipartFile upload_file = boardDTO.getUpload_file();
 			File file = new File(boardPath + "\\" + boardDAO.get(boardDTO.getNum()).getSaved_filename());
 

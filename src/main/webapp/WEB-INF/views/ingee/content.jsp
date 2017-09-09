@@ -13,12 +13,6 @@
 <c:set var="root_" value="<%=request.getContextPath() %>" />
 <c:set var="root" value="${root_}/resources" />
 <style>
-.content-div {
-	margin-top: 1%;
-	padding-top: 10px;
-	float: left;
-	height: 100%;
-}
 .span-date{
 	margin-left: 10px;
 	line-height: 36px;
@@ -47,22 +41,13 @@
 div.input-group{
 	width: 100% !important;
 }
-@media(max-width : 768px){
-	.content-div{
-		width : 100% !important;
-	}
-}
 .remove-file{
 	text-decoration: line-through;
+	color: #999;
 }
 </style>
 <script type="text/javascript">
 	$(function(){
-		document.getElementById("content_img_div").oncontextmenu = function(e){
-			alert("Right-click is restricted.");
-			return false;
-		}
-		
 		$(document).on("click", ".updateReplyForm", function(){
 			var content_div = $(this).parents().siblings(".comment-content");
 			var current_content = $(this).siblings("p.comment-hidden").text();
@@ -188,7 +173,7 @@ div.input-group{
 				html += "<img src='${root }/profile/" + loggedInProfile + "' alt=''>";
 				html += "</div>";
 				html += "<div class='reply-textarea-div'>";
-				html += "<textarea class='reply-textarea' style='width: 100%; height: 75px' name='content' required='required' placeholder='  As we all fans of gorgeous InGee, let's encourage all together while keeping netiquette.'></textarea>";
+				html += "<textarea class='reply-textarea' style='width: 100%; height: 75px' name='content' required='required' placeholder='  As we all fans of gorgeous InGee, let`s encourage all together while keeping netiquette.'></textarea>";
 				html += "</div>";
 				html += "<div style='background: #fff;' align='right'>";
 				html += "<input type='hidden' name='board_num' value='" + board_num + "'>";
@@ -363,13 +348,6 @@ div.input-group{
 			}
 		});
 	}
-	
-	function removeFile(obj) {
-		if($(obj).span.hasClass("remove-file"))
-			$(obj).siblings("span").removeClass("remove-file");
-		else
-			$(obj).siblings("span").addClass("remove-file");
-	}
 </script>
 <!-- Header -->
 <div class="content-section-a" style="min-height: 750px; margin-top: 10px;">
@@ -392,19 +370,11 @@ div.input-group{
 	            </div>
 	            <hr style="height: 2px; background: #777; width: 100%;">
 	            <c:if test="${boardDTO.saved_filename != 'NO' }">	            
-					<div class="content-div" style="width: 30%;" id="content_img_div">
-	                   	<img src="${root }/board/${boardDTO.saved_filename}" width="100%">
-	                   	<div class="content-div" style="width: 100%; text-align: center;">
-							<c:if test="${not empty isLogin}">
-								<a href="/board/ingee/download?file=${boardDTO.saved_filename }" style="font-size: 8pt;">download : ${boardDTO.origin_filename }</a>
-							</c:if>
-							<c:if test="${empty isLogin }">
-								<span style="font-size: 8pt;">download : ${boardDTO.origin_filename }</span>
-							</c:if>
-						</div>
+					<div class="content-div" id="content_img_div">
+	                   	<img src="${root }/board/${boardDTO.saved_filename}" style="max-width: 100%;">
 					</div>
 				</c:if>
-				<div class="content-div" style="width: ${boardDTO.saved_filename != 'NO' ? '70%' : '100%'};">
+				<div class="content-div">
 					<p style="margin-left: 20px; word-break: break-all; white-space: pre-line;">
 						${boardDTO.content }
 					</p>
@@ -517,8 +487,13 @@ div.input-group{
 									<label class="col-md-2 control-label">Image</label>
 									<div class="col-md-9">
 										<input type="file" class="form-control" name="upload_file" id="upload_file">
-										<span class="">${boardDTO.origin_filename }</span>	
-										<button type="button" class="btn btn-sm btn-warning" onclick="removeFile(this);">Remove</button>
+										<c:if test="${boardDTO.saved_filename != 'NO' }">
+											<span class="help-block" style="margin-bottom: 0; color: red; font-size: 9pt;">첨부파일 삭제(삭제하고싶은 파일 체크)</span>
+											<c:set var="saved_file" value="${fn:split(boardDTO.saved_filename, ',') }"/>
+											<c:forTokens items="${boardDTO.origin_filename }" delims="," var="origin_file" varStatus="status">
+												<input type="checkbox" value="${saved_file[status.index] }" name="remove_file"> ${origin_file }
+											</c:forTokens>
+										</c:if>
 										<span class="help-block" style="padding-left: 5px; color: red;">※ Please select a file only if you want to change uploaded image.</span>
 									</div>
 								</div>
@@ -526,7 +501,8 @@ div.input-group{
 							<div class="panel-footer">
 								<input type="hidden" name="writer" value="${boardDTO.writer }">
 								<input type="hidden" name="num" value="${boardDTO.num }">
-	                            <input type="submit" class="btn btn-success" value="OK"/>
+	                            <input type="submit" class="btn btn-success" value="OK" id="updateSubmit"/>
+<!-- 	                            <input type="hidden" name="remove_file" value=""> -->
 	                            <input type="reset" class="btn btn-danger" value="Clear" />
 	                            <button style="float: right;" type="button" class="btn btn-default btn-close" data-dismiss="modal">Close</button>
 							</div>

@@ -98,7 +98,7 @@ div.input-group{
 				<div class="well well-sm">
 					<form class="form-horizontal" action="/board/ingee/insert" method="post" enctype="multipart/form-data">
 						<fieldset>
-							<legend class="text-center"><h1>In Gee Chun</h1></legend>
+							<legend class="text-center"><h1>In Gee</h1></legend>
 							<div class="form-group">
 								<div class="input-group">
 									<label class="col-md-2 control-label">Subject</label>

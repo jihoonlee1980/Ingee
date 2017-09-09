@@ -8,7 +8,8 @@
 		select * from comment where <if test="board_num != null">board_num = #{board_num} and</if> comment_num = #{comment_num} order by writetime desc
 	</select>
 	<delete id="deleteComment" parameterType="int">
-		delete from comment where num = #{num}
+		delete from comment where num = #{num};
+		delete from comment where comment_num = #{num};
 	</delete>
 	<update id="updateComment" parameterType="com.menu.model.CommentDTO">
 		update comment set content = #{content} where num = #{num}
