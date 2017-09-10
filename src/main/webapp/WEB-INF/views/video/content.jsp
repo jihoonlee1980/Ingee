@@ -344,6 +344,25 @@ div.input-group{
 			}
 		});
 	}
+	
+	function validateFile(obj){
+		var maxSize = 1024 * 1024 * 100;
+		var fileSize = obj.files[0].size;
+		var fileName = obj.files[0].name;
+		var fileExtenstion = fileName.substring(fileName.lastIndexOf(".") + 1);
+		
+		if(fileExtenstion.toLowerCase() != "mp4"){
+			alert('Upload the file extension to ".mp4".');
+			obj.value = "";
+			return false;
+		}
+		
+		if(fileSize > maxSize){
+			alert("Please upload file size less than 100MB.");
+			obj.value = "";
+			return false;
+		}
+	}
 </script>
 <!-- Header -->
 <div class="content-section-a" style="min-height: 750px; margin-top: 10px;">
@@ -358,18 +377,16 @@ div.input-group{
 						views  :  ${boardDTO.readcount }
 					</span>
 	                <span style="width:50%; text-align: right; display: inline-block; float: left">
-						posted by : ${loginNick }
+						posted by : ${boardDTO.writer }
 					</span>
 					<p align="right">
 						<fmt:formatDate value="${boardDTO.writedate }" pattern="HH:mm, MMM dd, YYYY"/>
 					</p>
 	            </div>
 	            <hr style="height: 2px; background: #777; width: 100%;">
-	            <c:if test="${boardDTO.saved_filename != 'NO' }">	            
-					<div class="content-div" id="content_img_div">
-	                   	<img src="${root }/board/${boardDTO.saved_filename}" style="max-width: 100%;">
-					</div>
-				</c:if>
+				<div class="content-div" id="content_img_div">
+                   	<video style="max-width: 100%;" controls="controls" src="${root }/board/${boardDTO.saved_filename}" autoplay="autoplay"></video>
+				</div>
 				<div class="content-div">
 					<p style="margin-left: 20px; word-break: break-all; white-space: pre-line;">
 						${boardDTO.content }
@@ -413,7 +430,6 @@ div.input-group{
 						<c:set var="perPage" value="10"/>
 						<c:set var="perBlock" value="7"/>
 						<fmt:parseNumber var="totalPage" integerOnly="true" value="${totalComment % perPage == 0 ? totalComment / perPage : totalComment / perPage + 1 }"/>
-						
 						<c:set var="startPage" value="1"/>
 						<c:set var="endPage" value="${totalPage > perBlock ? perBlock : totalPage }"/>
 						<!-- 댓글 페이징 변수 끝 -->
@@ -464,7 +480,7 @@ div.input-group{
 				<div class="well well-sm">
 					<form class="form-horizontal" action="/board/video/update" method="post" enctype="multipart/form-data">
 						<fieldset>
-							<legend class="text-center"><h1>In Gee</h1></legend>
+							<legend class="text-center"><h1>Video</h1></legend>
 							<div class="form-group">
 								<div class="input-group">
 									<label class="col-md-2 control-label">Subject</label>
@@ -485,7 +501,7 @@ div.input-group{
 								<div class="input-group">
 									<label class="col-md-2 control-label">Image</label>
 									<div class="col-md-9">
-										<input type="file" class="form-control" name="upload_file" id="upload_file">
+										<input type="file" class="form-control" name="upload_file" id="upload_file" onchange="validateFile(this)">
 										<c:if test="${boardDTO.saved_filename != 'NO' }">
 											<span class="help-block" style="margin-bottom: 0; color: red; font-size: 9pt;">첨부파일 삭제(삭제하고싶은 파일 체크)</span>
 											<c:set var="saved_file" value="${fn:split(boardDTO.saved_filename, ',') }"/>

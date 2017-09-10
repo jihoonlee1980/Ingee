@@ -35,16 +35,6 @@ public class BoardController {
 	@Autowired
 	CommentDAO commentDAO;
 
-	// final String CATEGORY_INGEE = "ingee";
-	// final String CATEGORY_NOTICE = "notice";
-	// final String CATEGORY_PHOTO = "photo";
-	// final String CATEGORY_VIDEO = "video";
-	// final String CATEGORY_TOUR = "tour";
-	// final String CATEGORY_NETWORK = "network";
-	// final String CATEGORY_WEST = "west";
-	// final String CATEGORY_MIDWEST = "midwest";
-	// final String CATEGORY_NORTHEAST = "northeast";
-	// final String CATEGORY_SOUTH = "south";
 	final String CATEGORY_NULL = "";
 	final String path = "C:\\Users\\jihyun\\Desktop\\egov\\eGovFrameDev-3.6.0-64bit\\workspace\\InGeeFanClub\\src\\main\\webapp\\resources";
 	final int ZERO_COMMENT = 0;
@@ -56,8 +46,8 @@ public class BoardController {
 			@RequestParam(defaultValue = "1") int page) {
 		int perPage = 5;
 		int totalCount;
-
 		List<BoardDTO> boardDTOs;
+		
 		if (search_type == null || keyword == null) {
 			totalCount = boardDAO.getCount(b_category, CATEGORY_NULL);
 			boardDTOs = boardDAO.list((page - 1) * perPage, perPage, b_category, CATEGORY_NULL);
@@ -91,12 +81,12 @@ public class BoardController {
 
 	@RequestMapping(value = "/{b_category}/insert", method = RequestMethod.POST)
 	public String boardInsert(@PathVariable String b_category, BoardDTO boardDTO) {
-		MultipartFile attacehd_file = boardDTO.getUpload_file();
+		MultipartFile upload_file = boardDTO.getUpload_file();
 		boardDTO.setB_category(b_category);
 		boardDTO.setS_category(CATEGORY_NULL);
 
-		if (!"".equals(attacehd_file.getOriginalFilename())) {
-			String originFileName = attacehd_file.getOriginalFilename();
+		if (!"".equals(upload_file.getOriginalFilename())) {
+			String originFileName = upload_file.getOriginalFilename();
 			String extension = originFileName.substring(originFileName.lastIndexOf("."));
 			String boardPath = path + "\\board";
 			String saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000
@@ -110,7 +100,7 @@ public class BoardController {
 			boardDTO.setSaved_filename(saved_filename);
 
 			UploadFileWriter uploadFileWriter = new UploadFileWriter();
-			uploadFileWriter.writeFile(attacehd_file, boardPath, saved_filename);
+			uploadFileWriter.writeFile(upload_file, boardPath, saved_filename);
 		} else {
 			boardDTO.setSaved_filename("NO");
 		}
@@ -220,15 +210,26 @@ public class BoardController {
 
 	@RequestMapping(value = "/{b_category}/{s_category}/list")
 	public ModelAndView boardList(@PathVariable String b_category, @PathVariable String s_category,
+			@RequestParam(value = "search_type", required = false) String search_type,
+			@RequestParam(value = "keyword", required = false) String keyword,
 			@RequestParam(defaultValue = "1") int page) {
 		int perPage = 5;
-		int totalCount = boardDAO.getCount(b_category, s_category);
+		int totalCount;
+		List<BoardDTO> boardDTOs;
+		
+		if (search_type == null || keyword == null) {
+			totalCount = boardDAO.getCount(b_category, s_category);
+			boardDTOs = boardDAO.list((page - 1) * perPage, perPage, b_category, s_category);
+		} else {
+			totalCount = boardDAO.getCount(b_category, s_category, search_type, keyword);
+			boardDTOs = boardDAO.list((page - 1) * perPage, perPage, b_category, s_category, search_type, keyword);
+		}
+
 		int perBlock = 5;
 		int totalPage = totalCount % perPage > 0 ? totalCount / perPage + 1 : totalCount / perPage;
 		int startPage;
 		int endPage;
-		ModelAndView modeAndView = new ModelAndView();
-		List<BoardDTO> boardDTOs = boardDAO.list((page - 1) * perPage, perPage, b_category, s_category);
+		ModelAndView modelAndView = new ModelAndView();
 
 		startPage = (page - 1) / perBlock * perBlock + 1;
 		endPage = startPage + perBlock - 1;
@@ -236,14 +237,144 @@ public class BoardController {
 		if (endPage > totalPage)
 			endPage = totalPage;
 
-		modeAndView.addObject("currentPage", page);
-		modeAndView.addObject("totalCount", totalCount);
-		modeAndView.addObject("totalPage", totalPage);
-		modeAndView.addObject("startPage", startPage);
-		modeAndView.addObject("endPage", endPage);
-		modeAndView.addObject("boardList", boardDTOs);
-		modeAndView.setViewName("/2/" + b_category + "/" + s_category + "/list");
+		modelAndView.addObject("currentPage", page);
+		modelAndView.addObject("totalCount", totalCount);
+		modelAndView.addObject("totalPage", totalPage);
+		modelAndView.addObject("startPage", startPage);
+		modelAndView.addObject("endPage", endPage);
+		modelAndView.addObject("boardList", boardDTOs);
+		modelAndView.setViewName("/2/" + b_category + "/" + s_category + "/list");
 
-		return modeAndView;
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/{b_category}/{s_category}/insert", method = RequestMethod.POST)
+	public String boardInsert(@PathVariable String b_category, @PathVariable String s_category, BoardDTO boardDTO) {
+		MultipartFile upload_file = boardDTO.getUpload_file();
+		boardDTO.setB_category(b_category);
+		boardDTO.setS_category(s_category);
+
+		if (!"".equals(upload_file.getOriginalFilename())) {
+			String originFileName = upload_file.getOriginalFilename();
+			String extension = originFileName.substring(originFileName.lastIndexOf("."));
+			String boardPath = path + "\\board";
+			String saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000
+					+ extension;
+
+			while (boardDAO.find("saved_filename", saved_filename)) {
+				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000;
+			}
+
+			boardDTO.setOrigin_filename(originFileName);
+			boardDTO.setSaved_filename(saved_filename);
+
+			UploadFileWriter uploadFileWriter = new UploadFileWriter();
+			uploadFileWriter.writeFile(upload_file, boardPath, saved_filename);
+		} else {
+			boardDTO.setSaved_filename("NO");
+		}
+
+		boardDAO.insert(boardDTO);
+
+		return "redirect:/board/" + b_category + "/" + s_category + "/list";
+	}
+
+	@RequestMapping(value = "/{b_category}/{s_category}/{board_num}")
+	public ModelAndView boardContent(@PathVariable String b_category, @PathVariable String s_category,
+			@PathVariable int board_num, @RequestParam(defaultValue = "1") int page, HttpSession session) {
+		String loginID = (String) session.getAttribute("loggedInID");
+		String loginNick = (String) session.getAttribute("loginNick");
+		BoardDTO boardDTO = boardDAO.get(board_num);
+		List<CommentDTO> commentDTOs = commentDAO.list(board_num, ZERO_COMMENT);
+		List<String> profile_files = new ArrayList<String>();
+
+		for (CommentDTO commentDTO : commentDTOs) {
+			profile_files
+					.add(memberDAO.get(memberDAO.find("nick", commentDTO.getWriter()).getId()).getSaved_filename());
+		}
+
+		if (!boardDTO.getWriter().equals(loginNick))
+			boardDTO = boardDAO.updateReadCount(board_num);
+
+		ModelAndView modelAndView = new ModelAndView();
+
+		if (loginID != null) {
+			modelAndView.addObject("loggedInProfile", memberDAO.get(loginID).getSaved_filename());
+		}
+
+		modelAndView.addObject("commentList", commentDTOs);
+		modelAndView.addObject("profile_file", profile_files);
+		modelAndView.addObject("boardDTO", boardDTO);
+		modelAndView.setViewName("/2/" + b_category + "/" + s_category + "/content");
+
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/{b_category}/{s_category}/update")
+	public String boardUpdate(@PathVariable String b_category, @PathVariable String s_category, BoardDTO boardDTO,
+			@RequestParam(value = "page", defaultValue = "1") int page,
+			@RequestParam(value = "remove_file", required = false) String remove_file) {
+		String boardPath = path + "\\board";
+		BoardDTO dbDTO = boardDAO.get(boardDTO.getNum());
+		if (remove_file != null) {
+			StringTokenizer remove_files = new StringTokenizer(remove_file, ",");
+
+			while (remove_files.hasMoreTokens()) {
+				String filename = remove_files.nextToken();
+				File file = new File(boardPath + "\\" + filename);
+				if (file.exists())
+					file.delete();
+				dbDTO.setSaved_filename(dbDTO.getSaved_filename().replaceAll(filename, ""));
+				dbDTO.setSaved_filename(dbDTO.getSaved_filename().replaceAll(",,", ","));
+			}
+		}
+
+		if (boardDTO.getUpload_file().getOriginalFilename().equals("")) {
+			boardDTO.setSaved_filename(dbDTO.getSaved_filename().equals("") ? "NO" : dbDTO.getSaved_filename());
+			boardDTO.setOrigin_filename(dbDTO.getSaved_filename().equals("") ? "" : dbDTO.getOrigin_filename());
+			// boardDTO.setOrigin_filename(boardDAO.get(boardDTO.getNum()).getOrigin_filename());
+			// boardDTO.setSaved_filename(boardDAO.get(boardDTO.getNum()).getSaved_filename());
+		} else {
+			MultipartFile upload_file = boardDTO.getUpload_file();
+			File file = new File(boardPath + "\\" + boardDAO.get(boardDTO.getNum()).getSaved_filename());
+
+			if (file.exists())
+				file.delete();
+
+			if (!"".equals(upload_file.getOriginalFilename())) {
+				String originFileName = upload_file.getOriginalFilename();
+				String extension = originFileName.substring(originFileName.lastIndexOf("."));
+				String saved_filename = UUID.randomUUID().toString().split("-")[0]
+						+ System.currentTimeMillis() % 10000000 + extension;
+
+				while (boardDAO.find("saved_filename", saved_filename)) {
+					saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000;
+				}
+
+				boardDTO.setOrigin_filename(originFileName);
+				boardDTO.setSaved_filename(saved_filename);
+
+				UploadFileWriter uploadFileWriter = new UploadFileWriter();
+				uploadFileWriter.writeFile(upload_file, boardPath, saved_filename);
+			}
+		}
+		boardDAO.update(boardDTO);
+
+		return "redirect:/board/" + b_category + "/" + s_category + "/" + boardDTO.getNum() + "?page=" + page;
+	}
+
+	@RequestMapping(value = "/{b_category}/{s_category}/delete")
+	public String boardDelete(@PathVariable String b_category, @PathVariable String s_category,
+			@RequestParam(value = "num", required = true) int num,
+			@RequestParam(value = "page", defaultValue = "1") int page) {
+		String savedFileName = boardDAO.get(num).getSaved_filename();
+		File file = new File(path + "\\board\\" + savedFileName);
+
+		if (file.exists())
+			file.delete();
+
+		boardDAO.delete(num);
+
+		return "redirect:/board/" + b_category + "/" + s_category + "/list?page=" + page;
 	}
 }

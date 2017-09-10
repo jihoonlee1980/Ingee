@@ -17,8 +17,9 @@ public class BoardDAO extends SqlSessionDaoSupport {
 
 		return getSqlSession().selectList("boardList", map);
 	}
-	
-	public List<BoardDTO> list(int start, int perPage, String b_category, String s_category, String search_type, String keyword) {
+
+	public List<BoardDTO> list(int start, int perPage, String b_category, String s_category, String search_type,
+			String keyword) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		map.put("start", start);
@@ -55,8 +56,8 @@ public class BoardDAO extends SqlSessionDaoSupport {
 
 		return getSqlSession().selectOne("boardCount", map);
 	}
-	
-	public int getCount(String b_category, String s_category,  String search_type, String keyword) {
+
+	public int getCount(String b_category, String s_category, String search_type, String keyword) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		map.put("b_category", b_category);
@@ -79,5 +80,18 @@ public class BoardDAO extends SqlSessionDaoSupport {
 		map.put("value", value);
 
 		return getSqlSession().selectOne("findBoard", map) != null;
+	}
+
+	public void updateCommentCount(int num, int countValue) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("num", num);
+		map.put("countValue", countValue);
+
+		getSqlSession().update("updateCommentCountOnDeleteMember", map);
+	}
+
+	public List<BoardDTO> mainList() {
+		return getSqlSession().selectList("listOfMainpage");
 	}
 }

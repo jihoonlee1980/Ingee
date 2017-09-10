@@ -43,6 +43,25 @@ div.input-group{
 			$('.input-group #search_type').val(param);
 		});
 	});
+	
+	function validateFile(obj){
+		var maxSize = 1024 * 1024 * 100;
+		var fileSize = obj.files[0].size;
+		var fileName = obj.files[0].name;
+		var fileExtenstion = fileName.substring(fileName.lastIndexOf(".") + 1);
+		
+		if(fileExtenstion.toLowerCase() != "mp4"){
+			alert('Upload the file extension to ".mp4".');
+			obj.value = "";
+			return false;
+		}
+		
+		if(fileSize > maxSize){
+			alert("Please upload file size less than 100MB.");
+			obj.value = "";
+			return false;
+		}
+	}
 </script>
 <div class="content-section-a" style="margin-top: 10px; min-height: 750px;">
 	<div class="container">
@@ -60,14 +79,7 @@ div.input-group{
 			        		</c:if>
 			        		
 			        		<a href="${href }" class="list-group-item">
-			        			<c:if test="${boardDTO.saved_filename != 'NO' }">
-				                	<div class="media col-md-3" style="margin-top: 2%">
-					                    <figure class="pull-left">
-				                        	<img class="media-object img-rounded img-responsive" src="${root}/board/${boardDTO.saved_filename}" alt="${boardDTO.subject}" style="max-height: 180px; max-width: 250px;">
-				                    	</figure>
-				                	</div>
-			                	</c:if>
-			                	<div class="col-md-${boardDTO.saved_filename != 'NO' ? 6 : 9}" style="margin-top: 2%">
+			                	<div class="col-md-9" style="margin-top: 2%">
 				                    <h4 class="list-group-item-heading"><span style="font-size: 10pt; font-weight: 600; color: #e69b0b"></span><c:out value="${boardDTO.subject}"/><span style="font-size: 10pt; font-weight: 600; color: red">&nbsp;&nbsp;&nbsp;[ ${boardDTO.comment_count } ]</span></h4>
 			                    	<hr style="width: 100%; height: 2px; background: #777; margin-top: 5px 5px;">
 			                    	 <p class="list-group-item-text" style="max-height: 70px; word-break: break-all; white-space: pre-line; overflow: hidden;"> <c:out value="${boardDTO.content}"/> </p>
@@ -180,7 +192,7 @@ div.input-group{
 		<div class="modal fade" id="write" tabindex="-1" role="dialog" aria-labelledby="contactLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="well well-sm">
-					<form class="form-horizontal" action="/board/video/insert" method="post" enctype="multipart/form-data">
+					<form class="form-horizontal" action="/board/video/insert" method="post" enctype="multipart/form-data" onsubmit="return extensionCheck();">
 						<fieldset>
 							<legend class="text-center"><h1>Video</h1></legend>
 							<div class="form-group">
@@ -201,9 +213,9 @@ div.input-group{
 							</div>
 							<div class="form-group">
 								<div class="input-group">
-									<label class="col-md-2 control-label">Image</label>
+									<label class="col-md-2 control-label">Video</label>
 									<div class="col-md-9">
-										<input type="file" class="form-control" name="upload_file" id="upload_file">
+										<input type="file" class="form-control" name="upload_file" id="upload_file" required="required" accept="video/mp4" onchange="validateFile(this)">
 									</div>
 								</div>
 							</div>

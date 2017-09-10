@@ -17,4 +17,16 @@
 	<update id="updateReplyCount" parameterType="HashMap">
 		update comment set reply_count = (select a.* from (select count(*) from comment where comment_num = #{comment_num}) a) where num = #{comment_num}
 	</update>
+	<select id="getReplyCountOnDeleteMember" parameterType="String" resultType="HashMap">
+		select comment_num, count(*) count from comment where writer = #{writer} and comment_num > 0 group by comment_num
+	</select>
+	<select id="getCommentCountOnDeleteMember" parameterType="String" resultType="HashMap">
+		select board_num, count(*) count from comment where writer = #{writer} and comment_num = 0 group by board_num
+	</select>
+	<update id="updateReplyCountOnDeleteMember" parameterType="HashMap">
+		update comment set reply_count = reply_count + #{countValue} where num = #{num}
+	</update>
+	<delete id="deleteMemberCascade" parameterType="String">
+		delete from comment where writer = #{nick}
+	</delete>
 </mapper>
