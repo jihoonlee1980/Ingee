@@ -732,7 +732,7 @@ ul.the-icons {
 	border: none;
 	display: block;
 	max-width: 100%;
-    cursor:url(../img/cursor.png),pointer;
+    cursor: pointer;
     background-color:#fff;
     -webkit-transition: all 0.3s;
 	-moz-transition: all 0.3s;

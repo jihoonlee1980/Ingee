@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="/assets/css/fancybox/jquery.fancybox.css">	
 	<link href="/assets/css/bootstrap-theme.css" rel="stylesheet" />
 	<link rel="stylesheet" href="/assets/css/slippry.css">
-	<link href="/assets/css/style.css?ver=4" rel="stylesheet" />
+	<link href="/assets/css/style.css?ver=5" rel="stylesheet" />
 	<link rel="stylesheet" href="/assets/color/default.css">
 	<link rel="shortcut icon" href="/images/favicon.png">
 	<link href="/css/comment.css?ver=9" rel="stylesheet">

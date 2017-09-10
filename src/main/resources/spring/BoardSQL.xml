@@ -11,7 +11,7 @@
 		</if>
 	</select>	
 	<select id="boardList" resultType="com.menu.model.BoardDTO" parameterType="HashMap">
-		select * from board where b_category = #{b_category} and s_category = #{s_category}
+		select * from board where b_category = #{b_category} <if test="b_category == 'network' and s_category != ''"> and s_category = #{s_category}</if>
 		<if test="search_type != null">
 			and ${search_type} like CONCAT('%',#{keyword},'%')
 		</if>
@@ -23,7 +23,7 @@
 	<update id="updateReadCount" parameterType="int">
 		update board set readcount = readcount + 1 where num = #{num}
 	</update>
-	<select id="findBoard" parameterType="HashMap" resultType="com.menu.model.MemberDAO">
+	<select id="findBoard" parameterType="HashMap" resultType="com.menu.model.BoardDTO">
 		select * from board where ${column} = #{value}
 	</select>
 	<update id="updateBoard">
@@ -38,4 +38,7 @@
 	<update id="updateCommentCountOnDeleteMember" parameterType="HashMap">
 		update board set comment_count = comment_count + #{countValue} where num = #{num}
 	</update>
+	<select id="listOfMainpage" resultType="com.menu.model.BoardDTO">
+		select * from board where b_category='photo' order by writedate desc limit 0, 14
+	</select>
 </mapper>

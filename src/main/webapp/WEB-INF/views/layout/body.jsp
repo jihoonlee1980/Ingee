@@ -75,13 +75,12 @@
 	<div class="row">
 		<div class="col-md-12">
 			<ul class="grid effect" id="grid">
-<%-- 				<c:forEach var="a" items="${list}"> --%>
-<!-- 					<li><a class="fancybox" data-fancybox-group="gallery" -->
-<%-- 						title="${a.writer}<br>${a.writeday}<br>조회(${a.readcount})" --%>
-<%-- 						href="${root}/save/${a.filename}"> <img --%>
-<%-- 							src="${root}/save/${a.filename}" alt="" /> --%>
-<!-- 					</a></li> -->
-<%-- 				</c:forEach> --%>
+				<c:forEach var="boardDTO" items="${boardList}">
+					<li>
+						<a class="fancybox" data-fancybox-group="gallery" href="/board/photo/${boardDTO.num }">
+						<img src="${root}/board/${boardDTO.saved_filename}" alt="" />
+					</a></li>
+				</c:forEach>
 			</ul>
 		</div>
 	</div>

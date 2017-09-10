@@ -344,6 +344,25 @@ div.input-group{
 			}
 		});
 	}
+	
+	function validateFile(obj){
+		var maxSize = 1024 * 1024 * 100;
+		var fileSize = obj.files[0].size;
+		var fileName = obj.files[0].name;
+		var fileExtenstion = fileName.substring(fileName.lastIndexOf(".") + 1);
+		
+		if(fileExtenstion.toLowerCase() != "mp4"){
+			alert('Upload the file extension to ".mp4".');
+			obj.value = "";
+			return false;
+		}
+		
+		if(fileSize > maxSize){
+			alert("Please upload file size less than 100MB.");
+			obj.value = "";
+			return false;
+		}
+	}
 </script>
 <!-- Header -->
 <div class="content-section-a" style="min-height: 750px; margin-top: 10px;">
@@ -461,7 +480,7 @@ div.input-group{
 				<div class="well well-sm">
 					<form class="form-horizontal" action="/board/video/update" method="post" enctype="multipart/form-data">
 						<fieldset>
-							<legend class="text-center"><h1>In Gee</h1></legend>
+							<legend class="text-center"><h1>Video</h1></legend>
 							<div class="form-group">
 								<div class="input-group">
 									<label class="col-md-2 control-label">Subject</label>
@@ -482,7 +501,7 @@ div.input-group{
 								<div class="input-group">
 									<label class="col-md-2 control-label">Image</label>
 									<div class="col-md-9">
-										<input type="file" class="form-control" name="upload_file" id="upload_file">
+										<input type="file" class="form-control" name="upload_file" id="upload_file" onchange="validateFile(this)">
 										<c:if test="${boardDTO.saved_filename != 'NO' }">
 											<span class="help-block" style="margin-bottom: 0; color: red; font-size: 9pt;">첨부파일 삭제(삭제하고싶은 파일 체크)</span>
 											<c:set var="saved_file" value="${fn:split(boardDTO.saved_filename, ',') }"/>

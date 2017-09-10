@@ -72,6 +72,13 @@
 	<script src="/assets/js/AnimOnScroll.js"></script>
 	<script src="/assets/js/custom.js"></script>
 	<script>
+		new AnimOnScroll(document.getElementById('grid'), {
+			minDuration : 0.4,
+			maxDuration : 0.7,
+			viewportFactor : 0.2
+		});
+	</script>
+	<script>
 		$(document).ready(function(){
 		  $('#slippry-slider').slippry(
 			defaults = {
