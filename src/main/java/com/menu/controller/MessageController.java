@@ -27,16 +27,20 @@ public class MessageController {
 	@Autowired
 	MessageDAO messageDAO;
 	
-	@RequestMapping("/")
+	@RequestMapping(value="/" , method = {RequestMethod.POST , RequestMethod.GET})
 	public ModelAndView Message(HttpSession session ,
 			@RequestParam(defaultValue = "1") int page ,
-			@RequestParam(defaultValue = "recv") String DISC) {
+			@RequestParam(defaultValue = "recv") String DISC ,
+			@RequestParam(defaultValue = "") String keyword ,
+			@RequestParam(defaultValue = "") String searchType) {
 		ModelAndView modelAndView = new ModelAndView();
 		String id = (String)session.getAttribute("loggedInID");
 		int perPage = 5;
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
 		map.put("DISC", DISC);
+		map.put("keyword", keyword);
+		map.put("searchType", searchType);
 		int totalCount = messageDAO.getRecvMessageCount(map);
 		int perBlock = 5;
 		int totalPage = totalCount % perPage > 0 ? totalCount / perPage + 1 : totalCount / perPage;
@@ -52,7 +56,8 @@ public class MessageController {
 		map.put("startPage", (page - 1) * perPage);
 		map.put("perPage", perPage);
 		map.put("DISC", DISC);
-		
+		map.put("keyword", keyword);
+		map.put("searchType", searchType);
 		List<MessageDTO> messageDTOs = messageDAO.getRecvMessageList(map);	
 		if (page > totalPage)
 			page = totalPage;
@@ -64,6 +69,8 @@ public class MessageController {
 		modelAndView.addObject("endPage", endPage);
 		modelAndView.addObject("messageDTOs" , messageDTOs);
 		modelAndView.addObject("DISC" , DISC);
+		modelAndView.addObject("keyword",keyword);
+		modelAndView.addObject("searchType",searchType);
 		modelAndView.setViewName("/1/message/list");
 		return modelAndView;
 	}
@@ -130,6 +137,17 @@ public class MessageController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("resultList", resultList);
 
+		ModelAndView modelAndView = new ModelAndView("jsonView", map);
+
+		return map;
+	}
+	@RequestMapping(value = "/check/id/single")
+	public @ResponseBody Map<String, Object> checkID(@RequestParam String id) {
+		boolean check = messageDAO.checkIdSingle(id);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("resultCheck", check);
 		ModelAndView modelAndView = new ModelAndView("jsonView", map);
 
 		return map;

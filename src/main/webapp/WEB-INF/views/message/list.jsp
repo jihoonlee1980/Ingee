@@ -10,23 +10,19 @@
 <script src="/assets/jquery-3.2.1.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function () {
-	$('.star').on('click', function () {
-      $(this).toggleClass('star-checked');
-    });
-
-    $('.ckbox label').on('click', function () {
-      $(this).parents('tr').toggleClass('selected');
-    });
-
-    $('.btn-filter').on('click', function () {
-      var $target = $(this).data('target');
-      if ($target != 'all') {
-        $('.table tr').css('display', 'none');
-        $('.table tr[data-status="' + $target + '"]').fadeIn('slow');
-      } else {
-        $('.table tr').css('display', 'none').fadeIn('slow');
-      }
-    });
+	$('.search-panel .dropdown-menu').find('a').click(function(e) {
+		e.preventDefault();
+		var param = $(this).attr("href").replace("#","");
+		var concept = $(this).text();
+		$('.search-panel span#type').text(concept);
+		
+		if(param == "receiver")
+			$("input[name='DISC']").val("sent");
+		else
+			$("input[name='DISC']").val("recv");
+		
+		$('.input-group #search_type').val(param);
+	});
  });
 </script>
 <style>
@@ -134,12 +130,93 @@ a {
 	    <div class="row">
 			<div class="col-md-12">
 			    <div class="blog-comment">
-					<h3 class="text-success">Message</h3>
+					<h3 class="text-success">					
+					Message
+					<c:choose>
+						<c:when test="${DISC == 'sent' }">
+							Sent messages
+						</c:when>
+						<c:otherwise>
+							Received messages
+						</c:otherwise>
+					</c:choose>		
+					</h3>
 					<div class="btn-group">
-								<button type="button" class="btn btn-success" onclick="javascript:location.href='/message/'">받은쪽지함</button>
-								<button type="button" class="btn btn-warning" onclick="javascript:location.href='/message/?DISC=sent'">보낸쪽지함</button>
-								<button type="button" class="btn btn-primary" onclick="javascript:location.href='/message/send'">쪽지쓰기</button>
-					</div>					
+								<button type="button" class="btn btn-success" onclick="javascript:location.href='/message/'">Received messages</button>
+								<button type="button" class="btn btn-warning" onclick="javascript:location.href='/message/?DISC=sent'">Sent messages</button>
+								<button type="button" class="btn btn-primary" onclick="javascript:location.href='/message/send'">Write</button>
+					</div>
+					<form action="/message/" class="form-horizontal" style="width: 30%; float: right;" method="post">
+						<div class="col-xs-12">
+						    <div class="input-group">
+				                <div class="input-group-btn search-panel">
+				                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+				                    <c:choose>
+										<c:when test="${DISC == 'sent' }">
+											<c:if test="${empty searchType}">
+												<span id="type">receiver</span> <span class="caret"></span>	
+											</c:if>
+											<c:if test="${!empty searchType}">
+												<span id="type">${searchType}</span> <span class="caret"></span>
+											</c:if>
+										</c:when>
+										<c:otherwise>
+											<c:if test="${empty searchType}">
+												<span id="type">sender</span> <span class="caret"></span>
+											</c:if>
+											<c:if test="${!empty searchType}">
+												<span id="type">${searchType}</span> <span class="caret"></span>
+											</c:if>
+										</c:otherwise>
+									</c:choose>
+				                    		
+				                    </button>
+				                    <ul class="dropdown-menu" role="menu">
+				                    <c:choose>
+										<c:when test="${DISC == 'sent' }">
+											<li><a href="#receiver">receiver</a></li>	
+										</c:when>
+										<c:otherwise>
+											<li><a href="#sender">sender</a></li>
+										</c:otherwise>
+									</c:choose>					                    				                    	
+										<li><a href="#content">content</a></li>
+										<li><a href="#subject">subject</a></li>
+				                    </ul>
+				                </div>
+				                <c:choose>
+										<c:when test="${DISC == 'sent' }">
+											<c:if test="${empty searchType}">											
+												<input type="hidden" name="searchType" value ="receiver" id="search_type">
+											</c:if>
+											<c:if test="${!empty searchType}">
+												<input type="hidden" name="searchType" value ="${searchType}" id="search_type">
+											</c:if>				                			
+										</c:when>
+										<c:otherwise>
+											<c:if test="${empty searchType}">
+												<input type="hidden" name="searchType" value ="sender" id="search_type">
+											</c:if>
+											<c:if test="${!empty searchType}">
+				                				<input type="hidden" name="searchType" value ="${searchType }" id="search_type">
+				                			</c:if>
+										</c:otherwise>
+								</c:choose>
+				                
+				                <input type="hidden" name="page" value="${currentPage}">
+				                <input type="hidden" name="DISC" value="${DISC}">
+				                	<c:if test="${empty keyword}">
+				                		<input type="text" class="form-control" name="keyword" value="">
+				                	</c:if>
+				                	<c:if test="${!empty keyword}">
+				                		<input type="text" class="form-control" name="keyword" value="${keyword}">
+				                	</c:if>
+				                <span class="input-group-btn">
+				                    <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+				                </span>
+				            </div>
+				        </div>
+					</form>					
 	                <hr/>
 					<ul class="comments">
 					<c:choose>
@@ -157,10 +234,20 @@ a {
 							  
 							  <div class="post-comments">
 							      <p class="meta"><fmt:formatDate value="${messageDTO.date_sent}" pattern=" HH:mm MMM dd yyyy" /> &nbsp;
-							      	<a href="#">${messageDTO.receiver_nick}(${messageDTO.receiver})</a> says : <b style="font-size:16px;">${messageDTO.subject}</b>							      	
+							      	<a href="#">
+							      	<c:choose>
+										<c:when test="${DISC == 'sent' }">
+											<c:out value="${messageDTO.receiver_nick }"/>(<c:out value="${messageDTO.receiver }"/>)
+										</c:when>
+										<c:otherwise>
+											<c:out value="${messageDTO.sender_nick }"/>(<c:out value="${messageDTO.sender }"/>)
+										</c:otherwise>
+									</c:choose>							      	
+							      	</a> says : <b style="font-size:16px;"><c:out value="${messageDTO.subject}"/></b>							      	
 							      </p>
 							      <p>
-							          ${messageDTO.content}
+							      	<c:out value="${messageDTO.content}"/>
+							          
 							      </p>
 							  </div>
 							</li>

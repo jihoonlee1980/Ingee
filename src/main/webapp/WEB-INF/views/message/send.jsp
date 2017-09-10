@@ -10,24 +10,31 @@
 <script src="/assets/jquery-3.2.1.min.js"></script>
 <link href="/assets/css/bootstrap.css?ver=2" rel="stylesheet">
 <script type="text/javascript">
-$(document).ready(function(){
+$(document).ready(function(){	
     $("#addRecvBtn").click(function(){
-    	if($("#addAllRecvBtn").attr("check")=="false"){
+    	var recvArray = $("input[name='recvlist']").val().split(",");
+    	console.log("array : "+recvArray.length);
+    	if($("#addAllRecvBtn").attr("check")=="false"){    		
 	    	$("input[name='receiver']").prop("required",true);
-	    	if(idValidCheck()){
-	    		//$("#recvAddForm").html("");
-	        	$('#recvAddForm').empty();
-	    		var receiver = $("input[name='receiver']").val();    		
-	    		var OUTHTML = "<div class='input-group' ><span class='input-group-addon'><i class='fa fa-envelope'></i></span>"
-	    					+ "<input type='email' class='form-control' style='width:75%;' value='"+receiver+"' readonly='readonly'>";    					 
-	    					
-	    		$(OUTHTML).appendTo("#recvAddForm");
+	    	if(recvArray.length > 1){
 	    		$("#myModal").modal();
+	    	}
+	    	else{
+	    		if(idValidCheckAddBtn()){
+		    		//$("#recvAddForm").html("");
+		        	$('#recvAddForm').empty();
+		    		var receiver = $("input[name='receiver']").val();    		
+		    		var OUTHTML = "<div class='input-group' ><span class='input-group-addon'><i class='fa fa-envelope'></i></span>"
+		    					+ "<input type='email' class='form-control' style='width:75%;' value='"+receiver+"' readonly='readonly'>"
+		    					+ "<a class='btn icon-btn btn-warning' href='#' onclick=\"javascript:recvRemove(this);\"><span class='glyphicon btn-glyphicon glyphicon-minus img-circle text-warning'></span>Remove</a></div>";
+		    		$(OUTHTML).appendTo("#recvAddForm");
+		    		$("#myModal").modal();
+		    	}	
 	    	}
     	}
     	else
     		alert("All button is enabled");
-    });
+    });    
     $("#addAllRecvBtn").click(function(){
     	if($(this).attr("check")=="false"){
     		$("input[name='receiver']").prop("required",false);
@@ -47,7 +54,8 @@ $(document).ready(function(){
     });
     $('[data-toggle="tooltip"]').tooltip();  
 });
-function recvAdd() {	
+function recvAdd() {
+	var recvListArray = $("input[name='recvlist']").val().split(",")
 	var size = $("#recvAddForm").children(".input-group").size();
 	if(size < 10){
 		var OUTHTML = "<div class='input-group' ><span class='input-group-addon'><i class='fa fa-envelope'></i></span>"
@@ -60,13 +68,44 @@ function recvAdd() {
 		alert("You can only send to up to 10 people.");
 	}
 }
-
-function recvRemove(obj) {
-	$(obj).parent(".input-group").remove();	
+function recvAddClose(recvList){
+	var recvListArray = recvList.split(",");
+	if(recvListArray.length > 0){
+		$('#recvAddForm').empty();
+		for(var i = 0 ; i < recvListArray.length ; i ++){
+			var OUTHTML = "<div class='input-group' ><span class='input-group-addon'><i class='fa fa-envelope'></i></span>"
+				+ "<input type='email' class='form-control' style='width:75%;' value='"+recvListArray[i]+"' readonly='readonly'>"				
+				+ "<a class='btn icon-btn btn-warning' href='#' onclick=\"javascript:recvRemove(this);\"><span class='glyphicon btn-glyphicon glyphicon-minus img-circle text-warning'></span>Remove</a></div>";
+			$(OUTHTML).appendTo("#recvAddForm");
+		}
+	}
+	
 }
 
-function idValidCheck(){
-	var check = false;
+function recvRemove(obj) {	
+	var $recvList = $("input[name='recvlist']");
+	var recvArray = $recvList.val().split(",");
+	if(recvArray.length > 0){
+		console.log("before : "+$recvList.val());
+		var objValue = $(obj).parent(".input-group").children(".form-control").val();
+		var newRecvList = "";
+		for(var i = 0; i < recvArray.length ; i ++){		
+			if(recvArray[i] == objValue){
+				newRecvList += "";
+			}	
+			else
+				newRecvList += recvArray[i] + ",";
+		}
+		newRecvList = newRecvList.slice(0,-1);
+		$recvList.val(newRecvList);
+		console.log("after : "+$recvList.val());	
+	}
+	
+	$(obj).parent(".input-group").remove();	
+}
+function idValidCheckAddBtn(){	
+	var check = true;
+	
 	var receiver = $("input[name='receiver']").val(); 
 	var id = receiver.replace(" ", "");
 	var reg_email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
@@ -76,15 +115,40 @@ function idValidCheck(){
 		check = false;
 	}
 	
-	if(!reg_email.test(id) && ($("input[name='receiver']").val()==null || $("input[name='receiver']").val()=="")){
+	if(!reg_email.test(id)){
 		alert("It’s not a valid email form.");
 		check = false;
-	}
-	else{
-		check = true;
-	}
+	}	
 	return check;
+}
+
+function idValidCheck(){	
+	var check = true;
 	
+	var receiver = $("input[name='receiver']").val();
+	var title = $("input[name='receiver']").attr("title");
+	var id = receiver.replace(" ", "");
+	if(title == ""){	
+		
+		var reg_email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+	
+		if(id == ""){
+			alert("Please enter your username(eamil address)");
+			check = false;
+		}
+		
+		if(!reg_email.test(id)){
+			alert("It’s not a valid email form.");
+			check = false;
+		}
+		
+	}
+	var recvlist = id.split(",");
+	if(recvlist.length == 1 && check){
+		check = singleIdcheck(id);
+	}
+	
+	return check;
 }
 
 function idValidCheckMulti(){
@@ -111,49 +175,24 @@ function idValidCheckMulti(){
 	});
 	return check;
 }
-
-function idCheck(){
-	if(idValidCheckMulti()){
-		var arrData = new Array();        
-        
-		$("#recvAddForm").children(".input-group").each(function(index){
-			arrData[index] = $(this).children(".form-control").val();	 
-		});
-		console.log(arrData);
-		jQuery.ajaxSettings.traditional = true;
+function singleIdcheck(id) {
+	var sendCheck = false;
 		$.ajax({
-			url : "/message/check/id",
+			url : "/message/check/id/single",
 			type : "get",
-			data : {"arrData" : arrData},
+			data : {"id" : id},
 			dataType : "json",
+			async: false,
 			success : function(data){
-				console.log(data);
-				var resultData = "Invalid ID :";
-				if(data.resultList.length > 0){
-					for(var i =0 ; i < data.resultList.length; i++){
-						resultData += (data.resultList[i] + " , ");
-					}
-					alert(resultData);
-				}
+				//alert("resultCheck : "+data.resultCheck);
+				if(!data.resultCheck){
+					sendCheck = false;
+					var resultData = "Invalid ID :" + data.id;					
+						alert(resultData);
+				}			
 				else{
-					var recvList = "";
-					var recvListSize = $("#recvAddForm").children(".input-group").size();
-					$("#recvAddForm").children(".input-group").each(function(index){
-						
-						if(index === (recvListSize - 1))
-							recvList += ($(this).children(".form-control").val());	 
-						else{
-							recvList += ($(this).children(".form-control").val()+",");	
-						}
-					});
-					var originValue = $("input[name='receiver']").val();
-					$("input[name='receiver']").attr("title",recvList);
-					$("input[name='receiver']").val(originValue+"  ...");
-					$("input[name='receiver']").prop("required",true);
-					$("input[name='recvlist']").val("");
-					$("input[name='recvlist']").val(recvList);
+					sendCheck = true;
 				}
-									
 			},
 			statusCode : {
 				404 : function() {
@@ -163,7 +202,84 @@ function idCheck(){
 					alert("Server or grammatical error.");
 				}
 			}
+		});	
+	return sendCheck;
+}
+
+function idCheck(){
+	if(idValidCheckMulti()){
+		var arrData = new Array();    
+        var valueCheck = true;
+        
+		$("#recvAddForm").children(".input-group").each(function(index){			
+			arrData[index] = $(this).children(".form-control").val();
 		});
+		
+		var headers = $("#recvAddForm").children(".input-group");
+		var arrNewData = new Array();
+        for (var i = 0; i < headers.length; i++) {      
+        	for(var j = 0; j < i ; j++){
+        		if(arrData[i] === $(headers[j]).children(".form-control").val()){
+            		valueCheck = false;            		
+            		$(headers[j]).remove();
+            	}
+        		else{
+            	}
+        	}
+        }
+        arrData = new Array();
+        $("#recvAddForm").children(".input-group").each(function(index){			
+			arrData[index] = $(this).children(".form-control").val();
+		});
+        console.log(arrData);
+		//console.log(arrData);
+        if(valueCheck){
+    		jQuery.ajaxSettings.traditional = true;
+    		$.ajax({
+    			url : "/message/check/id",
+    			type : "get",
+    			data : {"arrData" : arrData},
+    			dataType : "json",
+    			success : function(data){
+    				console.log(data);
+    				var resultData = "Invalid ID :";
+    				if(data.resultList.length > 0){
+    					for(var i =0 ; i < data.resultList.length; i++){
+    						resultData += (data.resultList[i] + " , ");
+    					}
+    					alert(resultData);
+    				}
+    				else{
+    					var recvList = "";
+    					var recvListSize = $("#recvAddForm").children(".input-group").size();
+    					$("#recvAddForm").children(".input-group").each(function(index){
+    						if(index === (recvListSize - 1))
+    							recvList += ($(this).children(".form-control").val());	 
+    						else{
+    							recvList += ($(this).children(".form-control").val()+",");	
+    						}						
+    					});
+    					var originValue = $("input[name='receiver']").val();
+    					$("input[name='receiver']").attr("title",recvList);
+    					$("input[name='receiver']").val(recvList);
+    					$("input[name='receiver']").prop("readonly",true);    					
+    					$("input[name='recvlist']").val("");
+    					$("input[name='recvlist']").val(recvList);
+    					$("#myModal").modal("hide");
+    					recvAddClose(recvList);
+    				}
+    									
+    			},
+    			statusCode : {
+    				404 : function() {
+    					alert("No data.");
+    				},
+    				500 : function() {
+    					alert("Server or grammatical error.");
+    				}
+    			}
+    		});
+    		}
 	}
 }
 
@@ -266,15 +382,13 @@ function idCheck(){
 				  <div class="modal-dialog">
 				    <div class="modal-content">
 				      <div class="modal-header">
-				        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+				        <button type="button" class="close" data-dismiss="modal" onclick="javascript:modalClose();"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
 				        <h4 class="modal-title" id="myModalLabel"><i class="fa fa-share-alt"></i> Share</h4>
 				      </div>
-				      <div class="modal-body">
-				        <p><a title="Facebook" href=""><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x"></i></span></a> <a title="Twitter" href=""><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-twitter fa-stack-1x"></i></span></a> <a title="Google+" href=""><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-google-plus fa-stack-1x"></i></span></a> <a title="Linkedin" href=""><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-linkedin fa-stack-1x"></i></span></a> <a title="Reddit" href=""><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-reddit fa-stack-1x"></i></span></a> <a title="WordPress" href=""><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-wordpress fa-stack-1x"></i></span></a> <a title="Digg" href=""><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-digg fa-stack-1x"></i></span></a>  <a title="Stumbleupon" href=""><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-stumbleupon fa-stack-1x"></i></span></a><a title="E-mail" href=""><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-envelope fa-stack-1x"></i></span></a>  <a title="Print" href=""><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-print fa-stack-1x"></i></span></a></p>
-				        
-				        <h2><i class="fa fa-envelope"></i> Newsletter</h2>
+				      <div class="modal-body">			        
+				        <h2><i class="fa fa-envelope"></i>Message Send</h2>
 				                
-				                <p>Subscribe to our weekly Newsletter and stay tuned.
+				                <p>Adding a message recipient
 					                <a class="btn icon-btn btn-success" href="#" onclick="recvAdd()"><span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-success">
 					                </span>Add</a>
 				                </p>
@@ -288,7 +402,7 @@ function idCheck(){
 				              </form>
 				      </div>
 				      <div class="modal-footer">
-				        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="javascript:modalClose();">Close</button>
 				      </div>
 				    </div>
 				  </div>

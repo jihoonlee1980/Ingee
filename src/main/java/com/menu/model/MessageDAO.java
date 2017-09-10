@@ -56,4 +56,11 @@ public class MessageDAO extends SqlSessionDaoSupport {
 		}		
 		return ids;
 	}
+	public boolean checkIdSingle(String id) {
+		if(getSqlSession().selectOne("messageIdcheck" , id)==null)
+			return false;
+		else
+			return true;			
+	}
+	
 }

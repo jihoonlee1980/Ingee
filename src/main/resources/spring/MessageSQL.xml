@@ -2,17 +2,51 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com2">
 	<select id="getRecvMessageCount" parameterType="HashMap" resultType="int">
-		select count(*) from message
-		 where 
-		<choose>             
-             <when test="DISC == 'recv'">
-                 receiver 
-             </when>                            
-             <otherwise>
-                sender
-             </otherwise>        
-         </choose>
-         = #{id}		
+		select count(*) from message msg		
+		where
+		<choose>
+			<when test="keyword!=null and !keyword.equals('')">
+				<if test="searchType=='content'">
+					msg.content like CONCAT('%',#{keyword},'%') and
+					<choose>             
+	             		<when test="DISC == 'recv'">
+	             			msg.receiver = #{id}
+	             		</when>
+	             		<otherwise>
+	             			msg.sender = #{id}
+	             		</otherwise>
+	             	</choose>					 
+				</if>
+				<if test="searchType=='subject'">
+					msg.subject like CONCAT('%',#{keyword},'%') and
+					<choose>             
+	             		<when test="DISC == 'recv'">
+	             			msg.receiver = #{id}
+	             		</when>
+	             		<otherwise>
+	             			msg.sender = #{id}
+	             		</otherwise>
+	             	</choose>
+				</if>
+				<if test="searchType=='sender'">
+					msg.sender like CONCAT('%',#{keyword},'%') and msg.receiver = #{id}
+				</if>
+				<if test="searchType=='receiver'">
+					msg.receiver like CONCAT('%',#{keyword},'%') and msg.sender = #{id}
+				</if>
+			</when>
+			<otherwise>
+				<choose>             
+	             <when test="DISC == 'recv'">
+	                 msg.receiver
+	             </when>                            
+	             <otherwise>
+	                 msg.sender
+	             </otherwise>        
+	         	</choose>
+			 		= #{id}
+			</otherwise>
+		</choose>
 	</select>
 	
 	<select id="getRecvMessageList" parameterType="HashMap" resultType="com.menu.model.MessageDTO">
@@ -25,16 +59,51 @@
 		on msg.sender = m.id
 		left outer join member m2
 		on msg.receiver = m2.id
-		where 
-		<choose>             
-             <when test="DISC == 'recv'">
-                 msg.receiver
-             </when>                            
-             <otherwise>
-                 msg.sender
-             </otherwise>        
-         </choose>
-		 = #{id} order by msg.date_sent desc limit #{startPage} , #{perPage}
+		where
+		<choose>
+			<when test="keyword!=null and !keyword.equals('')">
+				<if test="searchType=='content'">
+					msg.content like CONCAT('%',#{keyword},'%') and
+					<choose>             
+	             		<when test="DISC == 'recv'">
+	             			msg.receiver = #{id}
+	             		</when>
+	             		<otherwise>
+	             			msg.sender = #{id}
+	             		</otherwise>
+	             	</choose>					 
+				</if>
+				<if test="searchType=='subject'">
+					msg.subject like CONCAT('%',#{keyword},'%') and
+					<choose>             
+	             		<when test="DISC == 'recv'">
+	             			msg.receiver = #{id}
+	             		</when>
+	             		<otherwise>
+	             			msg.sender = #{id}
+	             		</otherwise>
+	             	</choose>
+				</if>
+				<if test="searchType=='sender'">
+					msg.sender like CONCAT('%',#{keyword},'%') and msg.receiver = #{id}
+				</if>
+				<if test="searchType=='receiver'">
+					msg.receiver like CONCAT('%',#{keyword},'%') and msg.sender = #{id}
+				</if>
+			</when>
+			<otherwise>
+				<choose>             
+	             <when test="DISC == 'recv'">
+	                 msg.receiver
+	             </when>                            
+	             <otherwise>
+	                 msg.sender
+	             </otherwise>        
+	         	</choose>
+			 		= #{id}
+			</otherwise>
+		</choose>			
+		 order by msg.date_sent desc limit #{startPage} , #{perPage}
 	</select>
 	
 	<select id="getMessageContent" parameterType="int" resultType="HashMap">
