@@ -90,7 +90,7 @@ div.input-group{
 			                	<div class="col-md-${boardDTO.saved_filename != 'NO' ? 6 : 9}" style="margin-top: 2%">
 				                    <h4 class="list-group-item-heading"><span style="font-size: 10pt; font-weight: 600; color: #e69b0b"></span><c:out value="${boardDTO.subject}"/><span style="font-size: 10pt; font-weight: 600; color: red">&nbsp;&nbsp;&nbsp;[ ${boardDTO.comment_count } ]</span></h4>
 			                    	<hr style="width: 100%; height: 2px; background: #777; margin-top: 5px 5px;">
-			                    	 <p class="list-group-item-text" style="max-height: 70px; word-break: break-all; white-space: pre-line; overflow: hidden;"> <c:out value="${boardDTO.content}"/> </p>
+			                    	<p class="list-group-item-text" style="max-height: 70px; word-break: break-all; white-space: pre-line; overflow: hidden;">${boardDTO.content }</p>
 			                	</div>
 			                	<div class="col-md-3 text-center" style="margin-top: 2%">
 				                    <h4> <c:out value="${boardDTO.readcount}"/> <small> Views </small></h4>

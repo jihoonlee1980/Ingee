@@ -433,7 +433,6 @@ div.input-group{
 						<c:set var="perPage" value="10"/>
 						<c:set var="perBlock" value="7"/>
 						<fmt:parseNumber var="totalPage" integerOnly="true" value="${totalComment % perPage == 0 ? totalComment / perPage : totalComment / perPage + 1 }"/>
-						
 						<c:set var="startPage" value="1"/>
 						<c:set var="endPage" value="${totalPage > perBlock ? perBlock : totalPage }"/>
 						<!-- 댓글 페이징 변수 끝 -->

@@ -17,6 +17,7 @@ import com.menu.model.BoardDAO;
 import com.menu.model.CommentDAO;
 import com.menu.model.CommentDTO;
 import com.menu.model.MemberDAO;
+import com.nhncorp.lucy.security.xss.XssPreventer;
 
 @Controller
 @RequestMapping("/comment")
@@ -33,6 +34,7 @@ public class CommentController {
 	@RequestMapping(value = "/{b_category}/insert")
 	public String insertComment(@PathVariable String b_category, CommentDTO commentDTO,
 			@RequestParam(value = "page", defaultValue = "1") int page) {
+		commentDTO.setContent(XssPreventer.escape(commentDTO.getContent()));
 		commentDAO.insert(commentDTO);
 
 		return "redirect:/board/" + b_category + "/" + commentDTO.getBoard_num() + "?page=" + page;
@@ -41,6 +43,7 @@ public class CommentController {
 	@RequestMapping(value = "/{b_category}/update")
 	public String updateComment(@PathVariable String b_category, CommentDTO commentDTO,
 			@RequestParam(value = "page", defaultValue = "1") int page) {
+		commentDTO.setContent(XssPreventer.escape(commentDTO.getContent()));
 		commentDAO.update(commentDTO);
 
 		return "redirect:/board/" + b_category + "/" + commentDTO.getBoard_num() + "?page=" + page;
@@ -85,6 +88,7 @@ public class CommentController {
 	@RequestMapping(value = "/{b_category}/{s_category}/insert")
 	public String insertComment(@PathVariable String b_category, @PathVariable String s_category, CommentDTO commentDTO,
 			@RequestParam(value = "page", defaultValue = "1") int page) {
+		commentDTO.setContent(XssPreventer.escape(commentDTO.getContent()));
 		commentDAO.insert(commentDTO);
 
 		return "redirect:/board/" + b_category + "/" + s_category + "/" + commentDTO.getBoard_num() + "?page=" + page;
@@ -93,6 +97,7 @@ public class CommentController {
 	@RequestMapping(value = "/{b_category}/{s_category}/update")
 	public String updateComment(@PathVariable String b_category, @PathVariable String s_category, CommentDTO commentDTO,
 			@RequestParam(value = "page", defaultValue = "1") int page) {
+		commentDTO.setContent(XssPreventer.escape(commentDTO.getContent()));
 		commentDAO.update(commentDTO);
 
 		return "redirect:/board/" + b_category + "/" + s_category + "/" + commentDTO.getBoard_num() + "?page=" + page;
