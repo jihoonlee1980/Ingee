@@ -488,7 +488,7 @@ a {
 											<c:out value="${messageDTO.sender_nick }"/>(<c:out value="${messageDTO.sender }"/>)
 										</c:otherwise>
 									</c:choose>							      	
-							      	</a> says : <b style="font-size:16px;"><c:out value="${messageDTO.subject}"/></b>
+							      	</a> says : <b style="font-size:16px;">${messageDTO.subject}</b>
 							      		<div class="checkbox checkbox-success">
 					                        <input id="checkbox${messageDTO.num}" num="${messageDTO.num}" type="checkbox">
 					                        <label for="checkbox${messageDTO.num}">
@@ -497,7 +497,7 @@ a {
 							              </div>						      					      	
 							      </p>
 							      <p>
-							      	<c:out value="${messageDTO.content}"/>
+							      	${messageDTO.content}
 							          
 							      </p>
 							  </div>

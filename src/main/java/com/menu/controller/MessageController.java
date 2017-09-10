@@ -80,10 +80,12 @@ public class MessageController {
 	@RequestMapping(value="/send" , method = {RequestMethod.POST , RequestMethod.GET})
 	public ModelAndView MessageSend (HttpSession session , @RequestParam Map<String,Object> map , RedirectAttributes redirectAttributes) {		
 		ModelAndView modelAndView = new ModelAndView();
-		String id = (String)session.getAttribute("loggedInID");
+		String id = (String)session.getAttribute("loggedInID");		
 		modelAndView.addObject("id",id);		
 		String setViewName = "/1/message/send";
-		if(!map.isEmpty()){			
+		if(!map.isEmpty()){
+			map.put("subject", XssPreventer.escape(map.get("subject").toString()));
+			map.put("content", XssPreventer.escape(map.get("content").toString()));
 			if(map.get("recvlist").toString().equals(""))
 				map.put("DISC", "single");
 			else if(map.get("recvlist").toString().equals("all")){
