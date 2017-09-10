@@ -6,9 +6,16 @@
 	</insert>
 	<select id="boardCount" parameterType="HashMap" resultType="int">
 		select count(*) from board where b_category = #{b_category} and s_category = #{s_category}
+		<if test="search_type != null">
+			and ${search_type} like CONCAT('%',#{keyword},'%')
+		</if>
 	</select>	
 	<select id="boardList" resultType="com.menu.model.BoardDTO" parameterType="HashMap">
-		select * from board where b_category = #{b_category} and s_category = #{s_category} order by writedate desc limit #{start} , #{perPage}
+		select * from board where b_category = #{b_category} and s_category = #{s_category}
+		<if test="search_type != null">
+			and ${search_type} like CONCAT('%',#{keyword},'%')
+		</if>
+		order by writedate desc limit #{start} , #{perPage}
 	</select>
 	<select id="getBoard" parameterType="int" resultType="com.menu.model.BoardDTO">
 		select * from board where num = #{num}

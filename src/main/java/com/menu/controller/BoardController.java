@@ -23,6 +23,7 @@ import com.menu.model.BoardDTO;
 import com.menu.model.CommentDAO;
 import com.menu.model.CommentDTO;
 import com.menu.model.MemberDAO;
+import com.menu.model.MemberDTO;
 
 @Controller
 @RequestMapping("/board")
@@ -49,15 +50,27 @@ public class BoardController {
 	final int ZERO_COMMENT = 0;
 
 	@RequestMapping(value = "/{b_category}/list")
-	public ModelAndView boardList(@PathVariable String b_category, @RequestParam(defaultValue = "1") int page) {
+	public ModelAndView boardList(@PathVariable String b_category,
+			@RequestParam(value = "search_type", required = false) String search_type,
+			@RequestParam(value = "keyword", required = false) String keyword,
+			@RequestParam(defaultValue = "1") int page) {
 		int perPage = 5;
-		int totalCount = boardDAO.getCount(b_category, CATEGORY_NULL);
+		int totalCount;
+
+		List<BoardDTO> boardDTOs;
+		if (search_type == null || keyword == null) {
+			totalCount = boardDAO.getCount(b_category, CATEGORY_NULL);
+			boardDTOs = boardDAO.list((page - 1) * perPage, perPage, b_category, CATEGORY_NULL);
+		} else {
+			totalCount = boardDAO.getCount(b_category, CATEGORY_NULL, search_type, keyword);
+			boardDTOs = boardDAO.list((page - 1) * perPage, perPage, b_category, CATEGORY_NULL, search_type, keyword);
+		}
+
 		int perBlock = 5;
 		int totalPage = totalCount % perPage > 0 ? totalCount / perPage + 1 : totalCount / perPage;
 		int startPage;
 		int endPage;
-		ModelAndView modeAndView = new ModelAndView();
-		List<BoardDTO> boardDTOs = boardDAO.list((page - 1) * perPage, perPage, b_category, CATEGORY_NULL);
+		ModelAndView modelAndView = new ModelAndView();
 
 		startPage = (page - 1) / perBlock * perBlock + 1;
 		endPage = startPage + perBlock - 1;
@@ -65,15 +78,15 @@ public class BoardController {
 		if (endPage > totalPage)
 			endPage = totalPage;
 
-		modeAndView.addObject("currentPage", page);
-		modeAndView.addObject("totalCount", totalCount);
-		modeAndView.addObject("totalPage", totalPage);
-		modeAndView.addObject("startPage", startPage);
-		modeAndView.addObject("endPage", endPage);
-		modeAndView.addObject("boardList", boardDTOs);
-		modeAndView.setViewName("/1/" + b_category + "/list");
+		modelAndView.addObject("currentPage", page);
+		modelAndView.addObject("totalCount", totalCount);
+		modelAndView.addObject("totalPage", totalPage);
+		modelAndView.addObject("startPage", startPage);
+		modelAndView.addObject("endPage", endPage);
+		modelAndView.addObject("boardList", boardDTOs);
+		modelAndView.setViewName("/1/" + b_category + "/list");
 
-		return modeAndView;
+		return modelAndView;
 	}
 
 	@RequestMapping(value = "/{b_category}/insert", method = RequestMethod.POST)
@@ -153,6 +166,7 @@ public class BoardController {
 				if (file.exists())
 					file.delete();
 				dbDTO.setSaved_filename(dbDTO.getSaved_filename().replaceAll(filename, ""));
+				dbDTO.setSaved_filename(dbDTO.getSaved_filename().replaceAll(",,", ","));
 			}
 		}
 

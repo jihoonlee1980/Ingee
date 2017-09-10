@@ -247,7 +247,7 @@
 										<div class="input-group-addon">
 											<i class="fa fa-mobile"></i>
 										</div>
-					                    <input type="text" class="form-control" id="hp" placeholder="HP" name="hp" required="required">
+					                    <input type="text" class="form-control" id="hp" placeholder="HP(ex.123-123-1234)" name="hp" required="required">
 									</div>                                    
 								</div>
 								 <div class="col-sm-6">

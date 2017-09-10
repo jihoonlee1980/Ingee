@@ -122,14 +122,28 @@ table.admin thead tr th a {
 					</tr>
 				</thead>   
 				<tbody>
-					<c:forEach var="memberDTO" items="${memberList }">
-						<tr >
-		                    <td>${memberDTO.name }</td>
-		                    <td><a href="mailto:${memberDTO.id }">${memberDTO.id }</a></td>
-		                    <td>${memberDTO.detailed_address }, ${memberDTO.city }, ${memberDTO.state }, ${memberDTO.zipcode } </td>
-		                    <td>${memberDTO.hp }</td>
-	                	</tr>
-					</c:forEach>
+					<c:if test="${fn:length(memberList) > 0 }">
+						<c:forEach var="memberDTO" items="${memberList }">
+							<tr>
+			                    <td>${memberDTO.name }</td>
+			                    <td><a href="mailto:${memberDTO.id }">${memberDTO.id }</a></td>
+			                    <td>${memberDTO.detailed_address }, ${memberDTO.city }, ${memberDTO.state }, ${memberDTO.zipcode } </td>
+			                    <td>${memberDTO.hp }</td>
+		                	</tr>
+						</c:forEach>
+					</c:if>
+					<c:if test="${fn:length(memberList) == 0 }">
+						<tr>
+							<td colspan="4">
+								<c:if test="${param.search_type eq null }">
+									등록된 회원이 없습니다.
+								</c:if>
+								<c:if test="${param.search_type ne null }">
+									"${param.keyword }"로 검색된 결과가 없습니다.
+								</c:if>
+							</td>
+						</tr>
+					</c:if>
 				</tbody>
 			</table>
 			<c:if test="${totalPage > 0}">

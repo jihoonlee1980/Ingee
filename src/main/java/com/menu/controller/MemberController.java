@@ -181,7 +181,7 @@ public class MemberController {
 		if (session.getAttribute("loginID") != null)
 			session.removeAttribute("loginID");
 
-		if (session.getAttribute("logoutNick") != null)
+		if (session.getAttribute("loginNick") != null)
 			session.removeAttribute("loginNick");
 
 		if (session.getAttribute("isAdmin") != null)

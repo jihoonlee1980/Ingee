@@ -52,6 +52,7 @@
 		</div>
 	</div>
 </div>
+<a href="#" class="scrollup" style="background-color: #999"><i class="fa fa-angle-up fa-2x"></i></a>
 
 	<script src="/assets/js/jquery-1.9.1.min.js?ver=4"></script>
 	<script src="/assets/js/modernizr.custom.js"></script>

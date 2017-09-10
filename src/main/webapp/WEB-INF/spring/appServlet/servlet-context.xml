@@ -79,11 +79,20 @@
 			<mapping path="/member/update" />
 			<mapping path="/member/delete" />
 			<mapping path="/member/update/**" />
-			<mapping path="/comment/**"/>
-			<mapping path="/reply/**"/>
+			<mapping path="/comment/**/insert"/>
+			<mapping path="/comment/**/update"/>
+			<mapping path="/comment/**/delete"/>
+			<mapping path="/comment/**/reply/insert"/>
+			<mapping path="/comment/**/reply/delete"/>
+			<mapping path="/comment/**/reply/update"/>
 			<mapping path="/message/**"/>
 			<mapping path="/chat/**"/>
-			<exclude-mapping path="/reply/list"/>
+			<mapping path="/board/**/insert"/>
+			<mapping path="/board/**/update"/>
+			<mapping path="/board/**/delete"/>
+			<mapping path="/board/**/**/insert"/>
+			<mapping path="/board/**/**/update"/>
+			<mapping path="/board/**/**/delete"/>
 			<beans:ref bean="loginInterceptor" />
 		</interceptor>
 	</interceptors>

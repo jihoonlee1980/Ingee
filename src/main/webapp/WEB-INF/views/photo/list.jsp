@@ -48,15 +48,15 @@ div.input-group{
 	<div class="container">
 		<div class="event-row" id="div_event">
 			<div class="well">
-		        <h1 class="text-center">InGee</h1>
+		        <h1 class="text-center">Photo</h1>
 		        <div class="list-group" id="list_div">
 		        	<c:if test="${totalCount > 0 }">
 			        	<c:forEach items="${boardList}" var="boardDTO" varStatus="status">
 			        		<c:if test="${param.search_type eq null}">
-			        			<c:set var="href" value="/board/ingee/${boardDTO.num }?page=${currentPage}"/>
+			        			<c:set var="href" value="/board/photo/${boardDTO.num }?page=${currentPage}"/>
 			        		</c:if>
 			        		<c:if test="${param.search_type ne null}">
-			        			<c:set var="href" value="/board/ingee/${boardDTO.num }?page=${currentPage}&search_type=${param.search_type }&keyword=${param.keyword }"/>
+			        			<c:set var="href" value="/board/photo/${boardDTO.num }?page=${currentPage}&search_type=${param.search_type }&keyword=${param.keyword }"/>
 			        		</c:if>
 			        		
 			        		<a href="${href }" class="list-group-item">
@@ -100,23 +100,23 @@ div.input-group{
 					<ul class="pagination">
 						<c:if test="${startPage > 1}">
 							<c:if test="${param.search_type ne null }">
-								<li><a href="/board/ingee/list?page=${startPage-1}&search_type=${param.search_type}&keyword=${param.keyword}">&lt;</a></li>
+								<li><a href="/board/photo/list?page=${startPage-1}&search_type=${param.search_type}&keyword=${param.keyword}">&lt;</a></li>
 							</c:if>
 							<c:if test="${param.search_type eq null }">
-								<li><a href="/board/ingee/list?page=${startPage - 1}">&lt;</a></li>
+								<li><a href="/board/photo/list?page=${startPage - 1}">&lt;</a></li>
 							</c:if>
 						</c:if>
 						<c:forEach begin="${startPage}" end="${endPage}" var="page">
 							<c:if test="${param.search_type ne null }">
 								<li ${page eq currentPage ? "class='active'" : "" }>						
-									<a href="/board/ingee/list?page=${page}&search_type=${param.search_type}&keyword=${param.keyword}">
+									<a href="/board/photo/list?page=${page}&search_type=${param.search_type}&keyword=${param.keyword}">
 										<c:out value="${page}"/>
 									</a>
 								</li>
 							</c:if>
 							<c:if test="${param.search_type eq null  }">
 								<li ${page eq currentPage ? "class='active'" : "" }>						
-									<a href="/board/ingee/list?page=${page}">
+									<a href="/board/photo/list?page=${page}">
 										<c:out value="${page}"/>
 									</a>
 								</li>
@@ -127,14 +127,14 @@ div.input-group{
 								<li><a href="/member/search?page=${endPage + 1}&sort=${param.sort}&search_type=${param.search_type}&keyword=${param.keyword}">&gt;</a></li>
 							</c:if>
 							<c:if test="${param.search_type eq null }">
-								<li><a href="/board/ingee/list?page=${endPage + 1}">&gt;</a></li>
+								<li><a href="/board/photo/list?page=${endPage + 1}">&gt;</a></li>
 							</c:if>
 						</c:if>
 					</ul>
 				</div>
 				<!-- pagination end/search start -->
 				<div style="width: 100%; min-height: 50px;">
-					<form action="/board/ingee/list" class="form-horizontal search-form col-md-6">
+					<form action="/board/photo/list" class="form-horizontal search-form col-md-6">
 						<div class="col-md-12">
 						    <div class="input-group">
 				                <div class="input-group-btn search-panel">
@@ -166,14 +166,11 @@ div.input-group{
 				            </div>
 				        </div>
 					</form>
-					<c:if test="${not empty isLogin }">
-<%-- 					<c:if test="${isIngee ne null}"> --%>
-					<c:if test="${isAdmin ne null}">
+					<c:if test="${isLogin ne null}">
 						<div class="col-md-6" align="right">
 							<a class="btn btn-default btn-sm" data-toggle="modal" data-target="#write" data-original-title>Write</a>
 						</div>
 					</c:if>
-				</c:if>
 				</div>
 				<!-- search end/write start -->
 				<!-- write end -->
@@ -183,9 +180,9 @@ div.input-group{
 		<div class="modal fade" id="write" tabindex="-1" role="dialog" aria-labelledby="contactLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="well well-sm">
-					<form class="form-horizontal" action="/board/ingee/insert" method="post" enctype="multipart/form-data">
+					<form class="form-horizontal" action="/board/photo/insert" method="post" enctype="multipart/form-data">
 						<fieldset>
-							<legend class="text-center"><h1>InGee</h1></legend>
+							<legend class="text-center"><h1>Photo</h1></legend>
 							<div class="form-group">
 								<div class="input-group">
 									<label class="col-md-2 control-label">Subject</label>
@@ -206,7 +203,7 @@ div.input-group{
 								<div class="input-group">
 									<label class="col-md-2 control-label">Image</label>
 									<div class="col-md-9">
-										<input type="file" class="form-control" name="upload_file" id="upload_file">
+										<input type="file" class="form-control" name="upload_file" id="upload_file" required="required">
 									</div>
 								</div>
 							</div>

@@ -81,7 +81,7 @@ div.input-group{
 					}, function(isConfirm) {
 						if (isConfirm) {
 							var new_content = update_btn.parents().siblings("textarea").val();
-							location.href = "/comment/ingee/update?num=" + num + "&content=" + new_content + "&board_num=" + board_num + "&page=" + page;
+							location.href = "/comment/tour/update?num=" + num + "&content=" + new_content + "&board_num=" + board_num + "&page=" + page;
 						} else {
 							swal("Cancel", "The editing the comment is cancelled.", "error");
 						}
@@ -147,7 +147,7 @@ div.input-group{
 		}, function(isConfirm) {
 			if (isConfirm) {
 				swal("Complete", "The bulletin is deleted", "success");
-				location.href = "/board/ingee/delete?num=" + num + "&page=" + page;
+				location.href = "/board/tour/delete?num=" + num + "&page=" + page;
 			} else {
 				swal("Cancel", "The editing the bulletin is cancelled.", "error");
 			}
@@ -168,7 +168,7 @@ div.input-group{
 			
 			if(isLogin != ""){
 				html += "<li>";
-				html += "<form action='/comment/ingee/insert' class='reply-input' method='get'>";
+				html += "<form action='/comment/tour/insert' class='reply-input' method='get'>";
 				html += "<div class='reply-input-avatar'>";
 				html += "<img src='${root }/profile/" + loggedInProfile + "' alt=''>";
 				html += "</div>";
@@ -187,7 +187,7 @@ div.input-group{
 			}
 	
 			$.ajax({
-				url : "/comment/ingee/reply/list",
+				url : "/comment/tour/reply/list",
 				type : "get",
 				data : {"comment_num" : comment_num},
 				dataType : "json",
@@ -283,7 +283,7 @@ div.input-group{
 				}, function(isConfirm) {
 					if (isConfirm) {
 						var new_content = update_btn.parents().siblings("textarea").val();
-						location.href = "/comment/ingee/update?num=" + num + "&content=" + new_content + "&board_num=" + board_num + "&page=" + page;
+						location.href = "/comment/tour/update?num=" + num + "&content=" + new_content + "&board_num=" + board_num + "&page=" + page;
 					} else {
 						swal("Cancel", "The editing the comment is cancelled.", "error");
 					}
@@ -316,7 +316,7 @@ div.input-group{
 		}, function(isConfirm) {
 			if (isConfirm) {
 				swal("Complete", "The comment is deleted.", "success");
-				location.href = "/comment/ingee/delete?num=" + num + "&board_num=" + board_num + "&page=" + page;
+				location.href = "/comment/tour/delete?num=" + num + "&board_num=" + board_num + "&page=" + page;
 			} else {
 				swal("Cancel", "The deleting the comment is cancelled.", "error");
 			}
@@ -338,7 +338,7 @@ div.input-group{
 		}, function(isConfirm) {
 			if (isConfirm) {
 				swal("Complete", "The comment is deleted.", "success");
-				location.href = "/comment/ingee/reply/delete?num=" + $(obj).attr("num") + "&board_num=" + $(obj).attr("board_num")  + "&comment_num=" + $(obj).attr("comment_num") + "&page=" + $(obj).attr("page");
+				location.href = "/comment/tour/reply/delete?num=" + $(obj).attr("num") + "&board_num=" + $(obj).attr("board_num")  + "&comment_num=" + $(obj).attr("comment_num") + "&page=" + $(obj).attr("page");
 			} else {
 				swal("Cancel", "The deleting the comment is cancelled.", "error");
 			}
@@ -382,16 +382,16 @@ div.input-group{
 		       				<a class="btn btn-danger btn-sm" onclick="deleteCheck('${boardDTO.num}','${param.page }');">Delete</a>
 	       				</c:if>
 	       				<c:if test="${param.search_type ne null }">
-							<a class="btn btn-default btn-sm" href="/board/ingee/list?page=${param.page }&search_type=${param.search_type}&keyword=${param.keyword}">List</a>
+							<a class="btn btn-default btn-sm" href="/board/tour/list?page=${param.page }&search_type=${param.search_type}&keyword=${param.keyword}">List</a>
 						</c:if>
 	       				<c:if test="${param.search_type eq null }">
-	       					<a class="btn btn-default btn-sm" href="/board/ingee/list?page=${param.page }">List</a>
+	       					<a class="btn btn-default btn-sm" href="/board/tour/list?page=${param.page }">List</a>
 	       				</c:if>
        				</div>
        				<div class="row" style="margin-top:65px; padding-left: 5px;">
        					<div id="comment" style="width: 100%; height: 0px;"></div>
 						<c:if test="${isLogin ne null }">
-							<form action="/comment/ingee/insert" class="comment-input" method="get">
+							<form action="/comment/tour/insert" class="comment-input" method="get">
 								<div class="comment-input-avatar">
 									<img src="${root }/profile/${loggedInProfile}" alt="">
 								</div>
@@ -462,7 +462,7 @@ div.input-group{
 		<div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="contactLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="well well-sm">
-					<form class="form-horizontal" action="/board/ingee/update" method="post" enctype="multipart/form-data">
+					<form class="form-horizontal" action="/board/tour/update" method="post" enctype="multipart/form-data">
 						<fieldset>
 							<legend class="text-center"><h1>In Gee</h1></legend>
 							<div class="form-group">

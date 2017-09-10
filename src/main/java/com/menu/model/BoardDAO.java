@@ -17,6 +17,19 @@ public class BoardDAO extends SqlSessionDaoSupport {
 
 		return getSqlSession().selectList("boardList", map);
 	}
+	
+	public List<BoardDTO> list(int start, int perPage, String b_category, String s_category, String search_type, String keyword) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("start", start);
+		map.put("perPage", perPage);
+		map.put("b_category", b_category);
+		map.put("s_category", s_category);
+		map.put("search_type", search_type);
+		map.put("keyword", keyword);
+
+		return getSqlSession().selectList("boardList", map);
+	}
 
 	public void insert(BoardDTO boardDTO) {
 		getSqlSession().insert("insertBoard", boardDTO);
@@ -39,6 +52,17 @@ public class BoardDAO extends SqlSessionDaoSupport {
 
 		map.put("b_category", b_category);
 		map.put("s_category", s_category);
+
+		return getSqlSession().selectOne("boardCount", map);
+	}
+	
+	public int getCount(String b_category, String s_category,  String search_type, String keyword) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("b_category", b_category);
+		map.put("s_category", s_category);
+		map.put("search_type", search_type);
+		map.put("keyword", keyword);
 
 		return getSqlSession().selectOne("boardCount", map);
 	}
