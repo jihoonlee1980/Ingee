@@ -24,6 +24,8 @@ import com.menu.model.CommentDAO;
 import com.menu.model.CommentDTO;
 import com.menu.model.MemberDAO;
 import com.menu.model.MemberDTO;
+import com.nhncorp.lucy.security.xss.XssFilter;
+import com.nhncorp.lucy.security.xss.XssPreventer;
 
 @Controller
 @RequestMapping("/board")
@@ -84,6 +86,8 @@ public class BoardController {
 		MultipartFile upload_file = boardDTO.getUpload_file();
 		boardDTO.setB_category(b_category);
 		boardDTO.setS_category(CATEGORY_NULL);
+		boardDTO.setSubject(XssPreventer.escape(boardDTO.getSubject()));
+		boardDTO.setContent(XssPreventer.escape(boardDTO.getContent()));
 
 		if (!"".equals(upload_file.getOriginalFilename())) {
 			String originFileName = upload_file.getOriginalFilename();
@@ -147,6 +151,8 @@ public class BoardController {
 			@RequestParam(value = "remove_file", required = false) String remove_file) {
 		String boardPath = path + "\\board";
 		BoardDTO dbDTO = boardDAO.get(boardDTO.getNum());
+		boardDTO.setSubject(XssPreventer.escape(boardDTO.getSubject()));
+		boardDTO.setContent(XssPreventer.escape(boardDTO.getContent()));
 		if (remove_file != null) {
 			StringTokenizer remove_files = new StringTokenizer(remove_file, ",");
 
@@ -253,6 +259,8 @@ public class BoardController {
 		MultipartFile upload_file = boardDTO.getUpload_file();
 		boardDTO.setB_category(b_category);
 		boardDTO.setS_category(s_category);
+		boardDTO.setSubject(XssPreventer.escape(boardDTO.getSubject()));
+		boardDTO.setContent(XssPreventer.escape(boardDTO.getContent()));
 
 		if (!"".equals(upload_file.getOriginalFilename())) {
 			String originFileName = upload_file.getOriginalFilename();
@@ -315,6 +323,8 @@ public class BoardController {
 			@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(value = "remove_file", required = false) String remove_file) {
 		String boardPath = path + "\\board";
+		boardDTO.setSubject(XssPreventer.escape(boardDTO.getSubject()));
+		boardDTO.setContent(XssPreventer.escape(boardDTO.getContent()));
 		BoardDTO dbDTO = boardDAO.get(boardDTO.getNum());
 		if (remove_file != null) {
 			StringTokenizer remove_files = new StringTokenizer(remove_file, ",");
