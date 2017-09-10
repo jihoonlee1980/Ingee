@@ -358,7 +358,7 @@ div.input-group{
 						views  :  ${boardDTO.readcount }
 					</span>
 	                <span style="width:50%; text-align: right; display: inline-block; float: left">
-						posted by : ${loginNick }
+						posted by : ${boardDTO.writer }
 					</span>
 					<p align="right">
 						<fmt:formatDate value="${boardDTO.writedate }" pattern="HH:mm, MMM dd, YYYY"/>

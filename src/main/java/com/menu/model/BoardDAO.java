@@ -80,4 +80,13 @@ public class BoardDAO extends SqlSessionDaoSupport {
 
 		return getSqlSession().selectOne("findBoard", map) != null;
 	}
+	
+	public void updateCommentCount(int num, int countValue) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("num", num);
+		map.put("countValue", countValue);
+
+		getSqlSession().update("updateCommentCountOnDeleteMember", map);
+	}
 }

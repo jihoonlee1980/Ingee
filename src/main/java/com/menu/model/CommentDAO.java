@@ -51,4 +51,21 @@ public class CommentDAO extends SqlSessionDaoSupport {
 		getSqlSession().delete("deleteComment", num);
 		getSqlSession().update("updateReplyCount", map);
 	}
+	
+	public List<HashMap<String, Object>> getReplyCountOnDeleteMember(String nick){
+		return getSqlSession().selectList("getReplyCountOnDeleteMember", nick);
+	}
+	
+	public List<HashMap<String, Object>> getCommentCountOnDeleteMember(String nick){
+		return getSqlSession().selectList("getCommentCountOnDeleteMember", nick);
+	}
+	
+	public void updateReplyCount(int num, int countValue) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("num", num);
+		map.put("countValue", countValue);
+
+		getSqlSession().update("updateReplyCountOnDeleteMember", map);
+	}
 }

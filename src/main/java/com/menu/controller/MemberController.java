@@ -21,6 +21,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ingee.util.MailSender;
 import com.ingee.util.UploadFileWriter;
+import com.menu.model.BoardDAO;
+import com.menu.model.CommentDAO;
 import com.menu.model.MemberDAO;
 import com.menu.model.MemberDTO;
 
@@ -29,6 +31,10 @@ import com.menu.model.MemberDTO;
 public class MemberController {
 	@Autowired
 	MemberDAO memberDAO;
+	@Autowired
+	CommentDAO commentDAO;
+	@Autowired
+	BoardDAO boardDAO;
 	@Autowired
 	JavaMailSenderImpl mailSender;
 
@@ -343,35 +349,34 @@ public class MemberController {
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public String deleteMember(@RequestParam(value = "num", required = true) int num,
-			@RequestParam(value = "id", required = true) String id, HttpSession session) {
-		// List<HashMap<String, Object>> list1 =
-		// commentDAO.getCommentCountOnDeleteMember(id);
-		// List<HashMap<String, Object>> list2 =
-		// commentDAO.getReplyCountOnDeleteMember(id);
+			@RequestParam(value = "nick", required = true) String nick, HttpSession session) {
 
-		// for (HashMap<String, Object> hashMap : list1) {
-		// Integer board_num = (Integer) hashMap.get("board_num");
-		// Long countValue = (Long) hashMap.get("count");
-		// erpBoardDAO.updateCommentCount(board_num, (-1) *
-		// countValue.intValue());
-		// }
-		//
-		// for (HashMap<String, Object> hashMap : list2) {
-		// Integer comment_num = (Integer) hashMap.get("comment_num");
-		// Long countValue = (Long) hashMap.get("count");
-		// commentDAO.updateReplyCount(comment_num.intValue(), (-1) *
-		// countValue.intValue());
-		// }
+		List<HashMap<String, Object>> list1 = commentDAO.getCommentCountOnDeleteMember(nick);
+		List<HashMap<String, Object>> list2 = commentDAO.getReplyCountOnDeleteMember(nick);
+
+		for (HashMap<String, Object> hashMap : list1) {
+			Integer board_num = (Integer) hashMap.get("board_num");
+			Long countValue = (Long) hashMap.get("count");
+			boardDAO.updateCommentCount(board_num, (-1) * countValue.intValue());
+		}
+
+		for (HashMap<String, Object> hashMap : list2) {
+			Integer comment_num = (Integer) hashMap.get("comment_num");
+			Long countValue = (Long) hashMap.get("count");
+			commentDAO.updateReplyCount(comment_num.intValue(), (-1) * countValue.intValue());
+		}
 
 		String profilePath = path + "/profile";
-		File file = new File(profilePath + "/" + memberDAO.get(id).getSaved_filename());
+		File file = new File(profilePath + "/" + memberDAO.get(num).getSaved_filename());
 
 		if (file.exists())
 			file.delete();
 
-		memberDAO.delete(num, id);
+		memberDAO.delete(num, nick);
 
 		session.removeAttribute("isLogin");
+		session.removeAttribute("loginID");
+		session.removeAttribute("loginNick");
 		session.removeAttribute("loggedInID");
 
 		return "redirect:/";

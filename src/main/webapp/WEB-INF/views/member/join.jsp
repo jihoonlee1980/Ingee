@@ -57,7 +57,7 @@
 		});
 	});
 	
-	function validate(obj){
+	function validateFile(obj){
 		var maxSize = 1024 * 1024;
 		var fileSize = obj.files[0].size;
 		
@@ -255,7 +255,7 @@
 										<div class="input-group-addon">
 											<i class="fa fa-file-image-o"></i>
 										</div>
-										<input type="file" class="form-control" id="profile_file" name="profile_file" accept="image/*" onchange='validate(this)'>
+										<input type="file" class="form-control" id="profile_file" name="profile_file" accept="image/*" onchange="validateFile(this)">
 									</div>
 								</div>   
 							</div>

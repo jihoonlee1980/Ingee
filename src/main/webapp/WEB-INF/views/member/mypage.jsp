@@ -255,6 +255,17 @@
 			}
 		});
 	}
+	
+	function validateFile(obj){
+		var maxSize = 1024 * 1024;
+		var fileSize = obj.files[0].size;
+		
+		if(fileSize > maxSize){
+			alert("Please upload file size less than 1MB.");
+			obj.value = "";
+			return false;
+		}
+	}
 </script>
 <div class="content-section-a">
 	<div class="container">
@@ -302,7 +313,7 @@
 		                    					<div style="width: 100%; margin-top: 1%;" align="right">
 			                    					<input type="password" id="delete_pass" class="form-control" placeholder="password" maxlength="20" style="width: 50%; display: inline-block;">
 			                    					<input type="hidden" name="num" value="${memberDTO.num }">
-			                    					<input type="hidden" name="id" value="${memberDTO.id }">
+			                    					<input type="hidden" name="nick" value="${memberDTO.nick }">
 			                    					<button type="submit" class="btn btn-sm btn-danger">Withdrawal</button>
 		                    					</div>
 		                    				</div>
@@ -416,7 +427,7 @@
 								<div class="input-group-addon">
 									<i class="fa fa-file-image-o"></i>
 								</div>
-								<input type="file" class="form-control" id="profile_file" name="profile_file" accept="image/*">
+								<input type="file" class="form-control" id="profile_file" name="profile_file" accept="image/*" onchange="validateFile(this)">
 							</div>
 							<span class="help-block" style="padding-left: 5px; color: red;">※ Please select a file only if you want to change your profile photo.</span>
 						</div>

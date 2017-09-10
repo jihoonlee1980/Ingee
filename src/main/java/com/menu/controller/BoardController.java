@@ -91,12 +91,12 @@ public class BoardController {
 
 	@RequestMapping(value = "/{b_category}/insert", method = RequestMethod.POST)
 	public String boardInsert(@PathVariable String b_category, BoardDTO boardDTO) {
-		MultipartFile attacehd_file = boardDTO.getUpload_file();
+		MultipartFile upload_file = boardDTO.getUpload_file();
 		boardDTO.setB_category(b_category);
 		boardDTO.setS_category(CATEGORY_NULL);
 
-		if (!"".equals(attacehd_file.getOriginalFilename())) {
-			String originFileName = attacehd_file.getOriginalFilename();
+		if (!"".equals(upload_file.getOriginalFilename())) {
+			String originFileName = upload_file.getOriginalFilename();
 			String extension = originFileName.substring(originFileName.lastIndexOf("."));
 			String boardPath = path + "\\board";
 			String saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000
@@ -110,7 +110,7 @@ public class BoardController {
 			boardDTO.setSaved_filename(saved_filename);
 
 			UploadFileWriter uploadFileWriter = new UploadFileWriter();
-			uploadFileWriter.writeFile(attacehd_file, boardPath, saved_filename);
+			uploadFileWriter.writeFile(upload_file, boardPath, saved_filename);
 		} else {
 			boardDTO.setSaved_filename("NO");
 		}

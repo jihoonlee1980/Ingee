@@ -358,18 +358,16 @@ div.input-group{
 						views  :  ${boardDTO.readcount }
 					</span>
 	                <span style="width:50%; text-align: right; display: inline-block; float: left">
-						posted by : ${loginNick }
+						posted by : ${boardDTO.writer }
 					</span>
 					<p align="right">
 						<fmt:formatDate value="${boardDTO.writedate }" pattern="HH:mm, MMM dd, YYYY"/>
 					</p>
 	            </div>
 	            <hr style="height: 2px; background: #777; width: 100%;">
-	            <c:if test="${boardDTO.saved_filename != 'NO' }">	            
-					<div class="content-div" id="content_img_div">
-	                   	<img src="${root }/board/${boardDTO.saved_filename}" style="max-width: 100%;">
-					</div>
-				</c:if>
+				<div class="content-div" id="content_img_div">
+                   	<video style="max-width: 100%;" controls="controls" src="${root }/board/${boardDTO.saved_filename}" autoplay="autoplay"></video>
+				</div>
 				<div class="content-div">
 					<p style="margin-left: 20px; word-break: break-all; white-space: pre-line;">
 						${boardDTO.content }
@@ -413,7 +411,6 @@ div.input-group{
 						<c:set var="perPage" value="10"/>
 						<c:set var="perBlock" value="7"/>
 						<fmt:parseNumber var="totalPage" integerOnly="true" value="${totalComment % perPage == 0 ? totalComment / perPage : totalComment / perPage + 1 }"/>
-						
 						<c:set var="startPage" value="1"/>
 						<c:set var="endPage" value="${totalPage > perBlock ? perBlock : totalPage }"/>
 						<!-- 댓글 페이징 변수 끝 -->
