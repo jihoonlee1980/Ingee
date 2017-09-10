@@ -153,6 +153,7 @@ public class MemberController {
 			session.setAttribute("isLogin", "YES");
 			session.setAttribute("loginNick", memberDTO.getNick());
 			session.setAttribute("loggedInID", memberDTO.getId());
+			session.setAttribute("profile", memberDTO.getSaved_filename());
 
 			if (memberDAO.get(memberDTO.getId()).getAuthority() >= 5)
 				session.setAttribute("isAdmin", "YES");

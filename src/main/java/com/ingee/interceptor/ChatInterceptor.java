@@ -18,8 +18,10 @@ public class ChatInterceptor extends HttpSessionHandshakeInterceptor {
 		HttpServletRequest hsRequest = ssHttpRequest.getServletRequest();
 		String nick = (String) hsRequest.getSession().getAttribute("loginNick");
 		String id = (String) hsRequest.getSession().getAttribute("loggedInID");
+		String profile = (String) hsRequest.getSession().getAttribute("profile");
 		attributes.put("userID", id);
 		attributes.put("userNick", nick);
+		attributes.put("userProfile", profile);
 		return super.beforeHandshake(request, response, wsHandler, attributes);
 	}
 }

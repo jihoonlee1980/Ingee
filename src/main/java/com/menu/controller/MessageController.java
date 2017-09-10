@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.menu.model.MessageDAO;
 import com.menu.model.MessageDTO;
+import com.nhncorp.lucy.security.xss.XssPreventer;
 
 
 @Controller
@@ -34,6 +35,7 @@ public class MessageController {
 			@RequestParam(defaultValue = "") String keyword ,
 			@RequestParam(defaultValue = "") String searchType) {
 		ModelAndView modelAndView = new ModelAndView();
+		keyword = XssPreventer.escape(keyword);
 		String id = (String)session.getAttribute("loggedInID");
 		int perPage = 5;
 		HashMap<String, Object> map = new HashMap<String, Object>();
@@ -81,7 +83,7 @@ public class MessageController {
 		String id = (String)session.getAttribute("loggedInID");
 		modelAndView.addObject("id",id);		
 		String setViewName = "/1/message/send";
-		if(!map.isEmpty()){
+		if(!map.isEmpty()){			
 			if(map.get("recvlist").toString().equals(""))
 				map.put("DISC", "single");
 			else if(map.get("recvlist").toString().equals("all")){

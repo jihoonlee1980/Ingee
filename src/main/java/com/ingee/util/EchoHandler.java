@@ -12,6 +12,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.nhncorp.lucy.security.xss.XssFilter;
+import com.nhncorp.lucy.security.xss.XssPreventer;
 
 public class EchoHandler extends TextWebSocketHandler {
 	private static Logger logger = LoggerFactory.getLogger(EchoHandler.class);
@@ -55,14 +56,15 @@ public class EchoHandler extends TextWebSocketHandler {
 
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-		logger.info("{}로 부터 {} 받음", session.getAttributes().get("userID"), message.getPayload());
-		
-		XssFilter filter = XssFilter.getInstance("C:\\Users\\뢰후니\\git\\Ingee\\src\\main\\webapp\\resources\\assets\\lucy-xss-superset.xml");
-		String filterMsg = filter.doFilter(message.getPayload());
+		logger.info("{}로 부터 {} 받음", session.getAttributes().get("userID"), message.getPayload());		
+		String filterMsg = XssPreventer.escape(message.getPayload());
 		for (WebSocketSession sess : sessionList) {
 			String msg = session.getAttributes().get("userID").equals(sess.getAttributes().get("userID")) ?
-					"MsgMe|"+session.getAttributes().get("userNick")+"("+session.getAttributes().get("userID") + ")|"+filterMsg : "MsgUser|"+session.getAttributes().get("userNick")+"("+session.getAttributes().get("userID") + ")|"+filterMsg;
-			sess.sendMessage(new TextMessage(msg));
+					"MsgMe|"+session.getAttributes().get("userNick")+"|"+session.getAttributes().get("userID") + "|"
+					+session.getAttributes().get("userProfile")+  "|" +filterMsg :
+					"MsgUser|"+session.getAttributes().get("userNick")+"|"
+					+session.getAttributes().get("userID") + "|" +session.getAttributes().get("userProfile") + "|" +filterMsg;		
+					sess.sendMessage(new TextMessage(msg));
 		}
 	}
 
@@ -70,7 +72,7 @@ public class EchoHandler extends TextWebSocketHandler {
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		for (WebSocketSession sess : sessionList) {
 			if (!session.getAttributes().get("userID").equals(sess.getAttributes().get("userID"))) {
-				sess.sendMessage(new TextMessage("Off|"+session.getAttributes().get("userID") + "was sent off."));
+				sess.sendMessage(new TextMessage("Off|"+session.getAttributes().get("userID") + " was sent off."));
 			}
 		}
 		sessionList.remove(session);
