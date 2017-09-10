@@ -115,19 +115,16 @@ public class MessageController {
 	};
 	
 	@RequestMapping(value="/delete")
-	public ModelAndView MessageDelete (@RequestParam Map<String, Object> map , RedirectAttributes redirectAttributes) {
-		ModelAndView modelAndView = new ModelAndView();
-		String setViewName = new String();
+	public @ResponseBody Map<String, Object> MessageDelete (@RequestParam List<Integer> arrData) {
 				
-		int result = messageDAO.delteMessage(Integer.parseInt(map.get("num").toString()));
-		if(result > 0)
-			setViewName = "redirect:/message/?page="+Integer.parseInt(map.get("page").toString());		
-		else
-			redirectAttributes.addFlashAttribute("failed", "delete");
-			setViewName = "redirect:/message/";
+		int result = messageDAO.delteMessage(arrData);
 		
-		modelAndView.setViewName(setViewName);
-		return modelAndView;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("resultCheck", result);
+		
+		ModelAndView modelAndView = new ModelAndView("jsonView", map);
+
+		return map;
 	}
 	
 	@RequestMapping(value = "/check/id")

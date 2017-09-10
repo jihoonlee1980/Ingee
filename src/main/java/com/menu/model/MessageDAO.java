@@ -44,8 +44,10 @@ public class MessageDAO extends SqlSessionDaoSupport {
 		return getSqlSession().selectOne("getMessageContent", num);
 	}
 	
-	public int delteMessage(int num) {
-		return getSqlSession().delete("deleteMessage", num);
+	public int delteMessage(List<Integer> arrData) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("arrData", arrData);
+		return getSqlSession().delete("deleteMessage", map);
 	}
 	
 	public List<String> checkId(List<String> id) {

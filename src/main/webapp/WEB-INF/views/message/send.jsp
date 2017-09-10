@@ -128,25 +128,25 @@ function idValidCheck(){
 	var receiver = $("input[name='receiver']").val();
 	var title = $("input[name='receiver']").attr("title");
 	var id = receiver.replace(" ", "");
-	if(title == ""){	
-		
+	if(title == "" && !($("#addAllRecvBtn").attr("check") == "true")){	
+		//alert($("#addAllRecvBtn").attr("check"));
 		var reg_email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
-	
 		if(id == ""){
 			alert("Please enter your username(eamil address)");
 			check = false;
 		}
-		
 		if(!reg_email.test(id)){
 			alert("It’s not a valid email form.");
 			check = false;
 		}
-		
 	}
-	var recvlist = id.split(",");
-	if(recvlist.length == 1 && check){
-		check = singleIdcheck(id);
+	if(!($("#addAllRecvBtn").attr("check") == "true")){
+		var recvlist = id.split(",");
+		if(recvlist.length == 1 && check){
+			check = singleIdcheck(id);
+		}
 	}
+	
 	
 	return check;
 }

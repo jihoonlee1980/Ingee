@@ -130,7 +130,10 @@
 		);
 	</insert>
 	
-	<delete id="deleteMessage" parameterType="int">
-		delete from message where num = #{num}
+	<delete id="deleteMessage" parameterType="HashMap">
+		delete from message where num  in 
+		<foreach collection="arrData" item="item" index="index" separator="," open="(" close=")">
+		    ${arrData[index]}
+		</foreach>
 	</delete>
 </mapper>
