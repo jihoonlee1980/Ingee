@@ -23,7 +23,18 @@ $(document).ready(function () {
 		
 		$('.input-group #search_type').val(param);
 	});
-	
+	$(".comments .post-comments .checkbox").children("input[type='checkbox']").change(function(){
+		var checkValue = true;
+		$(".comments .post-comments .checkbox").each(function(index){
+			if(!($(this).children("input[type='checkbox']").is(":checked"))){
+				checkValue = false;
+			}			
+		});
+		if(!checkValue)
+			$("#deleteAll").prop('checked', false);		
+		else
+			$("#deleteAll").prop('checked', true);
+	});
 	$("#deleteAll").change(function(){		
         if($("#deleteAll").is(":checked")){
         	$(".comments .post-comments .checkbox").children("input[type='checkbox']").prop('checked', true);        	
@@ -173,7 +184,7 @@ a {
 	font-weight: 800;
 }
 .clearfix:hover {
-	border:1px solid #9a7e61
+	/* border:1px solid #9a7e61 */
 }
 .checkbox {
   padding-left: 20px;
