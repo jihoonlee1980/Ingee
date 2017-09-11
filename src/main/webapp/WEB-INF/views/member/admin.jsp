@@ -62,6 +62,15 @@ table.admin thead tr th a {
 	color: black;
 	text-decoration: underline;
 }
+@media(max-width: 767px){
+	table.admin{
+		font-size: 5pt;
+	}
+	table.admin .search-form{
+		width: 100% !important;
+	}
+}
+
 </style>
 <div class="content-section-a" style="height: 750px;">
 	<div class="container">
@@ -69,12 +78,12 @@ table.admin thead tr th a {
 			<table class="table table-striped table-condensed admin">
 				<caption style="padding-left: 10px;">
 					<span>※ You can sort the username or name.</span><br>
-					<span>※You can send an email by clicking on the email(username).</span><br>
+					<span>※ You can send an email by clicking on the email(username).</span><br>
 				</caption>
 				<thead>
 					<tr>
 						<th colspan="4">
-							<form action="/member/search" class="form-horizontal" style="width: 30%; float: right;">
+							<form action="/member/search" class="form-horizontal search-form" style="width: 30%; float: right;">
 								<div class="col-xs-12">
 								    <div class="input-group">
 						                <div class="input-group-btn search-panel">
@@ -136,10 +145,10 @@ table.admin thead tr th a {
 						<tr>
 							<td colspan="4">
 								<c:if test="${param.search_type eq null }">
-									등록된 회원이 없습니다.
+									No registered members.
 								</c:if>
 								<c:if test="${param.search_type ne null }">
-									"${param.keyword }"로 검색된 결과가 없습니다.
+									No results founded with "${param.keyword }".
 								</c:if>
 							</td>
 						</tr>

@@ -151,7 +151,7 @@
 		var check = true;
 		
 		if(!reg_pass.test($("#pass").val())){
-			alert("Please make your password with 8 ~ 20 letters(Case insensitive.)")
+			alert("Please make your password with 8 ~ 20 letters(Case insensitive.)");
 			check = false;
 		}
 		
@@ -165,13 +165,18 @@
 			check = false;
 		}
 		
+		if($("#city").val() == "" || $("#state").val() == ""){
+			alert("Please click the zipcode search button.");
+			check = false;
+		}			
+		
 		if(!$("#IDCheckBtn").is(":disabled")){
-			alert("Please check your username to avoid duplicate use.")
+			alert("Please check your username to avoid duplicate use.");
 			check = false;
 		}
 		
 		if(!$("#nickCheckBtn").is(":disabled")){
-			alert("Please check your nickname to avoid duplicate use.")
+			alert("Please check your nickname to avoid duplicate use.");
 			check = false;
 		}
 		

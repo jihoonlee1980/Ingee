@@ -81,20 +81,20 @@ div.input-group{
 	});
 	
 	function validateFile(obj){
-		var maxSize = 1024 * 1024 * 5;
+		var maxSize = 1024 * 1024 * 10;
 		var fileSize = obj.files[0].size;
 		var fileName = obj.files[0].name;
 		var fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
 		var imgExtension = ["png", "jpg", "jpeg", "bmp", "gif"];
 		
 		if(!imgExtension.includes(fileExtension.toLowerCase())){
-			alert('파일 확장자 명을 “jpg”, “png”, “gif” 중 하나로 업로드 해야 합니다.');
+			alert('You must upload the file extension name as one of “jpeg”," jpg "," bmp "," png ", or “ gif ”.');
 			obj.value = "";
 			return false;
 		}
 		
 		if(fileSize > maxSize){
-			alert("Please upload file size less than 5MB.");
+			alert("Please upload file size less than 10MB.");
 			obj.value = "";
 			return false;
 		}
@@ -267,6 +267,7 @@ div.input-group{
 									<label class="col-md-2 control-label">Image</label>
 									<div class="col-md-9">
 										<input type="file" class="form-control" name="upload_file" id="upload_file" onchange="validateFile(this)">
+										<span class="help-block" style="padding-left: 5px; color: red;">※ When upload photos using camera please take a picture horizontally.</span>
 									</div>
 								</div>
 							</div>

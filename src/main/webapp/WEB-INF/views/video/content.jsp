@@ -352,7 +352,7 @@ div.input-group{
 		var fileExtenstion = fileName.substring(fileName.lastIndexOf(".") + 1);
 		
 		if(fileExtenstion.toLowerCase() != "mp4"){
-			alert('Upload the file extension to ".mp4".');
+			alert('You must upload the file extension name to "mp4".');
 			obj.value = "";
 			return false;
 		}
@@ -503,7 +503,7 @@ div.input-group{
 									<div class="col-md-9">
 										<input type="file" class="form-control" name="upload_file" id="upload_file" onchange="validateFile(this)">
 										<c:if test="${boardDTO.saved_filename != 'NO' }">
-											<span class="help-block" style="margin-bottom: 0; color: red; font-size: 9pt;">첨부파일 삭제(삭제하고싶은 파일 체크)</span>
+											<span class="help-block" style="margin-bottom: 0; color: red; font-size: 9pt;">Delete the attachment(Please check what you want to delete).</span>
 											<c:set var="saved_file" value="${fn:split(boardDTO.saved_filename, ',') }"/>
 											<c:forTokens items="${boardDTO.origin_filename }" delims="," var="origin_file" varStatus="status">
 												<input type="checkbox" value="${saved_file[status.index] }" name="remove_file"> ${origin_file }

@@ -38,6 +38,10 @@ public class BoardController {
 	CommentDAO commentDAO;
 
 	final String CATEGORY_NULL = "";
+	// final String path =
+	// "/home/hosting_users/ingeefanclub/tomcat/webapps/ROOT/resources";
+	// final String path =
+	// "/home/ubuntu/apache-tomcat-8.0.46/webapps/Ingee/resources";
 	final String path = "C:\\Users\\jihyun\\Desktop\\egov\\eGovFrameDev-3.6.0-64bit\\workspace\\InGeeFanClub\\src\\main\\webapp\\resources";
 	final int ZERO_COMMENT = 0;
 
@@ -49,7 +53,7 @@ public class BoardController {
 		int perPage = 5;
 		int totalCount;
 		List<BoardDTO> boardDTOs;
-		
+
 		if (search_type == null || keyword == null) {
 			totalCount = boardDAO.getCount(b_category, CATEGORY_NULL);
 			boardDTOs = boardDAO.list((page - 1) * perPage, perPage, b_category, CATEGORY_NULL);
@@ -92,7 +96,7 @@ public class BoardController {
 		if (!"".equals(upload_file.getOriginalFilename())) {
 			String originFileName = upload_file.getOriginalFilename();
 			String extension = originFileName.substring(originFileName.lastIndexOf("."));
-			String boardPath = path + "\\board";
+			String boardPath = path + "/board";
 			String saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000
 					+ extension;
 
@@ -149,7 +153,7 @@ public class BoardController {
 	public String boardUpdate(@PathVariable String b_category, BoardDTO boardDTO,
 			@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(value = "remove_file", required = false) String remove_file) {
-		String boardPath = path + "\\board";
+		String boardPath = path + "/board";
 		BoardDTO dbDTO = boardDAO.get(boardDTO.getNum());
 		boardDTO.setSubject(XssPreventer.escape(boardDTO.getSubject()));
 		boardDTO.setContent(XssPreventer.escape(boardDTO.getContent()));
@@ -158,7 +162,7 @@ public class BoardController {
 
 			while (remove_files.hasMoreTokens()) {
 				String filename = remove_files.nextToken();
-				File file = new File(boardPath + "\\" + filename);
+				File file = new File(boardPath + "/" + filename);
 				if (file.exists())
 					file.delete();
 				dbDTO.setSaved_filename(dbDTO.getSaved_filename().replaceAll(filename, ""));
@@ -173,7 +177,7 @@ public class BoardController {
 			// boardDTO.setSaved_filename(boardDAO.get(boardDTO.getNum()).getSaved_filename());
 		} else {
 			MultipartFile upload_file = boardDTO.getUpload_file();
-			File file = new File(boardPath + "\\" + boardDAO.get(boardDTO.getNum()).getSaved_filename());
+			File file = new File(boardPath + "/" + boardDAO.get(boardDTO.getNum()).getSaved_filename());
 
 			if (file.exists())
 				file.delete();
@@ -204,7 +208,7 @@ public class BoardController {
 	public String boardDelete(@PathVariable String b_category, @RequestParam(value = "num", required = true) int num,
 			@RequestParam(value = "page", defaultValue = "1") int page) {
 		String savedFileName = boardDAO.get(num).getSaved_filename();
-		File file = new File(path + "\\board\\" + savedFileName);
+		File file = new File(path + "/board/" + savedFileName);
 
 		if (file.exists())
 			file.delete();
@@ -222,7 +226,7 @@ public class BoardController {
 		int perPage = 5;
 		int totalCount;
 		List<BoardDTO> boardDTOs;
-		
+
 		if (search_type == null || keyword == null) {
 			totalCount = boardDAO.getCount(b_category, s_category);
 			boardDTOs = boardDAO.list((page - 1) * perPage, perPage, b_category, s_category);
@@ -265,7 +269,7 @@ public class BoardController {
 		if (!"".equals(upload_file.getOriginalFilename())) {
 			String originFileName = upload_file.getOriginalFilename();
 			String extension = originFileName.substring(originFileName.lastIndexOf("."));
-			String boardPath = path + "\\board";
+			String boardPath = path + "/board";
 			String saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000
 					+ extension;
 
@@ -322,7 +326,7 @@ public class BoardController {
 	public String boardUpdate(@PathVariable String b_category, @PathVariable String s_category, BoardDTO boardDTO,
 			@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(value = "remove_file", required = false) String remove_file) {
-		String boardPath = path + "\\board";
+		String boardPath = path + "/board";
 		boardDTO.setSubject(XssPreventer.escape(boardDTO.getSubject()));
 		boardDTO.setContent(XssPreventer.escape(boardDTO.getContent()));
 		BoardDTO dbDTO = boardDAO.get(boardDTO.getNum());
@@ -331,7 +335,7 @@ public class BoardController {
 
 			while (remove_files.hasMoreTokens()) {
 				String filename = remove_files.nextToken();
-				File file = new File(boardPath + "\\" + filename);
+				File file = new File(boardPath + "/" + filename);
 				if (file.exists())
 					file.delete();
 				dbDTO.setSaved_filename(dbDTO.getSaved_filename().replaceAll(filename, ""));
@@ -346,7 +350,7 @@ public class BoardController {
 			// boardDTO.setSaved_filename(boardDAO.get(boardDTO.getNum()).getSaved_filename());
 		} else {
 			MultipartFile upload_file = boardDTO.getUpload_file();
-			File file = new File(boardPath + "\\" + boardDAO.get(boardDTO.getNum()).getSaved_filename());
+			File file = new File(boardPath + "/" + boardDAO.get(boardDTO.getNum()).getSaved_filename());
 
 			if (file.exists())
 				file.delete();
@@ -378,7 +382,7 @@ public class BoardController {
 			@RequestParam(value = "num", required = true) int num,
 			@RequestParam(value = "page", defaultValue = "1") int page) {
 		String savedFileName = boardDAO.get(num).getSaved_filename();
-		File file = new File(path + "\\board\\" + savedFileName);
+		File file = new File(path + "/board/" + savedFileName);
 
 		if (file.exists())
 			file.delete();

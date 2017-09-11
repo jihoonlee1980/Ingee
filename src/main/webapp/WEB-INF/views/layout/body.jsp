@@ -66,7 +66,7 @@
 			</div>
 			<div class="sub-heading">
 				<p>
-					<a href="/photo/list">Recent!</a><br>
+					<a href="/board/photo/list">Recent!</a><br>
 					<img src="${root}/img/main/new1.png" width="50" height="50" alt="">
 				</p>
 			</div>
@@ -99,7 +99,7 @@
 				</div>
 				<div class="sub-heading">
 					<p>
-						<a href="/network/west/list">Recent!</a>
+						<a href="/board/network/west/list">Recent!</a>
 					</p>
 					<img src="${root}/img/main/new2.png" width="50" height="50"
 						alt=""><br> <br>
@@ -180,4 +180,3 @@
 		</div>
 	</div>
 </section>
-

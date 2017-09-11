@@ -34,7 +34,7 @@
 						<li><a href="/board/network/west/list">NETWORK</a></li>
 						<c:if test="${isLogin ne null }">
 							<li><a href="/message/">MESSAGE</a></li>
-							<li><a href="/chat/">CHAT</a></li>
+<!-- 							<li><a href="/chat/">CHAT</a></li> -->
 						</c:if>
 						<c:if test="${isLogin eq null }">
 							<li><a href="/member/login">LOGIN</a></li>

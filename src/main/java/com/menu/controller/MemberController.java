@@ -38,6 +38,10 @@ public class MemberController {
 	@Autowired
 	JavaMailSenderImpl mailSender;
 
+	// final String path =
+	// "/home/hosting_users/ingeefanclub/tomcat/webapps/ROOT/resources";
+	// final String path =
+	// "/home/ubuntu/apache-tomcat-8.0.46/webapps/Ingee/resources";
 	final String path = "C:\\Users\\jihyun\\Desktop\\egov\\eGovFrameDev-3.6.0-64bit\\workspace\\InGeeFanClub\\src\\main\\webapp\\resources";
 	// final String path =
 	// "C:\\Users\\뢰후니\\git\\Ingee\\src\\main\\webapp\\resources";
@@ -202,7 +206,6 @@ public class MemberController {
 			@RequestParam(value = "keyword", required = true) String keyword,
 			@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(value = "sort", defaultValue = "name") String sort, HttpSession session) {
-		// String id = (String) session.getAttribute("loggedInID");
 		int perPage = 15;
 		int totalCount = memberDAO.getCount(search_type, keyword);
 		int perBlock = 5;
@@ -218,10 +221,6 @@ public class MemberController {
 		if (endPage > totalPage)
 			endPage = totalPage;
 
-		// MemberDTO memberDTO = memberDAO.get(id);
-		// modelAndView.addObject("loggedInAuthority",
-		// memberDTO.getAuthority());
-
 		modelAndView.addObject("currentPage", page);
 		modelAndView.addObject("totalCount", totalCount);
 		modelAndView.addObject("totalPage", totalPage);
@@ -235,7 +234,6 @@ public class MemberController {
 	@RequestMapping(value = "/admin")
 	public ModelAndView admin(@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(value = "sort", defaultValue = "name") String sort, HttpSession session) {
-		// String id = (String) session.getAttribute("loggedInID");
 		int perPage = 20;
 		int totalCount = memberDAO.getCount();
 		int perBlock = 10;
@@ -250,10 +248,6 @@ public class MemberController {
 
 		if (endPage > totalPage)
 			endPage = totalPage;
-
-		// MemberDTO memberDTO = memberDAO.get(id);
-		// modelAndView.addObject("loggedInAuthority",
-		// memberDTO.getAuthority());
 
 		modelAndView.addObject("currentPage", page);
 		modelAndView.addObject("totalCount", totalCount);

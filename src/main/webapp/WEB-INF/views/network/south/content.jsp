@@ -346,20 +346,20 @@ div.input-group{
 	}
 	
 	function validateFile(obj){
-		var maxSize = 1024 * 1024 * 5;
+		var maxSize = 1024 * 1024 * 10;
 		var fileSize = obj.files[0].size;
 		var fileName = obj.files[0].name;
 		var fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
 		var imgExtension = ["png", "jpg", "jpeg", "bmp", "gif"];
 		
 		if(!imgExtension.includes(fileExtension.toLowerCase())){
-			alert('파일 확장자 명을 “jpg”, “png”, “gif” 중 하나로 업로드 해야 합니다.');
+			alert('You must upload the file extension name as one of “jpeg”," jpg "," bmp "," png ", or “ gif ”.');
 			obj.value = "";
 			return false;
 		}
 		
 		if(fileSize > maxSize){
-			alert("Please upload file size less than 5MB.");
+			alert("Please upload file size less than 10MB.");
 			obj.value = "";
 			return false;
 		}
@@ -507,13 +507,14 @@ div.input-group{
 									<div class="col-md-9">
 										<input type="file" class="form-control" name="upload_file" id="upload_file" onchange="validateFile(this)">
 										<c:if test="${boardDTO.saved_filename != 'NO' }">
-											<span class="help-block" style="margin-bottom: 0; color: red; font-size: 9pt;">첨부파일 삭제(삭제하고싶은 파일 체크)</span>
+											<span class="help-block" style="margin-bottom: 0; color: red; font-size: 9pt;">Delete the attachment(Please check what you want to delete).</span>
 											<c:set var="saved_file" value="${fn:split(boardDTO.saved_filename, ',') }"/>
 											<c:forTokens items="${boardDTO.origin_filename }" delims="," var="origin_file" varStatus="status">
 												<input type="checkbox" value="${saved_file[status.index] }" name="remove_file"> ${origin_file }
 											</c:forTokens>
 										</c:if>
 										<span class="help-block" style="padding-left: 5px; color: red;">※ Please select a file only if you want to change uploaded image.</span>
+										<span class="help-block" style="padding-left: 5px; color: red;">※ When upload photos using camera please take a picture horizontally.</span>
 									</div>
 								</div>
 							</div>

@@ -51,7 +51,7 @@ div.input-group{
 		var fileExtenstion = fileName.substring(fileName.lastIndexOf(".") + 1);
 		
 		if(fileExtenstion.toLowerCase() != "mp4"){
-			alert('Upload the file extension to ".mp4".');
+			alert('You must upload the file extension name to "mp4".');
 			obj.value = "";
 			return false;
 		}

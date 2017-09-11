@@ -86,7 +86,7 @@
 		  }
 	}
 	var sock;
-	sock = new SockJS("<c:url value='/chat/'/>");
+	sock = new SockJS("wss://ingeefanclub.com/chat/");
 	sock.onmessage = onMessage;
 	sock.onclose = onClose;
 	
@@ -118,7 +118,7 @@
 		switch (data[0]) {
 		  case 'MsgUser'  :
 			  OUTHTML = "<li class='left clearfix'><span class='chat-img pull-left'>"
-				+ "<img src='http://localhost:8080/resources/profile/"+data[3]+"' alt='User Avatar' class='img-circle'>"
+				+ "<img src='http://ingeefanclub.com/resources/profile/"+data[3]+"' alt='User Avatar' class='img-circle'>"
 				+ "</span>"
 				+ "<div class='chat-body clearfix'>"
 				+ "<div class='header'>"
@@ -133,7 +133,7 @@
 				break;
 		  case 'MsgMe' :
 			  OUTHTML = "<li class='right clearfix'><span class='chat-img pull-right'>"
-				  + "<img src='http://localhost:8080/resources/profile/"+data[3]+"' alt='User Avatar' class='img-circle'>"
+				  + "<img src='http://ingeefanclub.com/resources/profile/"+data[3]+"' alt='User Avatar' class='img-circle'>"
 				  + "</span>"
 				  + "<div class='chat-body clearfix'>"
 				  + "<div class='header'>"
