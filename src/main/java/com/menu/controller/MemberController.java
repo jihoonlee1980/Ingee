@@ -124,6 +124,8 @@ public class MemberController {
 
 			UploadFileWriter uploadFileWriter = new UploadFileWriter();
 			uploadFileWriter.writeFile(profile_file, profilePath, saved_filename);
+		} else {
+			memberDTO.setSaved_filename("NO");
 		}
 		memberDTO.setPass(memberDTO.getPass().toLowerCase());
 
@@ -157,10 +159,15 @@ public class MemberController {
 			session.setAttribute("isLogin", "YES");
 			session.setAttribute("loginNick", memberDTO.getNick());
 			session.setAttribute("loggedInID", memberDTO.getId());
-			session.setAttribute("profile", (memberDTO.getSaved_filename()==null||memberDTO.getSaved_filename().equals(""))?"":memberDTO.getSaved_filename());
+			session.setAttribute("profile",
+					(memberDTO.getSaved_filename() == null || "NO".equals(memberDTO.getSaved_filename())) ? "NO"
+							: memberDTO.getSaved_filename());
 
-			if (memberDAO.get(memberDTO.getId()).getAuthority() >= 5)
+			if (memberDAO.get(memberDTO.getId()).getAuthority() == 10)
 				session.setAttribute("isAdmin", "YES");
+			
+			if (memberDAO.get(memberDTO.getId()).getAuthority() == 5)
+				session.setAttribute("isIngee", "YES");
 
 			if ("YES".equals(saveID)) {
 				session.setAttribute("isSave", saveID);
@@ -197,6 +204,12 @@ public class MemberController {
 
 		if (session.getAttribute("isAdmin") != null)
 			session.removeAttribute("isAdmin");
+
+		if (session.getAttribute("profile") != null)
+			session.removeAttribute("profile");
+		
+		if (session.getAttribute("isIngee") != null)
+			session.removeAttribute("isIngee");
 
 		return "redirect:/";
 	}
@@ -332,6 +345,12 @@ public class MemberController {
 
 		if (session.getAttribute("isAdmin") != null)
 			session.removeAttribute("isAdmin");
+
+		if (session.getAttribute("profile") != null)
+			session.removeAttribute("profile");
+		
+		if (session.getAttribute("isIngee") != null)
+			session.removeAttribute("isIngee");
 
 		memberDTO.setPass(memberDTO.getPass().toLowerCase());
 

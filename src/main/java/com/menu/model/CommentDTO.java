@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 
 public class CommentDTO {
 	int num, board_num, comment_num, reply_count;
-	String writer, content;
+	String writer, content, id;
 	Timestamp writetime;
 
 	public int getNum() {
@@ -37,6 +37,14 @@ public class CommentDTO {
 
 	public void setReply_count(int reply_count) {
 		this.reply_count = reply_count;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getWriter() {

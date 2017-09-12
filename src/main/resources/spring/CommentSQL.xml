@@ -5,7 +5,7 @@
 		insert into comment values(0, #{board_num}, #{comment_num}, #{writer}, #{content}, 0, now())
 	</insert>
 	<select id="commentList" parameterType="HashMap" resultType="com.menu.model.CommentDTO">
-		select * from comment where <if test="board_num != null">board_num = #{board_num} and</if> comment_num = #{comment_num} order by writetime desc
+		select c.num, c.board_num, c.comment_num, c.writer, c.content, c.reply_count, c.writetime, m.id from comment c left outer join member m on c.writer = m.nick where <if test="board_num != null">board_num = #{board_num} and</if> comment_num = #{comment_num} order by writetime desc
 	</select>
 	<delete id="deleteComment" parameterType="int">
 		delete from comment where num = #{num};

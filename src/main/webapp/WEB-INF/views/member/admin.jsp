@@ -72,7 +72,7 @@ table.admin thead tr th a {
 }
 
 </style>
-<div class="content-section-a" style="height: 750px;">
+<div class="content-section-a" style="min-height: 750px;">
 	<div class="container">
 		<div class="row" style="margin:0;">
 			<table class="table table-striped table-condensed admin">
@@ -82,7 +82,7 @@ table.admin thead tr th a {
 				</caption>
 				<thead>
 					<tr>
-						<th colspan="4">
+						<th colspan="5">
 							<form action="/member/search" class="form-horizontal search-form" style="width: 30%; float: right;">
 								<div class="col-xs-12">
 								    <div class="input-group">
@@ -107,7 +107,7 @@ table.admin thead tr th a {
 						                	<input type="hidden" name="search_type" value="${param.search_type == 'id' ? 'id' : 'name' }" id="search_type">
 						                </c:if>
 						                <input type="hidden" name="page" value="${param.page }">
-						                <input type="hidden" name="sort" value="${param.sort }">         
+						                <input type="hidden" name="sort" value="${param.sort }">
 						                <input type="text" class="form-control" name="keyword" value="${param.keyword }">
 						                <span class="input-group-btn">
 						                    <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
@@ -119,13 +119,14 @@ table.admin thead tr th a {
 					</tr>
 					<tr>
 						<c:if test="${param.search_type ne null }">
-							<th width="20%"><a href="/member/search?sort=name&search_type=${param.search_type }&keyword=${param.keyword}">NAME</a></th>
-							<th width="20%"><a href="/member/search?sort=id&search_type=${param.search_type }&keyword=${param.keyword}">USERNAME</a></th>
+							<th width="15%"><a href="/member/search?sort=name&search_type=${param.search_type }&keyword=${param.keyword}">NAME</a></th>
+							<th width="15%"><a href="/member/search?sort=id&search_type=${param.search_type }&keyword=${param.keyword}">USERNAME</a></th>
 						</c:if>
 						<c:if test="${param.search_type eq null }">
-							<th width="20%"><a href="/member/admin?sort=name">NAME</a></th>
-							<th width="20%"><a href="/member/admin?sort=id">USERNAME</a></th>
+							<th width="15%"><a href="/member/admin?sort=name">NAME</a></th>
+							<th width="15%"><a href="/member/admin?sort=id">USERNAME</a></th>
 						</c:if>
+						<th width="10%">LOCATION</th>
 						<th width="40%">ADDRESS</th>
 						<th width="20%">H.P</th>
 					</tr>
@@ -136,6 +137,7 @@ table.admin thead tr th a {
 							<tr>
 			                    <td>${memberDTO.name }</td>
 			                    <td><a href="mailto:${memberDTO.id }">${memberDTO.id }</a></td>
+			                    <td></td>
 			                    <td>${memberDTO.detailed_address }, ${memberDTO.city }, ${memberDTO.state }, ${memberDTO.zipcode } </td>
 			                    <td>${memberDTO.hp }</td>
 		                	</tr>

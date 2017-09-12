@@ -180,7 +180,7 @@ div.input-group{
 				html += "<input type='hidden' name='comment_num' value='" + comment_num + "'>";
 				html += "<input type='hidden' name='writer' value='" + loginNick + "'>";
 				html += "<input type='hidden' name='page' value='" + page + "'>";
-				html += "<button type='submit' class='btn btn-default btn-sm'>Input</button>";
+				html += "<button type='submit' class='btn btn-warning btn-sm'>Save</button>";
 				html += "</div>";
 				html += "</form>";
 				html += "</li>";
@@ -423,7 +423,7 @@ div.input-group{
 									<input type="hidden" name="comment_num" value="0">
 									<input type="hidden" name="writer" value="${loginNick }">
 									<input type="hidden" name="page" value="${param.page }">
-									<button type="submit" class="btn btn-default btn-sm">Input</button>
+									<button type="submit" class="btn btn-warning btn-sm">Save</button>
 								</div>
 							</form>
 						</c:if>
@@ -447,12 +447,11 @@ div.input-group{
 												<div class="comment-avatar"><img src="${root }/profile/${profile_file[status.index]}" alt=""></div>
 												<div class="comment-box">
 													<div class="comment-head">
-														<h6 class="comment-name ${boardDTO.writer == commentDTO.writer ? 'by-author' : '' }">${commentDTO.writer }</h6>
+														<a href="/message/send?receiver=${commentDTO.id }"><h6 class="comment-name ${boardDTO.writer == commentDTO.writer ? 'by-author' : '' }">${commentDTO.writer }</h6></a>
 														<span class="span-date"><fmt:formatDate value="${boardDTO.writedate }" pattern="HH:mm, MMM dd, yy"/></span>
 														<i class="fa fa-reply" onclick="getReply(this, '${boardDTO.num }', '${commentDTO.num}', '${isLogin }', '${loginNick }', '${loggedInProfile }', '${boardDTO.writer }', '${param.page }')">[${commentDTO.reply_count }]</i>
 														<c:if test="${loginNick == commentDTO.writer }">
-															<i class="fa fa-trash" onclick="deleteComment(${commentDTO.num}, ${boardDTO.num }, ${param.page })"></i>
-															<i class="fa fa-pencil-square-o" onclick="updateCommentForm(this, ${commentDTO.num}, ${commentDTO.board_num }, ${param.page })"></i>
+															<i class="fa fa-trash" onclick="deleteComment(${commentDTO.num}, ${boardDTO.num }, ${param.page })"></i>															<i class="fa fa-pencil-square-o" onclick="updateCommentForm(this, ${commentDTO.num}, ${commentDTO.board_num }, ${param.page })"></i>
 															<p style="display: none;" class="comment-hidden">${commentDTO.content }</p>
 														</c:if>
 													</div>

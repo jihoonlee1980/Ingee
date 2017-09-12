@@ -88,14 +88,14 @@ div.input-group{
 				                	</div>
 			                	</c:if>
 			                	<div class="col-md-${boardDTO.saved_filename != 'NO' ? 6 : 9}" style="margin-top: 2%">
-				                    <h4 class="list-group-item-heading"><span style="font-size: 10pt; font-weight: 600; color: #e69b0b"></span><c:out value="${boardDTO.subject}"/><span style="font-size: 10pt; font-weight: 600; color: red">&nbsp;&nbsp;&nbsp;[ ${boardDTO.comment_count } ]</span></h4>
+				                    <h4 class="list-group-item-heading"><span style="font-size: 10pt; font-weight: 600; color: #e69b0b"></span>${boardDTO.subject}<span style="font-size: 10pt; font-weight: 600; color: red">&nbsp;&nbsp;&nbsp;[ ${boardDTO.comment_count } ]</span></h4>
 			                    	<hr style="width: 100%; height: 2px; background: #777; margin-top: 5px 5px;">
 			                    	<p class="list-group-item-text" style="max-height: 70px; word-break: break-all; white-space: pre-line; overflow: hidden;">${boardDTO.content }</p>
 			                	</div>
 			                	<div class="col-md-3 text-center" style="margin-top: 2%">
-				                    <h4> <c:out value="${boardDTO.readcount}"/> <small> Views </small></h4>
+				                    <h4> ${boardDTO.readcount}<small> Views </small></h4>
 			                    	<br>
-			                    	<p> Posted by: <c:out value="${boardDTO.writer}"/></p>
+			                    	<p> Posted by: ${boardDTO.writer}</p>
 			                    	<br>
 			                    	<p><fmt:formatDate value="${boardDTO.writedate }" pattern="HH:mm, MMM dd, YYYY"/></p>
 			                	</div>
@@ -130,14 +130,14 @@ div.input-group{
 							<c:if test="${param.search_type ne null }">
 								<li ${page eq currentPage ? "class='active'" : "" }>						
 									<a href="/board/ingee/list?page=${page}&search_type=${param.search_type}&keyword=${param.keyword}">
-										<c:out value="${page}"/>
+										${page}
 									</a>
 								</li>
 							</c:if>
 							<c:if test="${param.search_type eq null  }">
 								<li ${page eq currentPage ? "class='active'" : "" }>						
 									<a href="/board/ingee/list?page=${page}">
-										<c:out value="${page}"/>
+										${page}
 									</a>
 								</li>
 							</c:if>
@@ -187,13 +187,12 @@ div.input-group{
 				        </div>
 					</form>
 					<c:if test="${not empty isLogin }">
-<%-- 					<c:if test="${isIngee ne null}"> --%>
-					<c:if test="${isAdmin ne null}">
-						<div class="col-md-6" align="right">
-							<a class="btn btn-default btn-sm" data-toggle="modal" data-target="#write" data-original-title>Write</a>
-						</div>
+						<c:if test="${isIngee ne null}">
+							<div class="col-md-6" align="right">
+								<a class="btn btn-default btn-sm" data-toggle="modal" data-target="#write" data-original-title>Write</a>
+							</div>
+						</c:if>
 					</c:if>
-				</c:if>
 				</div>
 				<!-- search end/write start -->
 				<!-- write end -->

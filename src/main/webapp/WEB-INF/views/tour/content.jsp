@@ -180,7 +180,7 @@ div.input-group{
 				html += "<input type='hidden' name='comment_num' value='" + comment_num + "'>";
 				html += "<input type='hidden' name='writer' value='" + loginNick + "'>";
 				html += "<input type='hidden' name='page' value='" + page + "'>";
-				html += "<button type='submit' class='btn btn-default btn-sm'>Input</button>";
+				html += "<button type='submit' class='btn btn-warning btn-sm'>Input</button>";
 				html += "</div>";
 				html += "</form>";
 				html += "</li>";
@@ -423,7 +423,7 @@ div.input-group{
 									<input type="hidden" name="comment_num" value="0">
 									<input type="hidden" name="writer" value="${loginNick }">
 									<input type="hidden" name="page" value="${param.page }">
-									<button type="submit" class="btn btn-default btn-sm">Input</button>
+									<button type="submit" class="btn btn-warning btn-sm">Save</button>
 								</div>
 							</form>
 						</c:if>

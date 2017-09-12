@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class MemberDTO {
 	int num, authority;
-	String nick, name, id, pass, zipcode, state, city, detailed_address, hp, saved_filename, origin_filename;
+	String nick, name, id, pass, zipcode, state, city, detailed_address, hp, saved_filename, origin_filename, region;
 	MultipartFile profile_file;
 	Timestamp joindate;
 
@@ -112,6 +112,14 @@ public class MemberDTO {
 
 	public void setOrigin_filename(String origin_filename) {
 		this.origin_filename = origin_filename;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String zone) {
+		this.region = zone;
 	}
 
 	public MultipartFile getProfile_file() {

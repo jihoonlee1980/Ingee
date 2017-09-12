@@ -299,6 +299,7 @@
 	                            <hr>
 	                            <p><strong>NAME : ${memberDTO.name }</strong></p>
 	                            <p><strong>NICK : ${memberDTO.nick }</strong></p>
+	                            <p><strong>REGION : ${memberDTO.region }</strong></p>
 	                            <p><strong>ADDR : ${memberDTO.detailed_address }, ${memberDTO.city }, ${memberDTO.state }, ${memberDTO.zipcode }</strong></p>
 	                            <p><strong>H·P : ${memberDTO.hp }</strong></p>
 	                            <span class="help-block"></span>
@@ -396,6 +397,22 @@
 								<button type="button" id="nickCheckBtn" class="btn btn-success" onclick="nickValidCheck();" disabled="disabled">Verify</button>
 							</div>
 						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-12">
+							<div class="input-group">
+								<div class="input-group-addon">
+									<i class="fa fa-globe"></i>
+								</div>
+								<select name="region" class="form-control join_text">
+									<option value="">select..</option>
+									<option value="West" ${memberDTO.region == 'West' ? 'selected' : '' }>West</option>
+									<option value="MidWest" ${memberDTO.region == 'West' ? 'MidWest' : '' }>MidWest</option>
+									<option value="NorthEast" ${memberDTO.region == 'NorthEast' ? 'selected' : '' }>NorthEast</option>
+									<option value="South" ${memberDTO.region == 'South' ? 'selected' : '' }>South</option>
+								</select>
+							</div>
+	                    </div>
 					</div>
 					<div class="form-group">
 						<div class="col-sm-12">

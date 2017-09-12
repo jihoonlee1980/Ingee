@@ -60,7 +60,7 @@
 		limit #{start}, #{perPage}
 	</select>
 	<insert id="insertMember">
-		insert into member values(0, #{nick}, #{name}, #{id}, md5(#{pass}), #{zipcode}, #{state}, #{city}, #{detailed_address}, #{hp}, #{saved_filename}, #{origin_filename}, #{authority}, now())
+		insert into member values(0, #{nick}, #{name}, #{id}, md5(#{pass}), #{zipcode}, #{state}, #{city}, #{detailed_address}, #{hp}, #{saved_filename}, #{origin_filename}, #{authority}, now(), #{region})
 	</insert>
 	<delete id="deleteMember" parameterType="int">
 		delete from member where num = #{num}
@@ -74,7 +74,7 @@
 		select * from member where num = #{num} and pass = md5(#{pass})
 	</select>
 	<update id="updateProfile" parameterType="com.menu.model.MemberDTO">
-		update member set name = #{name}, nick = #{nick}, zipcode = #{zipcode}, city = #{city}, state = #{state}, detailed_address = #{detailed_address}, hp = #{hp}, saved_filename = #{saved_filename}, origin_filename = #{origin_filename} where num = #{num}
+		update member set name = #{name}, nick = #{nick}, zipcode = #{zipcode}, city = #{city}, state = #{state}, detailed_address = #{detailed_address}, hp = #{hp}, saved_filename = #{saved_filename}, origin_filename = #{origin_filename}, region = #{region} where num = #{num}
 	</update>
 	<update id="updateNickCascade" parameterType="HashMap">
 		update board set writer = #{new_nick} where writer = #{current_nick}

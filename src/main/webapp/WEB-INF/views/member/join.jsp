@@ -180,6 +180,11 @@
 			check = false;
 		}
 		
+		if($("select[name='region']").val() == ""){
+			alert("Pleaes select a region.");
+			check = false;
+		}
+		
 		return check;
 	}
 </script>
@@ -263,8 +268,23 @@
 										<input type="file" class="form-control" id="profile_file" name="profile_file" accept="image/*" onchange="validateFile(this)">
 									</div>
 								</div>   
-							</div>
-							
+							</div>		
+							<div class="form-group">
+								<div class="col-sm-12">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-globe"></i>
+										</div>
+										<select name="region" class="form-control join_text">
+											<option value="">select..</option>
+											<option value="West">West</option>
+											<option value="MidWest">MidWest</option>
+											<option value="NorthEast">NorthEast</option>
+											<option value="South">South</option>
+										</select>
+									</div>
+			                    </div>
+							</div>					
 							<div class="form-group">
 								<div class="col-sm-12">
 									<div class="input-group">
