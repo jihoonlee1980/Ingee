@@ -479,16 +479,28 @@ a {
 							</c:choose>							  
 							  <div class="post-comments">
 							      <p class="meta"><fmt:formatDate value="${messageDTO.date_sent}" pattern=" HH:mm MMM dd yyyy" /> &nbsp;
-							      	<a href="#">
+							      	<div class="dropdown" style="display:inline-block;">
+							      	<button class="btn btn-default dropdown-toggle" style="border:none;" type="button" id="menu1" data-toggle="dropdown">
 							      	<c:choose>
 										<c:when test="${DISC == 'sent' }">
-											<c:out value="${messageDTO.receiver_nick }"/>(<c:out value="${messageDTO.receiver }"/>)
+											<c:out value="${messageDTO.receiver_nick }"/>(<c:out value="${messageDTO.receiver }"/>)									
+											</button>	
+										    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+										      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Profile</a></li>
+										      <li role="presentation"><a role="menuitem" tabindex="-1" href="/message/send?sendto=${messageDTO.receiver}">${messageDTO.receiver}</a></li>								      
+										    </ul>
 										</c:when>
 										<c:otherwise>
 											<c:out value="${messageDTO.sender_nick }"/>(<c:out value="${messageDTO.sender }"/>)
+											</button>	
+										    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+										      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Profile</a></li>
+										      <li role="presentation"><a role="menuitem" tabindex="-1" href="/message/send?sendto=${messageDTO.sender}">${messageDTO.sender}</a></li>								      
+										    </ul>
 										</c:otherwise>
-									</c:choose>							      	
-							      	</a> says : <b style="font-size:16px;">${messageDTO.subject}</b>
+									</c:choose>		
+    								</button>	  
+							      	</div> says : <b style="font-size:16px;">${messageDTO.subject}</b>
 							      		<div class="checkbox checkbox-success">
 					                        <input id="checkbox${messageDTO.num}" num="${messageDTO.num}" type="checkbox">
 					                        <label for="checkbox${messageDTO.num}">

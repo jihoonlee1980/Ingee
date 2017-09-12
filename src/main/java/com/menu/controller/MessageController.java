@@ -84,26 +84,29 @@ public class MessageController {
 		modelAndView.addObject("id",id);		
 		String setViewName = "/1/message/send";
 		if(!map.isEmpty()){
-			map.put("subject", XssPreventer.escape(map.get("subject").toString()));
-			map.put("content", XssPreventer.escape(map.get("content").toString()));
-			if(map.get("recvlist").toString().equals(""))
-				map.put("DISC", "single");
-			else if(map.get("recvlist").toString().equals("all")){
-				map.put("DISC", "all");	
-				map.put("id",id);
+			if(map.get("sendto")!=null){
+				modelAndView.addObject("sendto",map.get("sendto").toString());
 			}
-			else
-				map.put("DISC", "multi");	
-			int result = messageDAO.sendMessage(map);
-			if(result > 0){
-				modelAndView.clear();
-				setViewName = "redirect:/message/";
+			else{
+				map.put("subject", XssPreventer.escape(map.get("subject").toString()));
+				map.put("content", XssPreventer.escape(map.get("content").toString()));
+				if(map.get("recvlist").toString().equals(""))
+					map.put("DISC", "single");
+				else if(map.get("recvlist").toString().equals("all")){
+					map.put("DISC", "all");	
+					map.put("id",id);
+				}
+				else
+					map.put("DISC", "multi");	
+				int result = messageDAO.sendMessage(map);
+				if(result > 0){
+					modelAndView.clear();
+					setViewName = "redirect:/message/";
+				}
+				else
+					redirectAttributes.addFlashAttribute("failed", "insert");
 			}
-			else
-				redirectAttributes.addFlashAttribute("failed", "insert");
 		}
-		
-		
 		modelAndView.setViewName(setViewName);
 		return modelAndView;
 	}
