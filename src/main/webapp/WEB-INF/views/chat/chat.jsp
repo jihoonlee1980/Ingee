@@ -86,7 +86,7 @@
 		  }
 	}
 	var sock;
-	sock = new SockJS("wss://ingeefanclub.com/chat/");
+	sock = new SockJS("/chat/");
 	sock.onmessage = onMessage;
 	sock.onclose = onClose;
 	
