@@ -147,6 +147,11 @@
 			check = false;
 		}
 		
+		if($("select[name='region']").val() == ""){
+			alert("Pleaes select a region.");
+			check = false;
+		}
+		
 		return check;
 	}
 	

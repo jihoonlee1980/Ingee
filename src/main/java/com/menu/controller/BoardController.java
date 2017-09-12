@@ -23,8 +23,6 @@ import com.menu.model.BoardDTO;
 import com.menu.model.CommentDAO;
 import com.menu.model.CommentDTO;
 import com.menu.model.MemberDAO;
-import com.menu.model.MemberDTO;
-import com.nhncorp.lucy.security.xss.XssFilter;
 import com.nhncorp.lucy.security.xss.XssPreventer;
 
 @Controller
@@ -216,6 +214,17 @@ public class BoardController {
 		boardDAO.delete(num);
 
 		return "redirect:/board/" + b_category + "/list?page=" + page;
+	}
+
+	@RequestMapping(value = "/{b_category}/imageView")
+	public ModelAndView boardDelete(@PathVariable String b_category,
+			@RequestParam(value = "fileName", required = true) String fileName) {
+		ModelAndView modelAndView = new ModelAndView();
+
+		modelAndView.addObject("fileName", fileName);
+		modelAndView.setViewName("imageView");
+
+		return modelAndView;
 	}
 
 	@RequestMapping(value = "/{b_category}/{s_category}/list")

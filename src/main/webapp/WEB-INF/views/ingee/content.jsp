@@ -47,6 +47,14 @@ div.input-group{
 }
 </style>
 <script type="text/javascript">
+	function imageView(obj, fileName){
+		var width = obj.naturalWidth + 20;
+		var height = obj.naturalHeight + 20;
+		var left = ($(window).width() - width) / 2;
+		var opt = "width=" + width +", height=" + height + ",toolbar=no, menubar=no, location=no, status=no, resizable=no, left=" + left;
+		
+		window.open("imageView?fileName=" + fileName, "", opt);
+	}
 	$(function(){
 		$(document).on("click", ".updateReplyForm", function(){
 			var content_div = $(this).parents().siblings(".comment-content");
@@ -387,7 +395,7 @@ div.input-group{
 	            <hr style="height: 2px; background: #777; width: 100%;">
 	            <c:if test="${boardDTO.saved_filename != 'NO' }">	            
 					<div class="content-div" id="content_img_div">
-	                   	<img src="${root }/board/${boardDTO.saved_filename}" style="max-width: 100%;">
+	                   	<img src="${root }/board/${boardDTO.saved_filename}" style="max-width: 100%; cursor: pointer;" onclick="imageView(this, '${boardDTO.saved_filename}')" title="이미지를 클릭하시면 원본 크기로 보실 수 있습니다.">
 					</div>
 				</c:if>
 				<div class="content-div">
@@ -397,7 +405,7 @@ div.input-group{
 				</div>
 				<div class="row" style="margin: 0 auto; width: 100%; display: inline-block;">
 					<div class="content-div" style="width: 100%; text-align: right;">
-						<c:if test="${loginNick eq boardDTO.writer}">
+						<c:if test="${isIngee ne null}">
 						    <a class="btn btn-warning btn-sm" data-toggle="modal" data-target="#update" data-original-title>Modify</a>
 		       				<a class="btn btn-danger btn-sm" onclick="deleteCheck('${boardDTO.num}','${param.page }');">Delete</a>
 	       				</c:if>

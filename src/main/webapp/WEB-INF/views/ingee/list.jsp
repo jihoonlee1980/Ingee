@@ -105,7 +105,7 @@ div.input-group{
 			        <c:if test="${totalCount == 0 }">
 			        	<c:if test="${param.search_type ne null }">
 				        	<div class="media col-md-12" style="margin-top: 2%; text-align: center;">
-				        		<span style="font-size: 20pt; font-weight: 700; color: #999">"${param.keyword }"로 검색된 결과가 없습니다.</span>
+				        		<span style="font-size: 20pt; font-weight: 700; color: #999">No results founded with "${param.keyword }".</span>
 				        	</div>
 			        	</c:if>
 			        	<c:if test="${param.search_type eq null }">

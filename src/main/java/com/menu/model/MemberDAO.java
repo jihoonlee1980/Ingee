@@ -9,30 +9,37 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class MemberDAO extends SqlSessionDaoSupport {
-	public int getCount() {
-		return getSqlSession().selectOne("countMember");
+	public int getCount(String region) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("region", region);
+
+		return getSqlSession().selectOne("countMember", map);
 	}
 
-	public int getCount(String search_type, String keyword) {
+	public int getCount(String search_type, String keyword, String region) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		map.put("search_type", search_type);
 		map.put("keyword", keyword);
+		map.put("region", region);
 
 		return getSqlSession().selectOne("countSearchMember", map);
 	}
 
-	public List<MemberDTO> list(int startNum, int perPage, String sort) {
+	public List<MemberDTO> list(int startNum, int perPage, String sort, String region) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		map.put("start", startNum);
 		map.put("perPage", perPage);
 		map.put("sort", sort);
+		map.put("region", region);
 
 		return getSqlSession().selectList("memberList", map);
 	}
 
-	public List<MemberDTO> searchList(int start, int perPage, String sort, String search_type, String keyword) {
+	public List<MemberDTO> searchList(int start, int perPage, String sort, String search_type, String keyword,
+			String region) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		map.put("start", start);
@@ -40,6 +47,7 @@ public class MemberDAO extends SqlSessionDaoSupport {
 		map.put("sort", sort);
 		map.put("search_type", search_type);
 		map.put("keyword", keyword);
+		map.put("region", region);
 
 		return getSqlSession().selectList("searchMemberList", map);
 	}
@@ -56,12 +64,12 @@ public class MemberDAO extends SqlSessionDaoSupport {
 		return getSqlSession().selectOne("getMemberID", id);
 	}
 
-	public void updateNick(String current_nick, String new_nick){
+	public void updateNick(String current_nick, String new_nick) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		map.put("current_nick", current_nick);
 		map.put("new_nick", new_nick);
-		
+
 		getSqlSession().update("updateNickCascade", map);
 	}
 
