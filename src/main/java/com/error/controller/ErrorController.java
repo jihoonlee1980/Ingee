@@ -34,7 +34,8 @@ public class ErrorController {
                 break;
             }
         }
-        errorPage.addObject("errorMsg", errorMsg);        
+        errorPage.addObject("errorMsg", errorMsg);
+        errorPage.addObject("errorCode", httpErrorCode);
         return errorPage;
     }
      

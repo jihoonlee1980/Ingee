@@ -431,4 +431,13 @@ public class MemberController {
 
 		return map;
 	}
+	
+	@RequestMapping(value = "/profile")
+	public ModelAndView popupProfile(@RequestParam(value = "id", required = true) String id) {
+		ModelAndView modelAndView = new ModelAndView();
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		//modelAndView.setViewName(viewName);
+		return modelAndView;
+	}
 }

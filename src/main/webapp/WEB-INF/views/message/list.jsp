@@ -9,15 +9,11 @@
 <c:set var="root" value="${root_}/resources" />
 <script src="/assets/jquery-3.2.1.min.js"></script>
 <script type="text/javascript">
-function popupOpen(){
-
-	var popUrl = "test.html";	//팝업창에 출력될 페이지 URL
-
-	var popOption = "width=370, height=360, resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
-
-		window.open(popUrl,"",popOption);
-
-	}
+function popupOpen(id){
+	var popUrl = "/member/profile?id="+id;
+	var popOption = "width=370, height=360, resizable=no, scrollbars=no, status=no;";
+	window.open(popUrl,"",popOption);
+}
 
 $(document).ready(function () {
 	$('.search-panel .dropdown-menu').find('a').click(function(e) {
@@ -496,7 +492,7 @@ a {
 											<c:out value="${messageDTO.receiver_nick }"/>(<c:out value="${messageDTO.receiver }"/>)									
 											</button>	
 										    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-										      <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="popupOpen('/')">Profile</a></li>
+										      <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="popupOpen('${messageDTO.receiver}')">Profile</a></li>
 										      <li role="presentation"><a role="menuitem" tabindex="-1" href="/message/send?sendto=${messageDTO.receiver}">Reply</a></li>								      
 										    </ul>
 										</c:when>
@@ -504,7 +500,7 @@ a {
 											<c:out value="${messageDTO.sender_nick }"/>(<c:out value="${messageDTO.sender }"/>)
 											</button>	
 										    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-										      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Profile</a></li>
+										      <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="popupOpen('${messageDTO.receiver}')">Profile</a></li>
 										      <li role="presentation"><a role="menuitem" tabindex="-1" href="/message/send?sendto=${messageDTO.sender}">Reply</a></li>								      
 										    </ul>
 										</c:otherwise>
