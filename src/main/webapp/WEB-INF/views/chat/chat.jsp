@@ -37,21 +37,21 @@
 <script type="text/javascript" src="<c:url value="/resources/js/sockjs.js"/>"></script>
 <script type="text/javascript">
 	$(function(){
-		$("#btn-chat").click(function() {
+		$("#btn-chat").click(function() {			
 			if(maxLengthCheck()){
 				sendMessage();
 				$("#btn-input").val("");
 			}
 		});
-		$("#btn-input").keypress(function(e){
-			if(e.keyCode == 13){
+		$("#btn-input").keypress(function(e){			
+			if(e.keyCode == 13){				
 				if(maxLengthCheck()){
 					sendMessage();
 					$("#btn-input").val("");	
 				}
 			}
 		});
-	});
+	});	
 	function maxLengthCheck(){		
 		var check = true;
 		  var textLength = $('#btn-input').val().length;
@@ -61,11 +61,10 @@
 		  }
 		  else{
 		  var byteCnt = 0;
-		  var forIE = false; //IE에서 한글이 전부 지워지는 경우가 있다
 		  var maxLength = 200;
 		  for (i = 0; i < textLength; i++) {
 		   var charTemp = $('#btn-input').val().charAt(i);
-		   if (escape(charTemp).length > 4) {
+		   if (escape(charTemp).length == 6) {
 		    byteCnt += 2;
 		    forIE= true;
 		   } else {
@@ -75,12 +74,7 @@
 		  }
 		  if( byteCnt > maxLength){
 			  check = false;
-		   if(forIE){
-		    alert("You can not exceed "+maxLength+" characters.");//ie에서 한글일때
-		    $('#btn-input').val($('#btn-input').val().substr(0,textLength-1));
-		   }else{
-		    $('#btn-input').val($('ebtn-input').val().substr(0,textLength-1));
-		   }
+		    alert("You can not exceed "+maxLength+" characters.");//ie에서 한글일때		   
 		  }
 		  return check;
 		  }

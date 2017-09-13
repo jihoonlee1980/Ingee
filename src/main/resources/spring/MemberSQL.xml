@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com">
-	<select id="countMember" resultType="int">
-		select count(*) from member
+	<select id="countMember" resultType="int" parameterType="HashMap">
+		select count(*) from member<if test="region != 'all'"> where region = #{region}</if>
 	</select>
 	<select id="countSearchMember" resultType="int" parameterType="HashMap">
 		select count(*) from member where
@@ -15,6 +15,7 @@
 			</when>
 		</choose>
 		like CONCAT('%',#{keyword},'%')
+		<if test="region != 'all'"> and region = #{region}</if>
 	</select>
 	<select id="getMemberNum" parameterType="int" resultType="com.menu.model.MemberDTO">
 		select * from member where num = #{num}
@@ -26,7 +27,7 @@
 		select id from member where id != #{id}
 	</select>
 	<select id="memberList" resultType="com.menu.model.MemberDTO">
-		select * from member order by
+		select * from member<if test="region != 'all'"> where region = #{region}</if>order by
 		<choose>
 			<when test="sort == 'id'">
 				id
@@ -48,6 +49,7 @@
 			</when>
 		</choose>
 		like CONCAT('%',#{keyword},'%')
+		<if test="region != 'all'"> and region = #{region}</if>
 		order by
 		<choose>
 			<when test="sort == 'id'">
@@ -77,7 +79,8 @@
 		update member set name = #{name}, nick = #{nick}, zipcode = #{zipcode}, city = #{city}, state = #{state}, detailed_address = #{detailed_address}, hp = #{hp}, saved_filename = #{saved_filename}, origin_filename = #{origin_filename}, region = #{region} where num = #{num}
 	</update>
 	<update id="updateNickCascade" parameterType="HashMap">
-		update board set writer = #{new_nick} where writer = #{current_nick}
+		update board set writer = #{new_nick} where writer = #{current_nick};
+		update comment set writer = #{new_nick} where writer = #{current_nick};
 	</update>
 	<update id="updatePass" parameterType="com.menu.model.MemberDTO">
 		update member set pass = md5(#{pass}) where num = #{num}

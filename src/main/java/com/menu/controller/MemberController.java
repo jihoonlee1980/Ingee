@@ -165,7 +165,7 @@ public class MemberController {
 
 			if (memberDAO.get(memberDTO.getId()).getAuthority() == 10)
 				session.setAttribute("isAdmin", "YES");
-			
+
 			if (memberDAO.get(memberDTO.getId()).getAuthority() == 5)
 				session.setAttribute("isIngee", "YES");
 
@@ -207,7 +207,7 @@ public class MemberController {
 
 		if (session.getAttribute("profile") != null)
 			session.removeAttribute("profile");
-		
+
 		if (session.getAttribute("isIngee") != null)
 			session.removeAttribute("isIngee");
 
@@ -218,14 +218,15 @@ public class MemberController {
 	public ModelAndView searchMembers(@RequestParam(value = "search_type", required = true) String search_type,
 			@RequestParam(value = "keyword", required = true) String keyword,
 			@RequestParam(value = "page", defaultValue = "1") int page,
-			@RequestParam(value = "sort", defaultValue = "name") String sort, HttpSession session) {
+			@RequestParam(value = "region", defaultValue = "all") String region,
+			@RequestParam(value = "sort", defaultValue = "name") String sort) {
 		int perPage = 15;
-		int totalCount = memberDAO.getCount(search_type, keyword);
+		int totalCount = memberDAO.getCount(search_type, keyword, region);
 		int perBlock = 5;
 		int totalPage = totalCount % perPage > 0 ? totalCount / perPage + 1 : totalCount / perPage;
 		int startPage;
 		int endPage;
-		List<MemberDTO> memberDTOs = memberDAO.searchList((page - 1) * perPage, perPage, sort, search_type, keyword);
+		List<MemberDTO> memberDTOs = memberDAO.searchList((page - 1) * perPage, perPage, sort, search_type, keyword, region);
 		ModelAndView modelAndView = new ModelAndView();
 
 		startPage = (page - 1) / perBlock * perBlock + 1;
@@ -246,14 +247,15 @@ public class MemberController {
 
 	@RequestMapping(value = "/admin")
 	public ModelAndView admin(@RequestParam(value = "page", defaultValue = "1") int page,
-			@RequestParam(value = "sort", defaultValue = "name") String sort, HttpSession session) {
+			@RequestParam(value = "region", defaultValue = "all") String region,
+			@RequestParam(value = "sort", defaultValue = "name") String sort) {
 		int perPage = 20;
-		int totalCount = memberDAO.getCount();
+		int totalCount = memberDAO.getCount(region);
 		int perBlock = 10;
 		int totalPage = totalCount % perPage > 0 ? totalCount / perPage + 1 : totalCount / perPage;
 		int startPage;
 		int endPage;
-		List<MemberDTO> memberDTOs = memberDAO.list((page - 1) * perPage, perPage, sort);
+		List<MemberDTO> memberDTOs = memberDAO.list((page - 1) * perPage, perPage, sort, region);
 		ModelAndView modelAndView = new ModelAndView();
 
 		startPage = (page - 1) / perBlock * perBlock + 1;
@@ -348,7 +350,7 @@ public class MemberController {
 
 		if (session.getAttribute("profile") != null)
 			session.removeAttribute("profile");
-		
+
 		if (session.getAttribute("isIngee") != null)
 			session.removeAttribute("isIngee");
 
@@ -431,13 +433,18 @@ public class MemberController {
 
 		return map;
 	}
-	
+
 	@RequestMapping(value = "/profile")
-	public ModelAndView popupProfile(@RequestParam(value = "id", required = true) String id) {
+	public ModelAndView popupProfile(@RequestParam String id , HttpSession session , RedirectAttributes redirectAttributes) {
 		ModelAndView modelAndView = new ModelAndView();
-		Map<String, Object> map = new HashMap<String, Object>();
-		String returnURL = "/1/member/profile";
-		modelAndView.setViewName(returnURL);
+		String returnURL = "/member/profile";		
+		if(session.getAttribute("isLogin") != null && "YES".equals((String)session.getAttribute("isLogin"))){
+			MemberDTO memberDTO = memberDAO.get(id);
+			modelAndView.addObject("memberDTO",memberDTO);			
+			modelAndView.setViewName(returnURL);
+		}
+		else
+			returnURL = "redirect:/";		
 		return modelAndView;
 	}
 }

@@ -70,8 +70,16 @@ table.admin thead tr th a {
 		width: 100% !important;
 	}
 }
-
 </style>
+<c:if test="${not empty param.sort }">
+	<c:set var="sortStr" value="&sort=${param.sort }"/>
+</c:if>
+<c:if test="${not empty param.region}">
+	<c:set var="regionStr" value="&region=${param.region}"/>
+</c:if>
+<c:if test="${not empty param.search_type}">
+	<c:set var="searchStr" value="&search_type=${param.search_type}&keyword=${param.keyword }"/>
+</c:if>
 <div class="content-section-a" style="min-height: 750px;">
 	<div class="container">
 		<div class="row" style="margin:0;">
@@ -82,22 +90,42 @@ table.admin thead tr th a {
 				</caption>
 				<thead>
 					<tr>
-						<th colspan="5">
-							<form action="/member/search" class="form-horizontal search-form" style="width: 30%; float: right;">
+						<th colspan="4">
+							<div class="search-form" style="width: 27%; float: left;">
+								<div class="col-md-12">
+									<div class="input-gorup">
+										<c:if test="${param.search_type ne null }">
+											<a href="/member/search?region=all${not empty param.sort ? sortStr : '' }${not empty param.search_type ? searchStr : ''}">ALL</a>&nbsp;&nbsp;
+											<a href="/member/search?region=West${not empty param.sort ? sortStr : '' }${not empty param.search_type ? searchStr : ''}">West</a>&nbsp;&nbsp;
+											<a href="/member/search?region=MidWest${not empty param.sort ? sortStr : '' }${not empty param.search_type ? searchStr : ''}">MidWest</a>&nbsp;&nbsp;
+											<a href="/member/search?region=NorthEast${not empty param.sort ? sortStr : '' }${not empty param.search_type ? searchStr : ''}">NorthEast</a>&nbsp;&nbsp;
+											<a href="/member/search?region=South${not empty param.sort ? sortStr : '' }${not empty param.search_type ? searchStr : ''}">South</a>
+										</c:if>
+										<c:if test="${param.search_type eq null }">
+											<a href="/member/admin?region=all${not empty param.sort ? sortStr : '' }${not empty param.search_type ? searchStr : ''}">ALL</a>&nbsp;&nbsp;
+											<a href="/member/admin?region=West${not empty param.sort ? sortStr : '' }${not empty param.search_type ? searchStr : ''}">West</a>&nbsp;&nbsp;
+											<a href="/member/admin?region=MidWest${not empty param.sort ? sortStr : '' }${not empty param.search_type ? searchStr : ''}">MidWest</a>&nbsp;&nbsp;
+											<a href="/member/admin?region=NorthEast${not empty param.sort ? sortStr : '' }${not empty param.search_type ? searchStr : ''}">NorthEast</a>&nbsp;&nbsp;
+											<a href="/member/admin?region=South${not empty param.sort ? sortStr : '' }${not empty param.search_type ? searchStr : ''}">South</a>
+										</c:if>
+									</div>
+								</div>
+							</div>
+							<form action="/member/search" class="form-horizontal search-form" style="width: 40%; float: right;">
 								<div class="col-xs-12">
 								    <div class="input-group">
 						                <div class="input-group-btn search-panel">
 						                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 						                    	<c:if test="${param.search_type eq null }">
-						                    		<span id="type">username</span> <span class="caret"></span>
+						                    		<span id="type">USERNAME</span> <span class="caret"></span>
 						                    	</c:if>
 						                    	<c:if test="${param.search_type ne null }">
-						                    		<span id="type">${param.search_type == 'id' ? 'username' : 'name' }</span> <span class="caret"></span>
+						                    		<span id="type">${param.search_type == 'id' ? 'USERNAME' : 'NAME' }</span><span class="caret"></span>
 						                    	</c:if>
 						                    </button>
 						                    <ul class="dropdown-menu" role="menu">
-												<li><a href="#username">username</a></li>
-												<li><a href="#name">name</a></li>
+												<li><a href="#username">USERNAME</a></li>
+												<li><a href="#name">NAME</a></li>
 						                    </ul>
 						                </div>
 						                <c:if test="${param.search_type eq null }">
@@ -108,6 +136,7 @@ table.admin thead tr th a {
 						                </c:if>
 						                <input type="hidden" name="page" value="${param.page }">
 						                <input type="hidden" name="sort" value="${param.sort }">
+						                <input type="hidden" name="region" value="${param.region }">
 						                <input type="text" class="form-control" name="keyword" value="${param.keyword }">
 						                <span class="input-group-btn">
 						                    <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
@@ -119,16 +148,15 @@ table.admin thead tr th a {
 					</tr>
 					<tr>
 						<c:if test="${param.search_type ne null }">
-							<th width="15%"><a href="/member/search?sort=name&search_type=${param.search_type }&keyword=${param.keyword}">NAME</a></th>
-							<th width="15%"><a href="/member/search?sort=id&search_type=${param.search_type }&keyword=${param.keyword}">USERNAME</a></th>
+							<th><a href="/member/search?sort=name&search_type=${param.search_type }&keyword=${param.keyword}${not empty param.region ? regionStr : '' }">NAME</a></th>
+							<th><a href="/member/search?sort=id&search_type=${param.search_type }&keyword=${param.keyword}${not empty param.region ? regionStr : '' }">USERNAME</a></th>
 						</c:if>
 						<c:if test="${param.search_type eq null }">
-							<th width="15%"><a href="/member/admin?sort=name">NAME</a></th>
-							<th width="15%"><a href="/member/admin?sort=id">USERNAME</a></th>
+							<th><a href="/member/admin?sort=name${not empty param.region ? regionStr : '' }">NAME</a></th>
+							<th><a href="/member/admin?sort=id${not empty param.region ? regionStr : '' }">USERNAME</a></th>
 						</c:if>
-						<th width="10%">LOCATION</th>
-						<th width="40%">ADDRESS</th>
-						<th width="20%">H.P</th>
+						<th width="50%">ADDRESS</th>
+						<th>H.P</th>
 					</tr>
 				</thead>   
 				<tbody>
@@ -137,11 +165,13 @@ table.admin thead tr th a {
 							<tr>
 			                    <td>${memberDTO.name }</td>
 			                    <td><a href="mailto:${memberDTO.id }">${memberDTO.id }</a></td>
-			                    <td></td>
-			                    <td>${memberDTO.detailed_address }, ${memberDTO.city }, ${memberDTO.state }, ${memberDTO.zipcode } </td>
+			                    <td>${memberDTO.region }<br>${memberDTO.detailed_address }, ${memberDTO.city }, ${memberDTO.state }, ${memberDTO.zipcode } </td>
 			                    <td>${memberDTO.hp }</td>
 		                	</tr>
 						</c:forEach>
+						<tr>
+							<td colspan="4" style="text-align: right; padding-right: 10px;"><span>${fn:length(memberList) } 명의 회원정보가 있습니다.</span></td>
+						</tr>
 					</c:if>
 					<c:if test="${fn:length(memberList) == 0 }">
 						<tr>

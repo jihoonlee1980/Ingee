@@ -8,6 +8,9 @@
 		<put-attribute name="body" value="/WEB-INF/views/layout/body.jsp" />
 		<put-attribute name="footer" value="/WEB-INF/views/layout/footer.jsp" />
 	</definition>
+	
+	<definition name="imageView" template="/WEB-INF/views/image/imageView.jsp">
+	</definition>
 
 	<!-- wild card -->
 

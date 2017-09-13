@@ -8,12 +8,9 @@
 <c:set var="root_" value="<%=request.getContextPath() %>" />
 <c:set var="root" value="${root_}/resources" />
 <script src="/assets/jquery-3.2.1.min.js"></script>
+<script src="/resources/js/popup.js"></script>
 <script type="text/javascript">
-function popupOpen(id){
-	var popUrl = "/member/profile?id="+id;
-	var popOption = "width=370, height=360, resizable=no, scrollbars=no, status=no;";
-	window.open(popUrl,"",popOption);
-}
+
 
 $(document).ready(function () {
 	$('.search-panel .dropdown-menu').find('a').click(function(e) {
@@ -366,6 +363,30 @@ a {
   border-color: #5cb85c; }
 .radio-success input[type="radio"]:checked + label::after {
   background-color: #5cb85c; }
+.message-id {
+	word-spacing: normal;
+    white-space: normal;
+    word-break: break-all;
+}
+@media (max-width: 360px) {
+  .receivedBtn , .sentBtn{
+  	width:50% !important;
+  	font-size:0.8em !important;
+  }
+  .WriteBtn{
+  	width:100% !important;
+  	font-size:0.8em !important;
+  	margin:10px auto !important;
+  }
+  .searchForm-message{
+  	width:100% !important;
+  }
+  .blog-comment ul.comments ul{
+  	margin-left:0;
+  }
+  
+}  
+
 </style>
 <div class="content-section-a">
 	<div class="container bootstrap snippet">
@@ -384,11 +405,11 @@ a {
 					</c:choose>		
 					</h3>
 					<div class="btn-group">
-								<button type="button" class="btn btn-success" onclick="javascript:location.href='/message/'">Received messages</button>
-								<button type="button" class="btn btn-warning" onclick="javascript:location.href='/message/?DISC=sent'">Sent messages</button>
-								<button type="button" class="btn btn-primary" onclick="javascript:location.href='/message/send'">Write</button>
+								<button type="button" class="btn btn-success receivedBtn" onclick="javascript:location.href='/message/'">Received messages</button>
+								<button type="button" class="btn btn-warning sentBtn" onclick="javascript:location.href='/message/?DISC=sent'">Sent messages</button>
+								<button type="button" class="btn btn-primary WriteBtn" onclick="javascript:location.href='/message/send'">Write</button>
 					</div>
-					<form action="/message/" class="form-horizontal" style="width: 30%; float: right;" method="post">
+					<form action="/message/" class="form-horizontal searchForm-message" style="width: 30%; float: right;" method="post">
 						<div class="col-xs-12">
 						    <div class="input-group">
 				                <div class="input-group-btn search-panel">
@@ -486,7 +507,7 @@ a {
 							  <div class="post-comments">
 							      <p class="meta"><fmt:formatDate value="${messageDTO.date_sent}" pattern=" HH:mm MMM dd yyyy" /> &nbsp;
 							      	<div class="dropdown" style="display:inline-block;">
-							      	<button class="btn btn-default dropdown-toggle" style="border:none;" type="button" id="menu1" data-toggle="dropdown">
+							      	<button class="btn btn-default dropdown-toggle message-id" style="border:none;" type="button" data-toggle="dropdown">							      	
 							      	<c:choose>
 										<c:when test="${DISC == 'sent' }">
 											<c:out value="${messageDTO.receiver_nick }"/>(<c:out value="${messageDTO.receiver }"/>)									
@@ -500,7 +521,7 @@ a {
 											<c:out value="${messageDTO.sender_nick }"/>(<c:out value="${messageDTO.sender }"/>)
 											</button>	
 										    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-										      <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="popupOpen('${messageDTO.receiver}')">Profile</a></li>
+										      <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="popupOpen('${messageDTO.sender}')">Profile</a></li>
 										      <li role="presentation"><a role="menuitem" tabindex="-1" href="/message/send?sendto=${messageDTO.sender}">Reply</a></li>								      
 										    </ul>
 										</c:otherwise>
