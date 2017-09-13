@@ -71,6 +71,16 @@
 		$("#nick").on('input',function(){
 			$("#nickCheckBtn").prop("disabled", false);
 		});
+		
+		$("span.region").click(function(){
+			if($(this).hasClass("show")){
+				$("div.region-div").css("display", "none");
+				$(this).removeClass("show");
+			} else {
+				$("div.region-div").css("display", "block");
+				$(this).addClass("show");
+			}
+		});
 	});
 
 	function profileSubmitCheck(){
@@ -84,6 +94,11 @@
 
 		if(!$("#nickCheckBtn").is(":disabled")){
 			alert("Please check your nickname to avoid duplicate use.")
+			check = false;
+		}
+		
+		if($("select[name='region']").val() == ""){
+			alert("Pleaes select a region.");
 			check = false;
 		}
 		
@@ -144,11 +159,6 @@
 		
 		if($("#pass").val() != $("#check_new_pass").val()){
 			alert("The new password is not matching");
-			check = false;
-		}
-		
-		if($("select[name='region']").val() == ""){
-			alert("Pleaes select a region.");
 			check = false;
 		}
 		
@@ -299,7 +309,12 @@
 	                    <div role="tabpanel" class="tab-pane fade in active" id="profile_div">
 	                        <div class="tab-inner">                    
 	                        	<div style="width: 100%; text-align: center;">
-	                            	<img class="img-circle" src="${root }/profile/${memberDTO.saved_filename}" style="width: 40%;">
+	                        		<c:if test="${memberDTO.saved_filename == 'NO' }">
+	                        			<img src="${root }/profile/none_profile.png" style="width: 40%;">
+	                        		</c:if>
+	                        		<c:if test="${memberDTO.saved_filename != 'NO' }">
+	                        			<img src="${root }/profile/${memberDTO.saved_filename}" style="width: 40%;">
+	                        		</c:if>
 	                            </div>
 	                            <hr>
 	                            <p><strong>NAME : ${memberDTO.name }</strong></p>
@@ -404,12 +419,12 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<div class="col-sm-12">
+						<div class="col-sm-6">
 							<div class="input-group">
 								<div class="input-group-addon">
 									<i class="fa fa-globe"></i>
 								</div>
-								<select name="region" class="form-control join_text">
+								<select name="region" class="form-control">
 									<option value="">select..</option>
 									<option value="West" ${memberDTO.region == 'West' ? 'selected' : '' }>West</option>
 									<option value="MidWest" ${memberDTO.region == 'West' ? 'MidWest' : '' }>MidWest</option>
@@ -417,6 +432,12 @@
 									<option value="South" ${memberDTO.region == 'South' ? 'selected' : '' }>South</option>
 								</select>
 							</div>
+	                    </div>
+	                    <div class="col-sm-6">
+	                    	<span class="region" style="text-decoration: underline; cursor: pointer; line-height: 100%; vertical-align: bottom;">Unfold the regional network.</span>
+	                    </div>
+	                    <div class="col-sm-12 region-div" style="display: none;">
+	                    	<img alt="" src="${root }/img/main/region.jpg" style="max-width: 100%;" onclick="imageView(this, 'img/main/region.jpg')">
 	                    </div>
 					</div>
 					<div class="form-group">

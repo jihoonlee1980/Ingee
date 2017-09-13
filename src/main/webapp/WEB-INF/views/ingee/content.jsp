@@ -47,14 +47,6 @@ div.input-group{
 }
 </style>
 <script type="text/javascript">
-	function imageView(obj, fileName){
-		var width = obj.naturalWidth + 20;
-		var height = obj.naturalHeight + 20;
-		var left = ($(window).width() - width) / 2;
-		var opt = "width=" + width +", height=" + height + ",toolbar=no, menubar=no, location=no, status=no, resizable=no, left=" + left;
-		
-		window.open("imageView?fileName=" + fileName, "", opt);
-	}
 	$(function(){
 		$(document).on("click", ".updateReplyForm", function(){
 			var content_div = $(this).parents().siblings(".comment-content");
@@ -77,6 +69,11 @@ div.input-group{
 				html += "<div style='width: 100%' align='right'><button type='button' class='btn btn-sm btn-success updateBtn'>Edit</button><button type='button' class='btn btn-sm btn-default updateCancel'>Cancel</button></div>";
 				$(document).on("click", ".updateBtn", function(){
 					var update_btn = $(this);
+					var new_content = update_btn.parents().siblings("textarea").val();
+					
+					if(!maxLengthCheck(new_content, 1000, "comment"))
+						return ;
+					
 					swal({
 						title : "Are you sure you want to edit the comment?",
 						type : "warning",
@@ -88,7 +85,6 @@ div.input-group{
 						closeOnCancel : false
 					}, function(isConfirm) {
 						if (isConfirm) {
-							var new_content = update_btn.parents().siblings("textarea").val();
 							location.href = "/comment/ingee/update?num=" + num + "&content=" + new_content + "&board_num=" + board_num + "&page=" + page;
 						} else {
 							swal("Cancel", "The editing the comment is cancelled.", "error");
@@ -107,6 +103,15 @@ div.input-group{
 			}
 		});
 	});
+	
+	function imageView(obj, fileName){
+		var width = obj.naturalWidth + 20;
+		var height = obj.naturalHeight + 20;
+		var left = ($(window).width() - width) / 2;
+		var opt = "width=" + width +", height=" + height + ",toolbar=no, menubar=no, location=no, status=no, resizable=no, left=" + left;
+		
+		window.open("imageView?fileName=" + fileName, "", opt);
+	}
 	
 	function commnetPagination(obj, perPage, perBlock, totalPage){
 		var liLength = $("#comments-list li").length;
@@ -176,9 +181,12 @@ div.input-group{
 			
 			if(isLogin != ""){
 				html += "<li>";
-				html += "<form action='/comment/ingee/insert' class='reply-input' method='get'>";
+				html += "<form action='/comment/ingee/insert' class='reply-input' method='get' onsubmit='return commentInsert(this);'>";
 				html += "<div class='reply-input-avatar'>";
-				html += "<img src='${root }/profile/" + loggedInProfile + "' alt=''>";
+				if(loggedInProfile == "NO")
+					html += "<img src='${root }/profile/none_profile.png' alt='' title='Do not have any profile pictures.'>";
+				else
+					html += "<img src='${root }/profile/" + loggedInProfile + "' alt=''>";
 				html += "</div>";
 				html += "<div class='reply-textarea-div'>";
 				html += "<textarea class='reply-textarea' style='width: 100%; height: 75px' name='content' required='required' placeholder='  As we all fans of gorgeous InGee, let`s encourage all together while keeping netiquette.'></textarea>";
@@ -208,7 +216,10 @@ div.input-group{
 						var commentDTO = data.commentDTO[i];
 						
 						html += "<li>";
-						html += "<div class='comment-avatar'><img src='${root}/profile/" + profile_files[i] + "' alt=''></div>";
+						if(profile_files == "NO")
+							html += "<div class='comment-avatar'><img src='${root }/profile/none_profile.png' alt='' title='Do not have any profile pictures.'></div>";
+						else
+							html += "<div class='comment-avatar'><img src='${root}/profile/" + profile_files[i] + "' alt=''></div>";
 						html += "<div class='comment-box'>";
 						html += "<div class='comment-head'>";
 						html += "<h6 class='comment-name" + (board_writer == commentDTO.writer ? " by-author" : "") + "'>" + commentDTO.writer + "</h6>";
@@ -279,6 +290,11 @@ div.input-group{
 			
 			$(document).on("click", "#updateBtn" + num, function(){
 				var update_btn = $(this);
+
+				var new_content = update_btn.parents().siblings("textarea").val();
+				if(!maxLengthCheck(new_content, 1000, "Content"))
+					return;
+				
 				swal({
 					title : "Are you sure you want to edit the comment?",
 					type : "warning",
@@ -290,7 +306,6 @@ div.input-group{
 					closeOnCancel : false
 				}, function(isConfirm) {
 					if (isConfirm) {
-						var new_content = update_btn.parents().siblings("textarea").val();
 						location.href = "/comment/ingee/update?num=" + num + "&content=" + new_content + "&board_num=" + board_num + "&page=" + page;
 					} else {
 						swal("Cancel", "The editing the comment is cancelled.", "error");
@@ -372,6 +387,45 @@ div.input-group{
 			return false;
 		}
 	}
+	
+	function maxLengthCheck(text, maxLength, type){
+		var check = true;
+		var textLength = text.length;
+		var byteCnt = 0;
+		
+		for (i = 0; i < textLength; i++) {
+			var charTemp = text.charAt(i);
+			if (escape(charTemp).length > 4)
+				byteCnt += 2;
+			else
+				byteCnt += 1;
+		}
+		
+		if (byteCnt > maxLength) {
+			check = false;
+			alert(type + " length can not exceed " + maxLength + " characters.");
+		}
+		
+		return check;
+	}
+	
+	function commentInsert(obj){
+		var isInsert = true;
+		
+		isInsert = maxLengthCheck($(obj).find("textarea[name='content']").val(), 1000, "Comment");
+		
+		return isInsert;
+	}
+	
+	function boardUpdate(){
+		var isInsert = true;
+		
+		isInsert = maxLengthCheck($("#subject").val(), 300, "Subject");
+		if(isInsert)
+			isInsert = maxLengthCheck($("#content").val(), 2000, "Content");
+		
+		return isInsert;
+	}
 </script>
 <!-- Header -->
 <div class="content-section-a" style="min-height: 750px; margin-top: 10px;">
@@ -395,7 +449,7 @@ div.input-group{
 	            <hr style="height: 2px; background: #777; width: 100%;">
 	            <c:if test="${boardDTO.saved_filename != 'NO' }">	            
 					<div class="content-div" id="content_img_div">
-	                   	<img src="${root }/board/${boardDTO.saved_filename}" style="max-width: 100%; cursor: pointer;" onclick="imageView(this, '${boardDTO.saved_filename}')" title="이미지를 클릭하시면 원본 크기로 보실 수 있습니다.">
+	                   	<img src="${root }/board/${boardDTO.saved_filename}" style="max-width: 100%; cursor: pointer;" onclick="imageView(this, '${boardDTO.saved_filename}')" title="Please click the image to see original size.">
 					</div>
 				</c:if>
 				<div class="content-div">
@@ -419,12 +473,20 @@ div.input-group{
        				<div class="row" style="margin-top:65px; padding-left: 5px;">
        					<div id="comment" style="width: 100%; height: 0px;"></div>
 						<c:if test="${isLogin ne null }">
-							<form action="/comment/ingee/insert" class="comment-input" method="get">
+							<form action="/comment/ingee/insert" class="comment-input" method="get" onsubmit="return commentInsert(this);">
 								<div class="comment-input-avatar">
-									<img src="${root }/profile/${loggedInProfile}" alt="">
+									<c:if test="${loggedInProfile == 'NO' }">
+										<img src="${root }/profile/none_profile.png" alt="" title="Do not have any profile pictures.">
+									</c:if>
+									<c:if test="${loggedInProfile != 'NO' }">
+										<img src="${root }/profile/${loggedInProfile}" alt="">
+									</c:if>
 								</div>
 								<div class="comment-textarea-div">
 									<textarea class="comment-textarea" style="min-height: 100px; width: 100%;" name="content" required="required" placeholder="  As we all fans of gorgeous InGee, let's encourage all together while keeping netiquette."></textarea>
+								</div>
+								<div class="col-md-12 col-md-offset-1">
+									<input type="file" name="upload_file">
 								</div>
 								<div style="background: #fff;" align="right">
 									<input type="hidden" name="board_num" value="${boardDTO.num }">
@@ -452,14 +514,22 @@ div.input-group{
 									<c:forEach var="commentDTO" items="${commentList }" varStatus="status">
 										<li class="${status.index < perPage ? 'active' : '' }">
 											<div class="comment-main-level">
-												<div class="comment-avatar"><img src="${root }/profile/${profile_file[status.index]}" alt=""></div>
+												<div class="comment-avatar">
+													<c:if test="${profile_file[status.index] == 'NO' }">
+														<img src="${root }/profile/none_profile.png" alt="" title='Do not have any profile pictures.'>
+													</c:if>
+													<c:if test="${profile_file[status.index] != 'NO' }">
+														<img src="${root }/profile/${profile_file[status.index]}" alt="">
+													</c:if>
+												</div>
 												<div class="comment-box">
 													<div class="comment-head">
 														<a href="/message/send?receiver=${commentDTO.id }"><h6 class="comment-name ${boardDTO.writer == commentDTO.writer ? 'by-author' : '' }">${commentDTO.writer }</h6></a>
 														<span class="span-date"><fmt:formatDate value="${boardDTO.writedate }" pattern="HH:mm, MMM dd, yy"/></span>
 														<i class="fa fa-reply" onclick="getReply(this, '${boardDTO.num }', '${commentDTO.num}', '${isLogin }', '${loginNick }', '${loggedInProfile }', '${boardDTO.writer }', '${param.page }')">[${commentDTO.reply_count }]</i>
 														<c:if test="${loginNick == commentDTO.writer }">
-															<i class="fa fa-trash" onclick="deleteComment(${commentDTO.num}, ${boardDTO.num }, ${param.page })"></i>															<i class="fa fa-pencil-square-o" onclick="updateCommentForm(this, ${commentDTO.num}, ${commentDTO.board_num }, ${param.page })"></i>
+															<i class="fa fa-trash" onclick="deleteComment(${commentDTO.num}, ${boardDTO.num }, ${param.page })"></i>
+															<i class="fa fa-pencil-square-o" onclick="updateCommentForm(this, ${commentDTO.num}, ${commentDTO.board_num }, ${param.page })"></i>
 															<p style="display: none;" class="comment-hidden">${commentDTO.content }</p>
 														</c:if>
 													</div>
@@ -488,7 +558,7 @@ div.input-group{
 		<div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="contactLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="well well-sm">
-					<form class="form-horizontal" action="/board/ingee/update" method="post" enctype="multipart/form-data">
+					<form class="form-horizontal" action="/board/ingee/update" method="post" enctype="multipart/form-data" onsubmit="return boardUpdate();">
 						<fieldset>
 							<legend class="text-center"><h1>In Gee</h1></legend>
 							<div class="form-group">
@@ -503,7 +573,7 @@ div.input-group{
 								<div class="input-group">
 									<label class="col-md-2 control-label">Content</label>
 									<div class="col-md-9">
-										<textarea class="form-control" rows="10" cols="" name="content" required="required" style="width: 100%;">${boardDTO.content }</textarea>
+										<textarea class="form-control" rows="10" cols="" id="content" name="content" required="required" style="width: 100%;">${boardDTO.content }</textarea>
 									</div>
 								</div>
 							</div>
