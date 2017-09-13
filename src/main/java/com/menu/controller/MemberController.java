@@ -436,8 +436,8 @@ public class MemberController {
 	public ModelAndView popupProfile(@RequestParam(value = "id", required = true) String id) {
 		ModelAndView modelAndView = new ModelAndView();
 		Map<String, Object> map = new HashMap<String, Object>();
-		
-		//modelAndView.setViewName(viewName);
+		String returnURL = "/1/member/profile";
+		modelAndView.setViewName(returnURL);
 		return modelAndView;
 	}
 }
