@@ -6,6 +6,6 @@
 <link href="${root}/css/error.css" rel="stylesheet">
 <html>
 <body>
-	<img alt="aaasdf" src="${root }/board/${fileName }" title="이미지를 클릭하시면 창이 닫힙니다." onclick="javascript:window.close();" style="cursor: pointer;">
+	<img alt="aaasdf" src="${root }/board/${fileName }" title="Please click the image to close the window." onclick="javascript:window.close();" style="cursor: pointer;">
 </body>
 </html>

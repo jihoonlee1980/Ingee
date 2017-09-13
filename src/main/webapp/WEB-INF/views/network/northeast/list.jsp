@@ -27,7 +27,7 @@ div.input-group{
 		padding: 0;
 	}
 	.btn-outline{
-		padding: 10px;
+		padding: 5px;
 	}
 }
 .btn-outline {
@@ -79,6 +79,37 @@ div.input-group{
 			$('.input-group #search_type').val(param);
 		});
 	});
+	
+	function maxLengthCheck(text, maxLength, type){
+		var check = true;
+		var textLength = text.length;
+		var byteCnt = 0;
+		
+		for (i = 0; i < textLength; i++) {
+			var charTemp = text.charAt(i);
+			if (escape(charTemp).length > 4)
+				byteCnt += 2;
+			else
+				byteCnt += 1;
+		}
+		
+		if (byteCnt > maxLength) {
+			check = false;
+			alert(type + " length can not exceed " + maxLength + " characters.");
+		}
+		
+		return check;
+	}
+	
+	function boardInsert(){
+		var isInsert = true;
+		
+		isInsert = maxLengthCheck($("#subject").val(), 300, "Subject");
+		if(isInsert)
+			isInsert = maxLengthCheck($("#content").val(), 2000, "Content");
+		
+		return isInsert;
+	}
 	
 	function validateFile(obj){
 		var maxSize = 1024 * 1024 * 10;
@@ -135,7 +166,7 @@ div.input-group{
 			                    	 <p class="list-group-item-text" style="max-height: 70px; word-break: break-all; white-space: pre-line; overflow: hidden;">${boardDTO.content}</p>
 			                	</div>
 			                	<div class="col-md-3 text-center" style="margin-top: 2%">
-				                    <h4> ${boardDTO.readcount}> <small> Views </small></h4>
+				                    <h4> ${boardDTO.readcount} <small> Views </small></h4>
 			                    	<br>
 			                    	<p> Posted by: ${boardDTO.writer}</p>
 			                    	<br>
@@ -242,7 +273,7 @@ div.input-group{
 		<div class="modal fade" id="write" tabindex="-1" role="dialog" aria-labelledby="contactLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="well well-sm">
-					<form class="form-horizontal" action="/board/network/northeast/insert" method="post" enctype="multipart/form-data">
+					<form class="form-horizontal" action="/board/network/northeast/insert" method="post" enctype="multipart/form-data" onsubmit="return boardInsert();">
 						<fieldset>
 							<legend class="text-center"><h1>NorthEast</h1></legend>
 							<div class="form-group">
@@ -257,7 +288,7 @@ div.input-group{
 								<div class="input-group">
 									<label class="col-md-2 control-label">Content</label>
 									<div class="col-md-9">
-										<textarea class="form-control" rows="10" cols="" name="content" required="required" style="width: 100%;"></textarea>
+										<textarea class="form-control" rows="10" cols="" id="content" name="content" required="required" style="width: 100%;"></textarea>
 									</div>
 								</div>
 							</div>

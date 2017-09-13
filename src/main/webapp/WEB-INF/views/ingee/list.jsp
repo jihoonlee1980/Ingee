@@ -44,20 +44,51 @@ div.input-group{
 		});
 	});
 	
-	function validateFile(obj){
+	function maxLengthCheck(text, maxLength, type){
+		var check = true;
+		var textLength = text.length;
+		var byteCnt = 0;
+		
+		for (i = 0; i < textLength; i++) {
+			var charTemp = text.charAt(i);
+			if (escape(charTemp).length > 4)
+				byteCnt += 2;
+			else
+				byteCnt += 1;
+		}
+		
+		if (byteCnt > maxLength) {
+			check = false;
+			alert(type + " length can not exceed " + maxLength + " characters.");
+		}
+		
+		return check;
+	}
+	
+	function boardInsert(){
+		var isInsert = true;
+		
+		isInsert = maxLengthCheck($("#subject").val(), 300, "Subject");
+		if(isInsert)
+			isInsert = maxLengthCheck($("#content").val(), 2000, "Content");
+		
+		return isInsert;
+	}
+
+	function validateFile(obj) {
 		var maxSize = 1024 * 1024 * 10;
 		var fileSize = obj.files[0].size;
 		var fileName = obj.files[0].name;
 		var fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
-		var imgExtension = ["png", "jpg", "jpeg", "bmp", "gif"];
-		
-		if(!imgExtension.includes(fileExtension.toLowerCase())){
+		var imgExtension = [ "png", "jpg", "jpeg", "bmp", "gif" ];
+
+		if (!imgExtension.includes(fileExtension.toLowerCase())) {
 			alert('You must upload the file extension name as one of “jpeg”," jpg "," bmp "," png ", or “ gif ”.');
 			obj.value = "";
 			return false;
 		}
-		
-		if(fileSize > maxSize){
+
+		if (fileSize > maxSize) {
 			alert("Please upload file size less than 10MB.");
 			obj.value = "";
 			return false;
@@ -202,7 +233,7 @@ div.input-group{
 		<div class="modal fade" id="write" tabindex="-1" role="dialog" aria-labelledby="contactLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="well well-sm">
-					<form class="form-horizontal" action="/board/ingee/insert" method="post" enctype="multipart/form-data">
+					<form class="form-horizontal" action="/board/ingee/insert" method="post" enctype="multipart/form-data" onabort="return boardInsert();">
 						<fieldset>
 							<legend class="text-center"><h1>InGee</h1></legend>
 							<div class="form-group">
@@ -217,7 +248,7 @@ div.input-group{
 								<div class="input-group">
 									<label class="col-md-2 control-label">Content</label>
 									<div class="col-md-9">
-										<textarea class="form-control" rows="10" cols="" name="content" required="required" style="width: 100%;"></textarea>
+										<textarea class="form-control" rows="10" cols="" id="content" name="content" required="required" style="width: 100%;"></textarea>
 									</div>
 								</div>
 							</div>

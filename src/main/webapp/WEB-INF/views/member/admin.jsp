@@ -170,7 +170,7 @@ table.admin thead tr th a {
 		                	</tr>
 						</c:forEach>
 						<tr>
-							<td colspan="4" style="text-align: right; padding-right: 10px;"><span>${fn:length(memberList) } 명의 회원정보가 있습니다.</span></td>
+							<td colspan="4" style="text-align: right; padding-right: 10px;"><span>${fn:length(memberList) } member information is available.</span></td>
 						</tr>
 					</c:if>
 					<c:if test="${fn:length(memberList) == 0 }">
