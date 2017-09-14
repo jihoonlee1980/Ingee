@@ -195,6 +195,30 @@
 			check = false;
 		}
 		
+		if(!maxLengthCheck($("#detailed_address").val(), 150, "Detailed address"))
+			check = false;
+		
+		return check;
+	}
+	
+	function maxLengthCheck(text, maxLength, type){
+		var check = true;
+		var textLength = text.length;
+		var byteCnt = 0;
+		
+		for (i = 0; i < textLength; i++) {
+			var charTemp = text.charAt(i);
+			if (escape(charTemp).length > 4)
+				byteCnt += 2;
+			else
+				byteCnt += 1;
+		}
+		
+		if (byteCnt > maxLength) {
+			check = false;
+			alert(type + " length can not exceed " + maxLength + " characters.");
+		}
+		
 		return check;
 	}
 </script>

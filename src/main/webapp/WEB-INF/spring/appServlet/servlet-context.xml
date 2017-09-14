@@ -92,6 +92,7 @@
 			<mapping path="/member/update" />
 			<mapping path="/member/delete" />
 			<mapping path="/member/update/**" />
+			<mapping path="/member/profile"/>
 			<mapping path="/comment/**/insert"/>
 			<mapping path="/comment/**/update"/>
 			<mapping path="/comment/**/delete"/>
@@ -109,5 +110,13 @@
 			<beans:ref bean="loginInterceptor" />
 		</interceptor>
 	</interceptors>
-
+	
+	<interceptors>
+		<interceptor>
+			<mapping path="/board/ingee/insert"/>
+			<mapping path="/board/ingee/update"/>
+			<mapping path="/board/ingee/delete"/>
+			<beans:ref bean="ingeeInterceptor" />
+		</interceptor>
+	</interceptors>
 </beans:beans>
