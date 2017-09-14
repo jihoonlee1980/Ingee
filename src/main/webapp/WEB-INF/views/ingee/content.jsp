@@ -6,12 +6,13 @@
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
 <%@ page session="true"%>
 <script src="/assets/jquery-3.2.1.min.js"></script>
-<link href="${root }/css/sweetalert.css" rel="stylesheet">
-<script src="${root }/js/sweetalert-dev.js"></script>
-<script src="${root }/js/sweetalert.min.js"></script>
 <link href="/assets/css/bootstrap.css?ver=2" rel="stylesheet">
 <c:set var="root_" value="<%=request.getContextPath() %>" />
 <c:set var="root" value="${root_}/resources" />
+<link href="${root }/css/sweetalert.css" rel="stylesheet">
+<script src="${root }/js/sweetalert-dev.js"></script>
+<script src="${root }/js/sweetalert.min.js"></script>
+<script src="/resources/js/popup.js"></script>
 <style>
 .span-date{
 	margin-left: 10px;
@@ -466,7 +467,7 @@ div.input-group{
 				</div>
 				<div class="row" style="margin: 0 auto; width: 100%; display: inline-block;">
 					<div class="content-div" style="width: 100%; text-align: right;">
-						<c:if test="${isIngee ne null}">
+						<c:if test="${boardDTO.writer == loginNick}">
 						    <a class="btn btn-warning btn-sm" data-toggle="modal" data-target="#update" data-original-title>Modify</a>
 		       				<a class="btn btn-danger btn-sm" onclick="deleteCheck('${boardDTO.num}','${param.page }');">Delete</a>
 	       				</c:if>
@@ -531,7 +532,13 @@ div.input-group{
 												</div>
 												<div class="comment-box">
 													<div class="comment-head">
-														<a href="/message/send?receiver=${commentDTO.id }"><h6 class="comment-name ${boardDTO.writer == commentDTO.writer ? 'by-author' : '' }">${commentDTO.writer }</h6></a>
+														<div class="dropdown-toggle">
+															<button class="btn btn-default dropdown-toggle message-id" style="border:none;" type="button" data-toggle="dropdown"><h6 class="comment-name ${boardDTO.writer == commentDTO.writer ? 'by-author' : '' }">${commentDTO.writer }</h6></button>
+															<ul class="dropdown-menu" role="menu" aria-labelledby="menu1" style="top : 17%; left:15px;">
+																<li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="popupOpen('${commentDTO.id}')">Profile</a></li>
+																<li role="presentation"><a role="menuitem" tabindex="-1" href="/message/send?sendto=${commentDTO.id}">Message</a></li>								      
+														    </ul>
+														</div>
 														<span class="span-date"><fmt:formatDate value="${boardDTO.writedate }" pattern="HH:mm, MMM dd, yy"/></span>
 														<i class="fa fa-reply" onclick="getReply(this, '${boardDTO.num }', '${commentDTO.num}', '${isLogin }', '${loginNick }', '${loggedInProfile }', '${boardDTO.writer }', '${param.page }')">[${commentDTO.reply_count }]</i>
 														<c:if test="${loginNick == commentDTO.writer }">
