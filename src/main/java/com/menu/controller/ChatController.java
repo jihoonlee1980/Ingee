@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class ChatController {
 
-	@RequestMapping("/")
+	/*@RequestMapping("/")
 	public String Chat(HttpSession session) {
 		String returnURL = new String();
 		if (session.getAttribute("isLogin") != null)
@@ -20,7 +20,7 @@ public class ChatController {
 			returnURL = "redirect:/";
 
 		return returnURL;
-	}
+	}*/
 	/*
 	 * @RequestMapping(value = "/echo", method = RequestMethod.GET) public
 	 * String home(HttpSession session) { return "chat"; }
