@@ -20,6 +20,10 @@ public class CommentDAO extends SqlSessionDaoSupport {
 			getSqlSession().update("updateReplyCount", map);
 	}
 
+	public CommentDTO get(int num) {
+		return getSqlSession().selectOne("getComment", num);
+	}
+
 	public List<CommentDTO> list(int board_num, int comment_num) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
@@ -51,15 +55,15 @@ public class CommentDAO extends SqlSessionDaoSupport {
 		getSqlSession().delete("deleteComment", num);
 		getSqlSession().update("updateReplyCount", map);
 	}
-	
-	public List<HashMap<String, Object>> getReplyCountOnDeleteMember(String nick){
+
+	public List<HashMap<String, Object>> getReplyCountOnDeleteMember(String nick) {
 		return getSqlSession().selectList("getReplyCountOnDeleteMember", nick);
 	}
-	
-	public List<HashMap<String, Object>> getCommentCountOnDeleteMember(String nick){
+
+	public List<HashMap<String, Object>> getCommentCountOnDeleteMember(String nick) {
 		return getSqlSession().selectList("getCommentCountOnDeleteMember", nick);
 	}
-	
+
 	public void updateReplyCount(int num, int countValue) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
@@ -67,5 +71,14 @@ public class CommentDAO extends SqlSessionDaoSupport {
 		map.put("countValue", countValue);
 
 		getSqlSession().update("updateReplyCountOnDeleteMember", map);
+	}
+
+	public boolean find(String column, Object value) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("column", column);
+		map.put("value", value);
+
+		return getSqlSession().selectOne("findComment", map) != null;
 	}
 }

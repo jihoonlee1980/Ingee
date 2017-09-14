@@ -88,7 +88,8 @@ public class MessageController {
 	@RequestMapping(value="/send" , method = {RequestMethod.POST , RequestMethod.GET})
 	public ModelAndView MessageSend (HttpSession session , @RequestParam Map<String,Object> map , RedirectAttributes redirectAttributes) {		
 		ModelAndView modelAndView = new ModelAndView();
-		String id = (String)session.getAttribute("loggedInID");		
+		String id = (String)session.getAttribute("loggedInID");
+		boolean authority = (session.getAttribute("isAdmin")!=null || session.getAttribute("isIngee")!=null);
 		modelAndView.addObject("id",id);		
 		String setViewName = "/1/message/send";
 		if(!map.isEmpty()){
@@ -113,8 +114,9 @@ public class MessageController {
 				}
 				else
 					redirectAttributes.addFlashAttribute("failed", "insert");
-			}
+			}			
 		}
+		modelAndView.addObject("authority",authority);
 		modelAndView.setViewName(setViewName);
 		return modelAndView;
 	}

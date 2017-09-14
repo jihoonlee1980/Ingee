@@ -498,10 +498,10 @@ a {
 							<li class="clearfix">
 							<c:choose>
 								<c:when test="${DISC == 'sent' }">
-									<img src="${root }/profile/${messageDTO.receiver_profile}" class="avatar" alt="">
+									<img src="${root }/profile/${messageDTO.receiver_profile=='NO'?'none_profile.png':messageDTO.receiver_profile}" class="avatar" alt="">
 								</c:when>
 								<c:otherwise>
-									<img src="${root }/profile/${messageDTO.sender_profile}" class="avatar" alt="">
+									<img src="${root }/profile/${messageDTO.sender_profile=='NO'?'none_profile.png':messageDTO.sender_profile}" class="avatar" alt="">
 								</c:otherwise>
 							</c:choose>							  
 							  <div class="post-comments">

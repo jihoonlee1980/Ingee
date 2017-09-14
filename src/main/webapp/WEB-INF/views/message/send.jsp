@@ -418,7 +418,9 @@ function idCheck(){
                          <input type="text" class="form-control" name="receiver" data-toggle="tooltip" title="" placeholder="Receiver" value="${sendto ne null || (!empty sendto)? sendto : ''}" required="required" style="width:75%;" >
                          <input type="hidden" name="recvlist" style="width:75%;" >
                          <button type="button" id="addRecvBtn" style="padding: 5px 12px;"><i class="fa fa-users" aria-hidden="true"></i>Add</button>
-                         <button type="button" id="addAllRecvBtn" style="padding: 5px 12px;" check="false"><i class="fa fa-users" aria-hidden="true"></i>All</button>                         
+                         <c:if test="${authority eq true }">
+                         	<button type="button" id="addAllRecvBtn" style="padding: 5px 12px;" check="false"><i class="fa fa-users" aria-hidden="true"></i>All</button>
+                         </c:if>
                         </div>				        
                      </div>
                      <div class="form-group">

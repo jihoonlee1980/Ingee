@@ -99,7 +99,7 @@ public class BoardController {
 					+ extension;
 
 			while (boardDAO.find("saved_filename", saved_filename)) {
-				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000;
+				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000 + extension;
 			}
 
 			boardDTO.setOrigin_filename(originFileName);
@@ -187,7 +187,7 @@ public class BoardController {
 						+ System.currentTimeMillis() % 10000000 + extension;
 
 				while (boardDAO.find("saved_filename", saved_filename)) {
-					saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000;
+					saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000 + extension;
 				}
 
 				boardDTO.setOrigin_filename(originFileName);
@@ -283,7 +283,7 @@ public class BoardController {
 					+ extension;
 
 			while (boardDAO.find("saved_filename", saved_filename)) {
-				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000;
+				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000 + extension;;
 			}
 
 			boardDTO.setOrigin_filename(originFileName);
@@ -371,7 +371,7 @@ public class BoardController {
 						+ System.currentTimeMillis() % 10000000 + extension;
 
 				while (boardDAO.find("saved_filename", saved_filename)) {
-					saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000;
+					saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000 + extension;;
 				}
 
 				boardDTO.setOrigin_filename(originFileName);
