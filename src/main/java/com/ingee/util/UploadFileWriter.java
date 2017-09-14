@@ -1,5 +1,6 @@
 package com.ingee.util;
 
+import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.IOException;
 

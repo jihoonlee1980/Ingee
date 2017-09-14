@@ -1,11 +1,17 @@
 package com.menu.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
+import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -13,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.ingee.util.UploadFileWriter;
 import com.menu.model.MessageDAO;
 import com.menu.model.MessageDTO;
 import com.nhncorp.lucy.security.xss.XssPreventer;
@@ -123,37 +131,28 @@ public class MessageController {
 	
 	@RequestMapping(value="/delete")
 	public @ResponseBody Map<String, Object> MessageDelete (@RequestParam List<Integer> arrData) {
-				
 		int result = messageDAO.delteMessage(arrData);
-		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("resultCheck", result);
-		
 		ModelAndView modelAndView = new ModelAndView("jsonView", map);
-
 		return map;
 	}
 	
 	@RequestMapping(value = "/check/id")
 	public @ResponseBody Map<String, Object> checkID(@RequestParam List<String> arrData) {
 		List<String> resultList = messageDAO.checkId(arrData);
-		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("resultList", resultList);
-
 		ModelAndView modelAndView = new ModelAndView("jsonView", map);
-
 		return map;
 	}
 	@RequestMapping(value = "/check/id/single")
 	public @ResponseBody Map<String, Object> checkID(@RequestParam String id) {
 		boolean check = messageDAO.checkIdSingle(id);
-		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
 		map.put("resultCheck", check);
 		ModelAndView modelAndView = new ModelAndView("jsonView", map);
-
 		return map;
 	}
 }

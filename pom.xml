@@ -276,6 +276,13 @@
 			<version>1.6.3</version>
 		</dependency>
 		<!-- lucy-xss end -->
+		<!-- imgscalr -->		
+		<dependency>
+			<groupId>org.imgscalr</groupId>
+			<artifactId>imgscalr-lib</artifactId>
+			<version>4.2</version>			
+		</dependency>
+		<!-- imgscalr end -->
 	</dependencies>
 	<build>
 		<plugins>

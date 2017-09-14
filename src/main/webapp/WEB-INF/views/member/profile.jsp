@@ -28,7 +28,7 @@
             </div>
             <div class="panel-body">
               <div class="row">
-                <div class="col-md-3 col-lg-3 " align="center"> <img style="width:50%;" alt="User Pic" src="${root}/profile/${memberDTO.saved_filename}" class="img-responsive"> </div>
+                <div class="col-md-3 col-lg-3 " align="center"> <img style="width:50%;" alt="User Pic" src="${root}/profile/${memberDTO.saved_filename == 'NO' ? 'none_profile.png':memberDTO.saved_filename}" class="img-responsive"> </div>
                 <div class=" col-md-9 col-lg-9 "> 
                   <table class="table table-user-information">
                     <tbody>
