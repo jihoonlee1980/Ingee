@@ -2,17 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com">
 	<insert id="inserComment" parameterType="com.menu.model.CommentDTO">
-		insert into comment values(0, #{board_num}, #{comment_num}, #{writer}, #{content}, 0, now())
+		insert into comment values(0, #{board_num}, #{comment_num}, #{writer}, #{content}, 0, #{origin_filename}, #{saved_filename}, now())
 	</insert>
 	<select id="commentList" parameterType="HashMap" resultType="com.menu.model.CommentDTO">
-		select c.num, c.board_num, c.comment_num, c.writer, c.content, c.reply_count, c.writetime, m.id from comment c left outer join member m on c.writer = m.nick where <if test="board_num != null">board_num = #{board_num} and</if> comment_num = #{comment_num} order by writetime desc
+		select c.num, c.board_num, c.comment_num, c.writer, c.content, c.reply_count, c.origin_filename, c.saved_filename, c.writetime, m.id from comment c left outer join member m on c.writer = m.nick where <if test="board_num != null">board_num = #{board_num} and</if> comment_num = #{comment_num} order by writetime desc
 	</select>
 	<delete id="deleteComment" parameterType="int">
 		delete from comment where num = #{num};
 		delete from comment where comment_num = #{num};
 	</delete>
 	<update id="updateComment" parameterType="com.menu.model.CommentDTO">
-		update comment set content = #{content} where num = #{num}
+		update comment set content = #{content}, saved_filename = #{saved_filename}, origin_filename = #{origin_filename} where num = #{num}
 	</update>
 	<update id="updateReplyCount" parameterType="HashMap">
 		update comment set reply_count = (select a.* from (select count(*) from comment where comment_num = #{comment_num}) a) where num = #{comment_num}
@@ -29,4 +29,10 @@
 	<delete id="deleteMemberCascade" parameterType="String">
 		delete from comment where writer = #{nick}
 	</delete>
+	<select id="findComment" parameterType="HashMap" resultType="com.menu.model.CommentDTO">
+		select * from comment where ${column} = #{value}
+	</select>
+	<select id="getComment" parameterType="int" resultType="com.menu.model.CommentDTO">
+		select * from comment where num = #{num}
+	</select>
 </mapper>

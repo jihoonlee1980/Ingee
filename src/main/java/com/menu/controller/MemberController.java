@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
@@ -22,9 +23,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.ingee.util.MailSender;
 import com.ingee.util.UploadFileWriter;
 import com.menu.model.BoardDAO;
+import com.menu.model.BoardDTO;
 import com.menu.model.CommentDAO;
 import com.menu.model.MemberDAO;
 import com.menu.model.MemberDTO;
+import com.nhncorp.lucy.security.xss.XssPreventer;
 
 @Controller
 @RequestMapping("/member")
@@ -116,7 +119,7 @@ public class MemberController {
 					+ extension;
 
 			while (memberDAO.find("saved_filename", saved_filename) != null) {
-				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000;
+				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000 + extension;
 			}
 
 			memberDTO.setOrigin_filename(originFileName);
@@ -226,7 +229,8 @@ public class MemberController {
 		int totalPage = totalCount % perPage > 0 ? totalCount / perPage + 1 : totalCount / perPage;
 		int startPage;
 		int endPage;
-		List<MemberDTO> memberDTOs = memberDAO.searchList((page - 1) * perPage, perPage, sort, search_type, keyword, region);
+		List<MemberDTO> memberDTOs = memberDAO.searchList((page - 1) * perPage, perPage, sort, search_type, keyword,
+				region);
 		ModelAndView modelAndView = new ModelAndView();
 
 		startPage = (page - 1) / perBlock * perBlock + 1;
@@ -286,9 +290,26 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public ModelAndView profileUpdate(MemberDTO memberDTO, HttpSession session) {
+	public ModelAndView profileUpdate(MemberDTO memberDTO, HttpSession session,
+			@RequestParam(value = "remove_file", required = false) String remove_file) {
+		String profilePath = path + "/profile";
 		MultipartFile profile_file = memberDTO.getProfile_file();
 		MemberDTO currentDTO = memberDAO.get(memberDTO.getNum());
+		
+		MemberDTO dbDTO = memberDAO.get(memberDTO.getNum());
+		
+		if (remove_file != null) {
+			StringTokenizer remove_files = new StringTokenizer(remove_file, ",");
+
+			while (remove_files.hasMoreTokens()) {
+				String filename = remove_files.nextToken();
+				File file = new File(profilePath + "/" + filename);
+				if (file.exists())
+					file.delete();
+				dbDTO.setSaved_filename(dbDTO.getSaved_filename().replaceAll(filename, ""));
+				dbDTO.setSaved_filename(dbDTO.getSaved_filename().replaceAll(",,", ","));
+			}
+		}
 
 		if (!currentDTO.getNick().equals(memberDTO.getNick())) {
 			memberDAO.updateNick(currentDTO.getNick(), memberDTO.getNick());
@@ -296,7 +317,6 @@ public class MemberController {
 		}
 
 		if (!"".equals(profile_file.getOriginalFilename())) {
-			String profilePath = path + "/profile";
 			File file = new File(profilePath + "/" + memberDAO.get(memberDTO.getNum()).getSaved_filename());
 
 			if (file != null)
@@ -308,7 +328,7 @@ public class MemberController {
 					+ extension;
 
 			while (memberDAO.find("saved_filename", saved_filename) != null) {
-				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000;
+				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000 + extension;
 			}
 
 			memberDTO.setOrigin_filename(originFileName);
@@ -317,8 +337,10 @@ public class MemberController {
 			UploadFileWriter uploadFileWriter = new UploadFileWriter();
 			uploadFileWriter.writeFile(profile_file, profilePath, saved_filename);
 		} else {
-			memberDTO.setSaved_filename(memberDAO.get(memberDTO.getNum()).getSaved_filename());
-			memberDTO.setOrigin_filename(memberDAO.get(memberDTO.getNum()).getOrigin_filename());
+			memberDTO.setSaved_filename(dbDTO.getSaved_filename().equals("") ? "NO" : dbDTO.getSaved_filename());
+			memberDTO.setOrigin_filename(dbDTO.getSaved_filename().equals("") ? "" : dbDTO.getOrigin_filename());
+//			memberDTO.setSaved_filename(memberDAO.get(memberDTO.getNum()).getSaved_filename());
+//			memberDTO.setOrigin_filename(memberDAO.get(memberDTO.getNum()).getOrigin_filename());
 		}
 
 		ModelAndView modelAndView = new ModelAndView();
@@ -435,16 +457,16 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "/profile")
-	public ModelAndView popupProfile(@RequestParam String id , HttpSession session , RedirectAttributes redirectAttributes) {
+	public ModelAndView popupProfile(@RequestParam String id, HttpSession session,
+			RedirectAttributes redirectAttributes) {
 		ModelAndView modelAndView = new ModelAndView();
-		String returnURL = "/member/profile";		
-		if(session.getAttribute("isLogin") != null && "YES".equals((String)session.getAttribute("isLogin"))){
+		String returnURL = "/member/profile";
+		if (session.getAttribute("isLogin") != null && "YES".equals((String) session.getAttribute("isLogin"))) {
 			MemberDTO memberDTO = memberDAO.get(id);
-			modelAndView.addObject("memberDTO",memberDTO);			
+			modelAndView.addObject("memberDTO", memberDTO);
 			modelAndView.setViewName(returnURL);
-		}
-		else
-			returnURL = "redirect:/";		
+		} else
+			returnURL = "redirect:/";
 		return modelAndView;
 	}
 }

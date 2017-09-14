@@ -277,6 +277,7 @@
 										</div>
 										<input type="file" class="form-control" id="profile_file" name="profile_file" accept="image/*" onchange="validateFile(this)">
 									</div>
+									<span class="help-block" style="padding-left: 5px; color: red; font-size: 8pt;">※ When upload photos using camera please take a picture horizontally.</span>
 								</div>   
 							</div>		
 							<div class="form-group">

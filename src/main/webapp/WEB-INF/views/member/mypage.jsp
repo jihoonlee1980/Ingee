@@ -472,7 +472,15 @@
 								</div>
 								<input type="file" class="form-control" id="profile_file" name="profile_file" accept="image/*" onchange="validateFile(this)">
 							</div>
+							<c:if test="${memberDTO.saved_filename != 'NO' }">
+								<span class="help-block" style="margin-bottom: 0; color: red; font-size: 9pt;">Delete the attachment(Please check what you want to delete).</span>
+								<c:set var="saved_file" value="${fn:split(memberDTO.saved_filename, ',') }"/>
+								<c:forTokens items="${memberDTO.origin_filename }" delims="," var="origin_file" varStatus="status">
+									<input type="checkbox" value="${saved_file[status.index] }" name="remove_file"> ${origin_file }
+								</c:forTokens>
+							</c:if>
 							<span class="help-block" style="padding-left: 5px; color: red;">※ Please select a file only if you want to change your profile photo.</span>
+							<span class="help-block" style="padding-left: 5px; color: red;">※ When upload photos using camera please take a picture horizontally.</span>
 						</div>
 					</div>
 				</div>

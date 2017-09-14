@@ -47,6 +47,7 @@ div.input-group{
 }
 </style>
 <script type="text/javascript">
+	var resourcesPath = "http://192.168.0.6:8080/resources";
 	$(function(){
 		$(document).on("click", ".updateReplyForm", function(){
 			var content_div = $(this).parents().siblings(".comment-content");
@@ -54,48 +55,48 @@ div.input-group{
 			var num = $(this).attr("num");
 			var board_num = $(this).attr("board_num");
 			var page = $(this).attr("page");
+			var saved_filename = $(this).attr("saved_filename");
+			var origin_filename = $(this).attr("origin_filename");
 			
 			if($(this).hasClass("active")){
 				$(this).css("color", "#a6a6a6");
 				$(this).removeClass("active");
+				var html = "";
 				content_div.empty();
-				content_div.text(current_content);
+				if(saved_filename != "NO")
+					html += "<img src='" + resourcesPath + "/comment/" + saved_filename + "' style='max-width: 50%;'>";
+				
+				html += "<p style='word-break: break-all; white-space: pre-line;'>" + current_content + "</p>";
+				content_div.html(html);
 			} else {
 				$(this).css("color", "#03658c");
 				$(this).addClass("active");
-				var html = "<textarea rows='4' cols='' style='width: 100%'>";
+				var html = "<form action='/comment/ingee/update' method='post' class='form-horizontal' enctype='multipart/form-data' onsubmit='return commentInsert(this);'>";
+				html += "<textarea rows='4' cols='' style='width: 100%' name='content' class='form=control'>";
 				html += current_content;
 				html += "</textarea>";
-				html += "<div style='width: 100%' align='right'><button type='button' class='btn btn-sm btn-success updateBtn'>Edit</button><button type='button' class='btn btn-sm btn-default updateCancel'>Cancel</button></div>";
-				$(document).on("click", ".updateBtn", function(){
-					var update_btn = $(this);
-					var new_content = update_btn.parents().siblings("textarea").val();
-					
-					if(!maxLengthCheck(new_content, 1000, "comment"))
-						return ;
-					
-					swal({
-						title : "Are you sure you want to edit the comment?",
-						type : "warning",
-						showCancelButton : true,
-						confirmButtonColor : "#DD6B55",
-						confirmButtonText : "YES",
-						cancelButtonText : "NO",
-						closeOnConfirm : false,
-						closeOnCancel : false
-					}, function(isConfirm) {
-						if (isConfirm) {
-							location.href = "/comment/ingee/update?num=" + num + "&content=" + new_content + "&board_num=" + board_num + "&page=" + page;
-						} else {
-							swal("Cancel", "The editing the comment is cancelled.", "error");
-						}
-					});
-				});
+				html += "<input type='file' class='form-control' name='upload_file' id='upload_file' onchange='validateFile(this)'>";
+				if(saved_filename != "NO"){
+					html += "<span class='help-block' style='margin-bottom: 0; color: red; font-size: 9pt;'>Delete the attachment(Please check what you want to delete).</span>";	
+					html += "<input type='checkbox' value='" + saved_filename + "' name='remove_file'> " + origin_filename;
+				}
+				html += "<span class='help-block' style='padding-left: 5px; color: red;'>※ Please select a file only if you want to change uploaded image.</span>";
+				html += "<span class='help-block' style='padding-left: 5px; color: red;'>※ When upload photos using camera please take a picture horizontally.</span>";
+				html += "<div style='width: 100%' align='right'>";
+				html += "<input type='hidden' name='num' value='" + num + "'/>";
+				html += "<input type='hidden' name='board_num' value='" + board_num + "'/>";
+				html += "<input type='hidden' name='page' value='" + page + "'/>";
+				html += "<button type='submit' class='btn btn-sm btn-success'>Edit</button>";
+				html += "<button type='button' class='btn btn-sm btn-default updateCancel'>Cancel</button></div>";
 				
 				$(document).on("click", ".updateCancel", function(){
-					var content_div = $(this).parents(".comment-content");
+					var html = "";
 					content_div.empty();
-					content_div.text(content_div.siblings(".comment-head").children("p.comment-hidden").text());
+					if(saved_filename != "NO")
+						html += "<img src='" + resourcesPath + "/comment/" + saved_filename + "' style='max-width: 50%;'>";
+					
+					html += "<p style='word-break: break-all; white-space: pre-line;'>" + current_content + "</p>";
+					content_div.html(html);
 					content_div.siblings(".comment-head").children("i.fa-pencil-square-o").css("color", "#a6a6a6");
 					content_div.siblings(".comment-head").children("i.fa-pencil-square-o").removeClass("active");
 				});
@@ -181,7 +182,7 @@ div.input-group{
 			
 			if(isLogin != ""){
 				html += "<li>";
-				html += "<form action='/comment/ingee/insert' class='reply-input' method='get' onsubmit='return commentInsert(this);'>";
+				html += "<form action='/comment/ingee/insert' class='reply-input' method='post' onsubmit='return commentInsert(this);' enctype='multipart/form-data'>";
 				html += "<div class='reply-input-avatar'>";
 				if(loggedInProfile == "NO")
 					html += "<img src='${root }/profile/none_profile.png' alt='' title='Do not have any profile pictures.'>";
@@ -190,6 +191,7 @@ div.input-group{
 				html += "</div>";
 				html += "<div class='reply-textarea-div'>";
 				html += "<textarea class='reply-textarea' style='width: 100%; height: 75px' name='content' required='required' placeholder='  As we all fans of gorgeous InGee, let`s encourage all together while keeping netiquette.'></textarea>";
+				html += "<div class='col-md-12'><input type='file' name='upload_file'></div>";
 				html += "</div>";
 				html += "<div style='background: #fff;' align='right'>";
 				html += "<input type='hidden' name='board_num' value='" + board_num + "'>";
@@ -225,12 +227,18 @@ div.input-group{
 						html += "<h6 class='comment-name" + (board_writer == commentDTO.writer ? " by-author" : "") + "'>" + commentDTO.writer + "</h6>";
 						html += "<span class='span-date'>" + formatDate(commentDTO.writetime) +  "</span>";
 						if(commentDTO.writer == loginNick){
+							var origin = "";
+							if(commentDTO.saved_filename != "NO")
+								origin = "' origin_filename='" + commentDTO.origin_filename;
 							html += "<i class='fa fa-trash' onclick='deleteReply(this)' num='" + commentDTO.num + "' comment_num='" + comment_num + "' board_num='" + board_num +"' page='" + page + "'></i>";
-							html += "<i class='fa fa-pencil-square-o updateReplyForm' num='" + commentDTO.num + "' board_num='" + board_num + "' page='" + page + "'></i>";
+							html += "<i class='fa fa-pencil-square-o updateReplyForm' num='" + commentDTO.num + "' board_num='" + board_num + "' page='" + page + "' saved_filename='" + commentDTO.saved_filename + origin  + "'></i>";
 							html += "<p class='comment-hidden' style='display: none;'>" + commentDTO.content + "</p>";
 						}
 						html += "</div>";
-						html += "<div class='comment-content'><p style= 'word-break: break-all; white-space: pre-line;'>";
+						html += "<div class='comment-content'>";
+						if(commentDTO.saved_filename != "NO")
+							html += "<img src='" + resourcesPath + "/comment/" + commentDTO.saved_filename + "' style='max-width: 50%;'>";
+						html += "<p style= 'word-break: break-all; white-space: pre-line;'>";
 						html += commentDTO.content;
 						html += "</p></div>";
 						html += "</div>";
@@ -271,52 +279,51 @@ div.input-group{
 		return hour + ":" + minutes + ", " + month + " " + day + ", " + year;
 	}
 	
-	function updateCommentForm(obj, num, board_num, page){
+	function updateCommentForm(obj, num, board_num, page, saved_filename, origin_filename){
 		var content_div = $(obj).parents().siblings(".comment-content");
 		var current_content = $(obj).siblings("p.comment-hidden").text();
 		
 		if($(obj).hasClass("active")){
 			$(obj).css("color", "#a6a6a6");
 			$(obj).removeClass("active");
+
+			var html = "";
 			content_div.empty();
-			content_div.text(current_content);
+			if(saved_filename != "NO")
+				html += "<img src='" + resourcesPath + "/comment/" + saved_filename + "' style='max-width: 50%;'>";
+			
+			html += "<p style='word-break: break-all; white-space: pre-line;'>" + current_content + "</p>";
+			content_div.html(html);
 		} else {
 			$(obj).css("color", "#03658c");
 			$(obj).addClass("active");
-			var html = "<textarea rows='4' cols='' style='width: 100%'>";
+			
+			var html = "<form action='/comment/ingee/update' method='post' class='form-horizontal' enctype='multipart/form-data' onsubmit='return commentInsert(this);'>";
+			html += "<textarea rows='4' cols='' style='width: 100%' name='content' class='form=control'>";
 			html += current_content;
 			html += "</textarea>";
-			html += "<div style='width: 100%' align='right'><button type='button' class='btn btn-sm btn-success' id='updateBtn" + num + "'>Edit</button><button type='button' class='btn btn-sm btn-default' id='updateCancel" + num + "''>Cancel</button></div>";
+			html += "<input type='file' class='form-control' name='upload_file' id='upload_file' onchange='validateFile(this)'>";
+			if(saved_filename != "NO"){
+				html += "<span class='help-block' style='margin-bottom: 0; color: red; font-size: 9pt;'>Delete the attachment(Please check what you want to delete).</span>";
+				html += "<input type='checkbox' value='" + saved_filename + "' name='remove_file'> " + origin_filename;
+			}
+			html += "<span class='help-block' style='padding-left: 5px; color: red;'>※ Please select a file only if you want to change uploaded image.</span>";
+			html += "<span class='help-block' style='padding-left: 5px; color: red;'>※ When upload photos using camera please take a picture horizontally.</span>";
+			html += "<div style='width: 100%' align='right'>";
+			html += "<input type='hidden' name='num' value='" + num + "'/>";
+			html += "<input type='hidden' name='board_num' value='" + board_num + "'/>";
+			html += "<input type='hidden' name='page' value='" + page + "'/>";
+			html += "<button type='submit' class='btn btn-sm btn-success'>Edit</button>";
+			html += "<button type='button' class='btn btn-sm btn-default updateCancel'>Cancel</button></div>";
 			
-			$(document).on("click", "#updateBtn" + num, function(){
-				var update_btn = $(this);
-
-				var new_content = update_btn.parents().siblings("textarea").val();
-				if(!maxLengthCheck(new_content, 1000, "Content"))
-					return;
-				
-				swal({
-					title : "Are you sure you want to edit the comment?",
-					type : "warning",
-					showCancelButton : true,
-					confirmButtonColor : "#DD6B55",
-					confirmButtonText : "YES",
-					cancelButtonText : "NO",
-					closeOnConfirm : false,
-					closeOnCancel : false
-				}, function(isConfirm) {
-					if (isConfirm) {
-						location.href = "/comment/ingee/update?num=" + num + "&content=" + new_content + "&board_num=" + board_num + "&page=" + page;
-					} else {
-						swal("Cancel", "The editing the comment is cancelled.", "error");
-					}
-				});
-			});
-			
-			$(document).on("click", "#updateCancel" + num, function(){
-				var content_div = $(this).parents(".comment-content");
+			$(document).on("click", ".updateCancel", function(){
+				var html = "";
 				content_div.empty();
-				content_div.text(content_div.siblings(".comment-head").children("p.comment-hidden").text());
+				if(saved_filename != "NO")
+					html += "<img src='" + resourcesPath + "/comment/" + saved_filename + "' style='max-width: 50%;'>";
+				
+				html += "<p style='word-break: break-all; white-space: pre-line;'>" + current_content + "</p>";
+				content_div.html(html);
 				content_div.siblings(".comment-head").children("i.fa-pencil-square-o").css("color", "#a6a6a6");
 				content_div.siblings(".comment-head").children("i.fa-pencil-square-o").removeClass("active");
 			});
@@ -473,7 +480,7 @@ div.input-group{
        				<div class="row" style="margin-top:65px; padding-left: 5px;">
        					<div id="comment" style="width: 100%; height: 0px;"></div>
 						<c:if test="${isLogin ne null }">
-							<form action="/comment/ingee/insert" class="comment-input" method="get" onsubmit="return commentInsert(this);">
+							<form action="/comment/ingee/insert" class="comment-input" method="post" onsubmit="return commentInsert(this);" enctype="multipart/form-data">
 								<div class="comment-input-avatar">
 									<c:if test="${loggedInProfile == 'NO' }">
 										<img src="${root }/profile/none_profile.png" alt="" title="Do not have any profile pictures.">
@@ -529,11 +536,16 @@ div.input-group{
 														<i class="fa fa-reply" onclick="getReply(this, '${boardDTO.num }', '${commentDTO.num}', '${isLogin }', '${loginNick }', '${loggedInProfile }', '${boardDTO.writer }', '${param.page }')">[${commentDTO.reply_count }]</i>
 														<c:if test="${loginNick == commentDTO.writer }">
 															<i class="fa fa-trash" onclick="deleteComment(${commentDTO.num}, ${boardDTO.num }, ${param.page })"></i>
-															<i class="fa fa-pencil-square-o" onclick="updateCommentForm(this, ${commentDTO.num}, ${commentDTO.board_num }, ${param.page })"></i>
+															<i class="fa fa-pencil-square-o" onclick="updateCommentForm(this, ${commentDTO.num}, ${commentDTO.board_num }, ${param.page }, '${commentDTO.saved_filename }', '${commentDTO.origin_filename }')"></i>
 															<p style="display: none;" class="comment-hidden">${commentDTO.content }</p>
 														</c:if>
 													</div>
-													<div class="comment-content"><p style="word-break: break-all; white-space: pre-line;">${commentDTO.content }</p></div>
+													<div class="comment-content">
+														<c:if test="${commentDTO.saved_filename != 'NO' }">
+															<img alt="" src="${root }/comment/${commentDTO.saved_filename }" style="max-width: 50%;">
+														</c:if>
+														<p style="word-break: break-all; white-space: pre-line;">${commentDTO.content }</p>
+													</div>
 												</div>
 											</div>
 										</li>
@@ -598,7 +610,6 @@ div.input-group{
 								<input type="hidden" name="writer" value="${boardDTO.writer }">
 								<input type="hidden" name="num" value="${boardDTO.num }">
 	                            <input type="submit" class="btn btn-success" value="OK" id="updateSubmit"/>
-<!-- 	                            <input type="hidden" name="remove_file" value=""> -->
 	                            <input type="reset" class="btn btn-danger" value="Clear" />
 	                            <button style="float: right;" type="button" class="btn btn-default btn-close" data-dismiss="modal">Close</button>
 							</div>
