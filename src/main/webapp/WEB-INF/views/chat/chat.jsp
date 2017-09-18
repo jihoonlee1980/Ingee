@@ -141,19 +141,19 @@
                   + "</li>";
 				break;
 		  case 'ConnectionMe'  :
-			  OUTHTML = "<li>"+data[1]+"</li>";
+			  OUTHTML = "<li style='min-height: 35px'>"+data[1]+"</li>";
 			  	break;
 		  case 'ConnectionUser'  :
-			  OUTHTML = "<li>"+data[1]+"</li>";
+			  OUTHTML = "<li style='min-height: 35px'>"+data[1]+"</li>";
 			  	break;
 		  case 'Off'  :
-			  OUTHTML = "<li>"+data[1]+"</li>";
+			  OUTHTML = "<li style='min-height: 35px'>"+data[1]+"</li>";
 			  	break;
 		  case 'Overlap'  :
-			  OUTHTML = "<li>"+data[1]+"</li>";
+			  OUTHTML = "<li style='min-height: 35px'>"+data[1]+"</li>";
 			  	break;
 		  default   :
-			  OUTHTML = "<li>ERROR</li>";
+			  OUTHTML = "<li style='min-height: 25px'>ERROR</li>";
 			  	break;
 		}
 		$(OUTHTML).appendTo("#chatForm");
