@@ -112,7 +112,7 @@
 		switch (data[0]) {
 		  case 'MsgUser'  :
 			  OUTHTML = "<li class='left clearfix'><span class='chat-img pull-left'>"
-				+ "<img src='http://ingeefanclub.com/resources/profile/"+data[3]+"' alt='User Avatar' class='img-circle'>"
+				+ "<img src='http://ingeefanclub.com/resources/profile/"+data[3]==''+"' alt='User Avatar' class='img-circle'>"
 				+ "</span>"
 				+ "<div class='chat-body clearfix'>"
 				+ "<div class='header'>"
