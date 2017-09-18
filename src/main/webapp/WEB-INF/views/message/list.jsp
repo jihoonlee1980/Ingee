@@ -394,7 +394,6 @@ a {
 			<div class="col-md-12">
 			    <div class="blog-comment">
 					<h3 class="text-success">					
-					Message
 					<c:choose>
 						<c:when test="${DISC == 'sent' }">
 							Sent messages

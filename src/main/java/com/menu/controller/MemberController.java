@@ -41,12 +41,10 @@ public class MemberController {
 	@Autowired
 	JavaMailSenderImpl mailSender;
 
-	// final String path =
-	// "/home/hosting_users/ingeefanclub/tomcat/webapps/ROOT/resources";
+	final String path = "/home/hosting_users/ingeefanclub/tomcat/webapps/ROOT/resources";
 	// final String path =
 	// "/home/ubuntu/apache-tomcat-8.0.46/webapps/Ingee/resources";
-	final String path = "C:\\Users\\jihyun\\Desktop\\egov\\eGovFrameDev-3.6.0-64bit\\workspace\\InGeeFanClub\\src\\main\\webapp\\resources";
-	// final String path =
+	//final String path = "C:\\Users\\jihyun\\Desktop\\egov\\eGovFrameDev-3.6.0-64bit\\workspace\\InGeeFanClub\\src\\main\\webapp\\resources";
 	// "C:\\Users\\뢰후니\\git\\Ingee\\src\\main\\webapp\\resources";
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -461,12 +459,15 @@ public class MemberController {
 			RedirectAttributes redirectAttributes) {
 		ModelAndView modelAndView = new ModelAndView();
 		String returnURL = "/member/profile";
+		boolean loginCheck = false;
 		if (session.getAttribute("isLogin") != null && "YES".equals((String) session.getAttribute("isLogin"))) {
+			loginCheck = true;
 			MemberDTO memberDTO = memberDAO.get(id);
 			modelAndView.addObject("memberDTO", memberDTO);
 			modelAndView.setViewName(returnURL);
-		} else
-			returnURL = "redirect:/";
+		}
+		modelAndView.addObject("loginCheck",loginCheck);
+		
 		return modelAndView;
 	}
 }

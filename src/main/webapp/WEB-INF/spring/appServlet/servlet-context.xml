@@ -92,7 +92,6 @@
 			<mapping path="/member/update" />
 			<mapping path="/member/delete" />
 			<mapping path="/member/update/**" />
-			<mapping path="/member/profile"/>
 			<mapping path="/comment/**/insert"/>
 			<mapping path="/comment/**/update"/>
 			<mapping path="/comment/**/delete"/>
