@@ -219,10 +219,10 @@ div.input-group{
 						var commentDTO = data.commentDTO[i];
 						
 						html += "<li>";
-						if(profile_files == "NO")
-							html += "<div class='comment-avatar'><img src='${root }/profile/none_profile.png' alt='' title='Do not have any profile pictures.'></div>";
+						if(profile_files[i] == "NO")
+							html += "<div class='comment-avatar'><img src='"+resourcesPath+"/profile/none_profile.png' alt='' title='Do not have any profile pictures.'></div>";
 						else
-							html += "<div class='comment-avatar'><img src='${root}/profile/" + profile_files[i] + "' alt=''></div>";
+							html += "<div class='comment-avatar'><img src='"+resourcesPath+"/profile/" + profile_files[i] + "' alt=''></div>";
 						html += "<div class='comment-box'>";
 						html += "<div class='comment-head'>";
 						html += "<h6 class='comment-name" + (board_writer == commentDTO.writer ? " by-author" : "") + "'>" + commentDTO.writer + "</h6>";

@@ -18,6 +18,7 @@
     <link href="/assets/css/font-awesome.min.css?ver=3" rel="stylesheet" type="text/css">
     <link href="/assets/css/bootstrap.css?ver=2" rel="stylesheet">
 </head>
+<c:if test="${loginCheck eq true}">
 <div class="container" style="margin:0; padding: 0;">
       <div class="row">
       </div>
@@ -65,4 +66,11 @@
         </div>
       </div>
     </div>
+ </c:if>
+ <c:if test="${loginCheck ne true}">
+ <script type="text/javascript">
+ 	alert("This service requires login.");
+ 	window.close();
+ </script>
+ </c:if>
 </html>
