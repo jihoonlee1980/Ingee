@@ -99,7 +99,7 @@ div.input-group{
 	<div class="container">
 		<div class="event-row" id="div_event">
 			<div class="well">
-		        <h1 class="text-center">Tour</h1>
+		        <h1 class="text-center">Tournaments</h1>
 		        <div class="list-group" id="list_div">
 		        	<c:if test="${totalCount > 0 }">
 			        	<c:forEach items="${boardList}" var="boardDTO" varStatus="status">
@@ -233,7 +233,7 @@ div.input-group{
 				<div class="well well-sm">
 					<form class="form-horizontal" action="/board/tour/insert" method="post" enctype="multipart/form-data" onsubmit="return boardInsert();">
 						<fieldset>
-							<legend class="text-center"><h1>Tour</h1></legend>
+							<legend class="text-center"><h1>Tournaments</h1></legend>
 							<div class="form-group">
 								<div class="input-group">
 									<label class="col-md-2 control-label">Subject</label>

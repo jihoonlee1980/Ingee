@@ -5,13 +5,19 @@
 		insert into board values(0, #{writer}, #{b_category}, #{s_category}, #{subject}, #{content}, 0, 0, #{origin_filename}, #{saved_filename}, now())
 	</insert>
 	<select id="boardCount" parameterType="HashMap" resultType="int">
-		select count(*) from board where b_category = #{b_category} and s_category = #{s_category}
+		select count(*) from board where b_category = #{b_category}
+		<if test="b_category == 'network' and !s_category.equals('')">
+			and s_category = #{s_category}
+		</if>
 		<if test="search_type != null">
 			and ${search_type} like CONCAT('%',#{keyword},'%')
 		</if>
 	</select>	
 	<select id="boardList" resultType="com.menu.model.BoardDTO" parameterType="HashMap">
-		select * from board where b_category = #{b_category} <if test="b_category == 'network' and s_category != ''"> and s_category = #{s_category}</if>
+		select * from board where b_category = #{b_category}
+		<if test="b_category == 'network' and !s_category.equals('')">
+			and s_category = #{s_category}
+		</if>
 		<if test="search_type != null">
 			and ${search_type} like CONCAT('%',#{keyword},'%')
 		</if>

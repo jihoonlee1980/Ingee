@@ -26,6 +26,9 @@ div.input-group{
 		margin: 0;
 		padding: 0;
 	}
+	.btn-outline{
+		padding: 5px;
+	}
 }
 </style>
 <script type="text/javascript">
@@ -67,20 +70,27 @@ div.input-group{
 	<div class="container">
 		<div class="event-row" id="div_event">
 			<div class="well">
-		        <h1 class="text-center">Video</h1>
+				<div style="margin-top: 10px;">
+					<a class="btn btn-info btn-outline" href="/board/network/list">All</a>
+					<a class="btn btn-primary btn-outline" href="/board/network/west/list">West</a>
+					<a class="btn btn-warning btn-outline" href="/board/network/midwest/list">MidWest</a>
+					<a class="btn btn-success btn-outline" href="/board/network/northeast/list">NorthEast</a>
+					<a class="btn btn-danger btn-outline" href="/board/network/south/list">South</a>
+				</div>
+		        <h1 class="text-center">Network</h1>
 		        <div class="list-group" id="list_div">
 		        	<c:if test="${totalCount > 0 }">
 			        	<c:forEach items="${boardList}" var="boardDTO" varStatus="status">
 			        		<c:if test="${param.search_type eq null}">
-			        			<c:set var="href" value="/board/video/${boardDTO.num }?page=${currentPage}"/>
+			        			<c:set var="href" value="/board/network/${boardDTO.num }?page=${currentPage}"/>
 			        		</c:if>
 			        		<c:if test="${param.search_type ne null}">
-			        			<c:set var="href" value="/board/video/${boardDTO.num }?page=${currentPage}&search_type=${param.search_type }&keyword=${param.keyword }"/>
+			        			<c:set var="href" value="/board/network/${boardDTO.num }?page=${currentPage}&search_type=${param.search_type }&keyword=${param.keyword }"/>
 			        		</c:if>
 			        		
 			        		<a href="${href }" class="list-group-item">
 			                	<div class="col-md-9" style="margin-top: 2%">
-				                    <h4 class="list-group-item-heading"><span style="font-size: 10pt; font-weight: 600; color: #e69b0b"></span>${boardDTO.subject}<span style="font-size: 10pt; font-weight: 600; color: red">&nbsp;&nbsp;&nbsp;[ ${boardDTO.comment_count } ]</span></h4>
+				                    <h4 class="list-group-item-heading"><span style="font-size: 10pt; font-weight: 600; color: #e69b0b">[${boardDTO.s_category.toUpperCase() }]&nbsp;&nbsp;&nbsp;</span>${boardDTO.subject}<span style="font-size: 10pt; font-weight: 600; color: red">&nbsp;&nbsp;&nbsp;[ ${boardDTO.comment_count } ]</span></h4>
 			                    	<hr style="width: 100%; height: 2px; background: #777; margin-top: 5px 5px;">
 			                    	 <p class="list-group-item-text" style="max-height: 70px; word-break: break-all; white-space: pre-line; overflow: hidden;">${boardDTO.content}</p>
 			                	</div>
@@ -112,23 +122,23 @@ div.input-group{
 					<ul class="pagination">
 						<c:if test="${startPage > 1}">
 							<c:if test="${param.search_type ne null }">
-								<li><a href="/board/video/list?page=${startPage-1}&search_type=${param.search_type}&keyword=${param.keyword}">&lt;</a></li>
+								<li><a href="/board/network/list?page=${startPage-1}&search_type=${param.search_type}&keyword=${param.keyword}">&lt;</a></li>
 							</c:if>
 							<c:if test="${param.search_type eq null }">
-								<li><a href="/board/video/list?page=${startPage - 1}">&lt;</a></li>
+								<li><a href="/board/network/list?page=${startPage - 1}">&lt;</a></li>
 							</c:if>
 						</c:if>
 						<c:forEach begin="${startPage}" end="${endPage}" var="page">
 							<c:if test="${param.search_type ne null }">
 								<li ${page eq currentPage ? "class='active'" : "" }>						
-									<a href="/board/video/list?page=${page}&search_type=${param.search_type}&keyword=${param.keyword}">
+									<a href="/board/network/list?page=${page}&search_type=${param.search_type}&keyword=${param.keyword}">
 										${page}
 									</a>
 								</li>
 							</c:if>
 							<c:if test="${param.search_type eq null  }">
 								<li ${page eq currentPage ? "class='active'" : "" }>						
-									<a href="/board/video/list?page=${page}">
+									<a href="/board/network/list?page=${page}">
 										${page}
 									</a>
 								</li>
@@ -139,14 +149,14 @@ div.input-group{
 								<li><a href="/member/search?page=${endPage + 1}&sort=${param.sort}&search_type=${param.search_type}&keyword=${param.keyword}">&gt;</a></li>
 							</c:if>
 							<c:if test="${param.search_type eq null }">
-								<li><a href="/board/video/list?page=${endPage + 1}">&gt;</a></li>
+								<li><a href="/board/network/list?page=${endPage + 1}">&gt;</a></li>
 							</c:if>
 						</c:if>
 					</ul>
 				</div>
 				<!-- pagination end/search start -->
 				<div style="width: 100%; min-height: 50px;">
-					<form action="/board/video/list" class="form-horizontal search-form col-md-6">
+					<form action="/board/network/list" class="form-horizontal search-form col-md-6">
 						<div class="col-md-12">
 						    <div class="input-group">
 				                <div class="input-group-btn search-panel">
@@ -192,9 +202,9 @@ div.input-group{
 		<div class="modal fade" id="write" tabindex="-1" role="dialog" aria-labelledby="contactLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="well well-sm">
-					<form class="form-horizontal" action="/board/video/insert" method="post" enctype="multipart/form-data" onsubmit="return extensionCheck();">
+					<form class="form-horizontal" action="/board/network/insert" method="post" enctype="multipart/form-data" onsubmit="return extensionCheck();">
 						<fieldset>
-							<legend class="text-center"><h1>Video</h1></legend>
+							<legend class="text-center"><h1>Network</h1></legend>
 							<div class="form-group">
 								<div class="input-group">
 									<label class="col-md-2 control-label">Subject</label>
@@ -213,9 +223,28 @@ div.input-group{
 							</div>
 							<div class="form-group">
 								<div class="input-group">
-									<label class="col-md-2 control-label">Video</label>
+									<label class="col-md-2 control-label">Region</label>
 									<div class="col-md-9">
-										<input type="file" class="form-control" name="upload_file" id="upload_file" required="required" accept="video/mp4" onchange="validateFile(this)">
+                                		<div class="radio-inline">
+	                                    	<input type="radio" name="s_category" value="west" required="required">West
+	                                    </div>
+	                                    <div class="radio-inline">
+	                                    	<input type="radio" name="s_category" value="midwest">MidWest
+	                                    </div>
+	                                    <div class="radio-inline">
+	                                    	<input type="radio" name="s_category" value="northeast">NorthEast
+	                                    </div>
+	                                    <div class="radio-inline">
+	                                    	<input type="radio" name="s_category" value="south">South
+	                                    </div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-group">
+									<label class="col-md-2 control-label">Image</label>
+									<div class="col-md-9">
+										<input type="file" class="form-control" name="upload_file" id="upload_file" onchange="validateFile(this);">
 									</div>
 								</div>
 							</div>

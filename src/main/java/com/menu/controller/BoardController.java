@@ -36,10 +36,11 @@ public class BoardController {
 	CommentDAO commentDAO;
 
 	final String CATEGORY_NULL = "";
-	final String path ="/home/hosting_users/ingeefanclub/tomcat/webapps/ROOT/resources";
+	// final String path
+	// ="/home/hosting_users/ingeefanclub/tomcat/webapps/ROOT/resources";
 	// final String path =
 	// "/home/ubuntu/apache-tomcat-8.0.46/webapps/Ingee/resources";
-	//final String path = "C:\\Users\\jihyun\\Desktop\\egov\\eGovFrameDev-3.6.0-64bit\\workspace\\InGeeFanClub\\src\\main\\webapp\\resources";
+	final String path = "C:\\Users\\jihyun\\Desktop\\egov\\eGovFrameDev-3.6.0-64bit\\workspace\\InGeeFanClub\\src\\main\\webapp\\resources";
 	final int ZERO_COMMENT = 0;
 
 	@RequestMapping(value = "/{b_category}/list")
@@ -86,7 +87,8 @@ public class BoardController {
 	public String boardInsert(@PathVariable String b_category, BoardDTO boardDTO) {
 		MultipartFile upload_file = boardDTO.getUpload_file();
 		boardDTO.setB_category(b_category);
-		boardDTO.setS_category(CATEGORY_NULL);
+		if (boardDTO.getS_category() == null)
+			boardDTO.setS_category(CATEGORY_NULL);
 		boardDTO.setSubject(XssPreventer.escape(boardDTO.getSubject()));
 		boardDTO.setContent(XssPreventer.escape(boardDTO.getContent()));
 
@@ -98,7 +100,8 @@ public class BoardController {
 					+ extension;
 
 			while (boardDAO.find("saved_filename", saved_filename)) {
-				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000 + extension;
+				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000
+						+ extension;
 			}
 
 			boardDTO.setOrigin_filename(originFileName);
@@ -186,7 +189,8 @@ public class BoardController {
 						+ System.currentTimeMillis() % 10000000 + extension;
 
 				while (boardDAO.find("saved_filename", saved_filename)) {
-					saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000 + extension;
+					saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000
+							+ extension;
 				}
 
 				boardDTO.setOrigin_filename(originFileName);
@@ -217,6 +221,17 @@ public class BoardController {
 
 	@RequestMapping(value = "/{b_category}/imageView")
 	public ModelAndView boardDelete(@PathVariable String b_category,
+			@RequestParam(value = "fileName", required = true) String fileName) {
+		ModelAndView modelAndView = new ModelAndView();
+
+		modelAndView.addObject("fileName", fileName);
+		modelAndView.setViewName("imageView");
+
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/{b_category}/{s_category}/imageView")
+	public ModelAndView boardDelete(@PathVariable String b_category, @PathVariable String s_category,
 			@RequestParam(value = "fileName", required = true) String fileName) {
 		ModelAndView modelAndView = new ModelAndView();
 
@@ -282,7 +297,9 @@ public class BoardController {
 					+ extension;
 
 			while (boardDAO.find("saved_filename", saved_filename)) {
-				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000 + extension;;
+				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000
+						+ extension;
+				;
 			}
 
 			boardDTO.setOrigin_filename(originFileName);
@@ -370,7 +387,9 @@ public class BoardController {
 						+ System.currentTimeMillis() % 10000000 + extension;
 
 				while (boardDAO.find("saved_filename", saved_filename)) {
-					saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000 + extension;;
+					saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000
+							+ extension;
+					;
 				}
 
 				boardDTO.setOrigin_filename(originFileName);

@@ -283,6 +283,13 @@
 			<version>4.2</version>
 		</dependency>
 		<!-- imgscalr end -->
+		<!-- query log -->
+		<dependency>
+			<groupId>org.lazyluke</groupId>
+			<artifactId>log4jdbc-remix</artifactId>
+			<version>0.2.7</version>
+		</dependency>
+		<!-- query log end -->
 	</dependencies>
 	<build>
 		<plugins>

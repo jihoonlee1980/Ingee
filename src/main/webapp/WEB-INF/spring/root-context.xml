@@ -20,13 +20,24 @@
 		<property name="password" value="${mypassword}" />
 	</bean>
 
+	<bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+		<constructor-arg ref="mydataSource" />
+		<property name="logFormatter">
+			<bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+				<property name="loggingType" value="MULTI_LINE" />
+				<property name="sqlPrefix" value="SQL         :  " />
+			</bean>
+		</property>
+	</bean>
+
 	<bean id="mysqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="mydataSource" />
 		<property name="configLocation" value="classpath:spring/SqlMapConfig.xml" />
 	</bean>
-	
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="mydataSource"/>
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="mydataSource" />
 	</bean>
 
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
@@ -45,19 +56,19 @@
 	<bean id="mysqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg ref="mysqlSessionFactory" />
 	</bean>
-	
+
 	<bean id="memberDAO" class="com.menu.model.MemberDAO">
 		<property name="sqlSessionTemplate" ref="mysqlSessionTemplate" />
 	</bean>
-	
+
 	<bean id="messageDAO" class="com.menu.model.MessageDAO">
 		<property name="sqlSessionTemplate" ref="mysqlSessionTemplate" />
 	</bean>
-	
+
 	<bean id="boardDAO" class="com.menu.model.BoardDAO">
 		<property name="sqlSessionTemplate" ref="mysqlSessionTemplate" />
 	</bean>
-	
+
 	<bean id="commentDAO" class="com.menu.model.CommentDAO">
 		<property name="sqlSessionTemplate" ref="mysqlSessionTemplate" />
 	</bean>

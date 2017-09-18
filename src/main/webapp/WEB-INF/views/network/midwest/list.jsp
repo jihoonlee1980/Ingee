@@ -27,41 +27,8 @@ div.input-group{
 		padding: 0;
 	}
 	.btn-outline{
-		padding: 10px;
+		padding: 5px;
 	}
-}
-.btn-outline {
-    background-color: transparent;
-    color: inherit;
-    transition: all .5s;
-}
-
-.btn-primary.btn-outline {
-    color: #428bca;
-}
-
-.btn-success.btn-outline {
-    color: #5cb85c;
-}
-
-.btn-info.btn-outline {
-    color: #5bc0de;
-}
-
-.btn-warning.btn-outline {
-    color: #f0ad4e;
-}
-
-.btn-danger.btn-outline {
-    color: #d9534f;
-}
-
-.btn-primary.btn-outline:hover,
-.btn-success.btn-outline:hover,
-.btn-info.btn-outline:hover,
-.btn-warning.btn-outline:hover,
-.btn-danger.btn-outline:hover {
-    color: #fff;
 }
 </style>
 <script type="text/javascript">
@@ -106,6 +73,7 @@ div.input-group{
 		<div class="event-row" id="div_event">
 			<div class="well">
 				<div style="margin-top: 10px;">
+					<a class="btn btn-info btn-outline" href="/board/network/list">All</a>
 					<a class="btn btn-primary btn-outline" href="/board/network/west/list">West</a>
 					<a class="btn btn-warning btn-outline" href="/board/network/midwest/list">MidWest</a>
 					<a class="btn btn-success btn-outline" href="/board/network/northeast/list">NorthEast</a>

@@ -7,9 +7,13 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,10 +45,11 @@ public class MemberController {
 	@Autowired
 	JavaMailSenderImpl mailSender;
 
-	final String path = "/home/hosting_users/ingeefanclub/tomcat/webapps/ROOT/resources";
+	// final String path =
+	// "/home/hosting_users/ingeefanclub/tomcat/webapps/ROOT/resources";
 	// final String path =
 	// "/home/ubuntu/apache-tomcat-8.0.46/webapps/Ingee/resources";
-	//final String path = "C:\\Users\\jihyun\\Desktop\\egov\\eGovFrameDev-3.6.0-64bit\\workspace\\InGeeFanClub\\src\\main\\webapp\\resources";
+	final String path = "C:\\Users\\jihyun\\Desktop\\egov\\eGovFrameDev-3.6.0-64bit\\workspace\\InGeeFanClub\\src\\main\\webapp\\resources";
 	// "C:\\Users\\뢰후니\\git\\Ingee\\src\\main\\webapp\\resources";
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -117,7 +122,8 @@ public class MemberController {
 					+ extension;
 
 			while (memberDAO.find("saved_filename", saved_filename) != null) {
-				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000 + extension;
+				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000
+						+ extension;
 			}
 
 			memberDTO.setOrigin_filename(originFileName);
@@ -139,10 +145,13 @@ public class MemberController {
 
 	@RequestMapping(value = "/login/proc", method = RequestMethod.POST)
 	public String loginProc(HttpSession session, MemberDTO loginInfo, RedirectAttributes redirectAttributes,
-			@RequestParam(value = "saveID", required = false) String saveID) {
+			@RequestParam(value = "saveID", required = false) String saveID, HttpServletResponse response,
+			HttpServletRequest request) {
 		String returnURL = "";
 		// 0일때 성공, 1일때 실패(아이디나 비밀번호가 틀림), 2일때 최초 회원가입
 		int loginResult = 0;
+		Cookie cookie1;
+		Cookie cookie2;
 
 		loginInfo.setPass(loginInfo.getPass().toLowerCase());
 
@@ -171,9 +180,24 @@ public class MemberController {
 				session.setAttribute("isIngee", "YES");
 
 			if ("YES".equals(saveID)) {
-				session.setAttribute("isSave", saveID);
+				cookie1 = new Cookie("isSave", "YES");
+				cookie2 = new Cookie("saveID", memberDTO.getId());
+				cookie1.setMaxAge(60 * 60 * 24 * 365);
+				cookie2.setMaxAge(60 * 60 * 24 * 365);
+				response.addCookie(cookie1);
+				response.addCookie(cookie2);
 			} else {
-				session.removeAttribute("isSave");
+				Cookie[] cookies = request.getCookies();
+				for (int i = 0; i < cookies.length; i++) {
+					if ("isSave".equals(cookies[i].getName())) {
+						cookie1 = new Cookie("isSave", null);
+						cookie2 = new Cookie("saveID", null);
+						cookie1.setMaxAge(0);
+						cookie2.setMaxAge(0);
+						response.addCookie(cookie1);
+						response.addCookie(cookie2);
+					}
+				}
 			}
 
 			returnURL = "redirect:/";
@@ -189,13 +213,22 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "/logout")
-	public String logout(HttpSession session) {
+	public String logout(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
 		// 세션 전체를 날려버림
 		// session.invalidate();
 		session.removeAttribute("isLogin");
 
-		if (!"YES".equals(session.getAttribute("isSave")))
-			session.removeAttribute("loggedInID");
+		Cookie[] cookies = request.getCookies();
+		for (int i = 0; i < cookies.length; i++) {
+			if ("isSave".equals(cookies[i].getName()) && "YES".equals(cookies[i].getValue())) {
+				Cookie cookie1 = new Cookie("isSave", null);
+				Cookie cookie2 = new Cookie("saveID", null);
+				cookie1.setMaxAge(0);
+				cookie2.setMaxAge(0);
+				response.addCookie(cookie1);
+				response.addCookie(cookie2);
+			}
+		}
 
 		if (session.getAttribute("loginID") != null)
 			session.removeAttribute("loginID");
@@ -293,9 +326,9 @@ public class MemberController {
 		String profilePath = path + "/profile";
 		MultipartFile profile_file = memberDTO.getProfile_file();
 		MemberDTO currentDTO = memberDAO.get(memberDTO.getNum());
-		
+
 		MemberDTO dbDTO = memberDAO.get(memberDTO.getNum());
-		
+
 		if (remove_file != null) {
 			StringTokenizer remove_files = new StringTokenizer(remove_file, ",");
 
@@ -326,7 +359,8 @@ public class MemberController {
 					+ extension;
 
 			while (memberDAO.find("saved_filename", saved_filename) != null) {
-				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000 + extension;
+				saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000
+						+ extension;
 			}
 
 			memberDTO.setOrigin_filename(originFileName);
@@ -337,8 +371,8 @@ public class MemberController {
 		} else {
 			memberDTO.setSaved_filename(dbDTO.getSaved_filename().equals("") ? "NO" : dbDTO.getSaved_filename());
 			memberDTO.setOrigin_filename(dbDTO.getSaved_filename().equals("") ? "" : dbDTO.getOrigin_filename());
-//			memberDTO.setSaved_filename(memberDAO.get(memberDTO.getNum()).getSaved_filename());
-//			memberDTO.setOrigin_filename(memberDAO.get(memberDTO.getNum()).getOrigin_filename());
+			// memberDTO.setSaved_filename(memberDAO.get(memberDTO.getNum()).getSaved_filename());
+			// memberDTO.setOrigin_filename(memberDAO.get(memberDTO.getNum()).getOrigin_filename());
 		}
 
 		ModelAndView modelAndView = new ModelAndView();
@@ -466,8 +500,8 @@ public class MemberController {
 			modelAndView.addObject("memberDTO", memberDTO);
 			modelAndView.setViewName(returnURL);
 		}
-		modelAndView.addObject("loginCheck",loginCheck);
-		
+		modelAndView.addObject("loginCheck", loginCheck);
+
 		return modelAndView;
 	}
 }

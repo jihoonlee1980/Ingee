@@ -44,6 +44,9 @@
 	#nickCheckBtn{
 		width: 100% !important;
 	}
+	#pass_tab{
+		top: 40px;
+	}
 }
 </style>
 <script type="text/javascript">
@@ -296,7 +299,7 @@
 	                        </a>
 	                    </li>
 	                    <li role="presentation" class="">
-	                        <a href="#pass_div" aria-controls="pass_div" role="tab" data-toggle="tab">
+	                        <a href="#pass_div" aria-controls="pass_div" role="tab" data-toggle="tab" id="pass_tab">
 	                            <img class="img-circle" src="/assets/img/main/mp_pass.png" />
 	                            <span class="quote"><i class="fa fa-quote-left"></i></span>
 	                        </a>

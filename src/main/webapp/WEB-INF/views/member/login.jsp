@@ -122,8 +122,8 @@
 		                	</c:when>
 		                	<c:when test="${empty loginID}">
 		                		<c:choose>
-		                			<c:when test="${isSave eq 'YES' }">
-		                				<input type="email" class="form-control" id="id" name="id" placeholder="username(eamil address)" value="${loggedInID }" autofocus="autofocus">		                				
+		                			<c:when test="${cookie.isSave ne null }">
+		                				<input type="email" class="form-control" id="id" name="id" placeholder="username(eamil address)" value="${cookie.saveID.value }" autofocus="autofocus">		                				
 		                			</c:when>
 		                			<c:otherwise>
 		                				<input type="email" class="form-control" id="id" name="id" placeholder="username(eamil address)" autofocus="autofocus">
@@ -145,7 +145,7 @@
 		    <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-12">
 		        <div class="col-xs-6 col-sm-6">
 		            <label class="checkbox" style="margin-left: 5px;">
-		                <input type="checkbox" id="isSave" ${isSave eq 'YES' ? 'checked' : '' }>Remember Me
+		                <input type="checkbox" id="isSave" ${cookie.isSave.value eq 'YES' ? 'checked' : '' }>Remember Me
 		            </label>
 		        </div>
 		        <div class="col-xs-6 col-sm-6" style="margin-top: 10px;">

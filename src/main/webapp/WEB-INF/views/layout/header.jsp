@@ -29,9 +29,9 @@
 						<li><a href="/board/ingee/list">INGEE</a></li>
 						<li><a href="/board/notice/list">NOTICE</a></li>
 						<li><a href="/board/photo/list">PHOTO</a></li>
-						<li><a href="/board/video/list">VIDEO</a></li>
-						<li><a href="/board/tour/list">TOUR</a></li>
-						<li><a href="/board/network/west/list">NETWORK</a></li>
+						<li><a href="/board/video/list">MOVIE</a></li>
+						<li><a href="/board/tour/list">TOURNAMENTS</a></li>
+						<li><a href="/board/network/list">NETWORK</a></li>
 						<c:if test="${isLogin ne null }">
 							<li><a href="/message/">MESSAGE</a></li>
  							<!-- <li><a href="/chat/">CHAT</a></li> -->
