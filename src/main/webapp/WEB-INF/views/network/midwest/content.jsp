@@ -48,7 +48,7 @@ div.input-group{
 }
 </style>
 <script type="text/javascript">
-	var resourcesPath = "http://192.168.0.6:8080/resources";
+	var resourcesPath = "<c:url value='/resources'/>";
 	$(function(){
 		$(document).on("click", ".updateReplyForm", function(){
 			var content_div = $(this).parents().siblings(".comment-content");
