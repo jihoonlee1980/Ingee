@@ -60,7 +60,7 @@
   #chatListForm{
   	min-height:200px !important;
   	max-height:200px !important;
-  	display:none !important;
+  	display:none;
   }
   #chatListMoreBtn{
   	display:inline;
