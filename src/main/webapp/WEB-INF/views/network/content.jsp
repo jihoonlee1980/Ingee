@@ -104,6 +104,16 @@ div.input-group{
 				content_div.html(html);
 			}
 		});
+		
+		$("#upload_file").change(function(){
+			if($(this).val() != ""){
+				$("#source").prop("required", true);
+				$("#source").prop("readonly", false)
+			} else {
+				$("#source").prop("required", false);
+				$("#source").prop("readonly", true)
+			}
+		});
 	});
 	
 	function imageView(obj, fileName){
@@ -458,6 +468,7 @@ div.input-group{
 	            <c:if test="${boardDTO.saved_filename != 'NO' }">	            
 					<div class="content-div" id="content_img_div">
 	                   	<img src="${root }/board/${boardDTO.saved_filename}" style="max-width: 100%; cursor: pointer;" onclick="imageView(this, '${boardDTO.saved_filename}')" title="Please click the image to see original size.">
+	                   	<span style="display: block;">source : <a target="_blank" href="${boardDTO.source }">${boardDTO.source }</a></span>
 					</div>
 				</c:if>
 				<div class="content-div">
@@ -598,6 +609,25 @@ div.input-group{
 							</div>
 							<div class="form-group">
 								<div class="input-group">
+									<label class="col-md-2 control-label">Region</label>
+									<div class="col-md-9">
+                                		<div class="radio-inline">
+	                                    	<input type="radio" name="s_category" value="west" required="required">West
+	                                    </div>
+	                                    <div class="radio-inline">
+	                                    	<input type="radio" name="s_category" value="midwest">Midwest
+	                                    </div>
+	                                    <div class="radio-inline">
+	                                    	<input type="radio" name="s_category" value="northeast">East
+	                                    </div>
+	                                    <div class="radio-inline">
+	                                    	<input type="radio" name="s_category" value="south">South
+	                                    </div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-group">
 									<label class="col-md-2 control-label">Image</label>
 									<div class="col-md-9">
 										<input type="file" class="form-control" name="upload_file" id="upload_file" onchange="validateFile(this)">
@@ -610,6 +640,14 @@ div.input-group{
 										</c:if>
 										<span class="help-block" style="padding-left: 5px; color: red;">※ Please select a file only if you want to change uploaded image.</span>
 										<span class="help-block" style="padding-left: 5px; color: red;">※ When upload photos using camera please take a picture horizontally.</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-group">
+									<label class="col-md-2 control-label">Source</label>
+									<div class="col-md-9">
+										<input id="source" name="source" type="text" placeholder="source" class="form-control" value="${boardDTO.source }" readonly="readonly">
 									</div>
 								</div>
 							</div>

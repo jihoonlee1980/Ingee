@@ -76,7 +76,7 @@ div.input-group{
 				html += "<textarea rows='4' cols='' style='width: 100%' name='content' class='form=control'>";
 				html += current_content;
 				html += "</textarea>";
-				html += "<input type='file' class='form-control' name='upload_file' id='upload_file' onchange='validateFile(this)'>";
+				html += "<input type='file' class='form-control' name='upload_file' onchange='validateFile(this)'>";
 				if(saved_filename != "NO"){
 					html += "<span class='help-block' style='margin-bottom: 0; color: red; font-size: 9pt;'>Delete the attachment(Please check what you want to delete).</span>";	
 					html += "<input type='checkbox' value='" + saved_filename + "' name='remove_file'> " + origin_filename;
@@ -102,6 +102,16 @@ div.input-group{
 					content_div.siblings(".comment-head").children("i.fa-pencil-square-o").removeClass("active");
 				});
 				content_div.html(html);
+			}
+		});
+		
+		$("#upload_file").change(function(){
+			if($(this).val() != ""){
+				$("#source").prop("required", true);
+				$("#source").prop("readonly", false)
+			} else {
+				$("#source").prop("required", false);
+				$("#source").prop("readonly", true)
 			}
 		});
 	});
@@ -303,7 +313,7 @@ div.input-group{
 			html += "<textarea rows='4' cols='' style='width: 100%' name='content' class='form=control'>";
 			html += current_content;
 			html += "</textarea>";
-			html += "<input type='file' class='form-control' name='upload_file' id='upload_file' onchange='validateFile(this)'>";
+			html += "<input type='file' class='form-control' name='upload_file' onchange='validateFile(this)'>";
 			if(saved_filename != "NO"){
 				html += "<span class='help-block' style='margin-bottom: 0; color: red; font-size: 9pt;'>Delete the attachment(Please check what you want to delete).</span>";
 				html += "<input type='checkbox' value='" + saved_filename + "' name='remove_file'> " + origin_filename;
@@ -458,6 +468,7 @@ div.input-group{
 	            <c:if test="${boardDTO.saved_filename != 'NO' }">	            
 					<div class="content-div" id="content_img_div">
 	                   	<img src="${root }/board/${boardDTO.saved_filename}" style="max-width: 100%; cursor: pointer;" onclick="imageView(this, '${boardDTO.saved_filename}')" title="Please click the image to see original size.">
+	                   	<span style="display: block;">source : <a target="_blank" href="${boardDTO.source }">${boardDTO.source }</a></span>
 					</div>
 				</c:if>
 				<div class="content-div">
@@ -610,6 +621,14 @@ div.input-group{
 										</c:if>
 										<span class="help-block" style="padding-left: 5px; color: red;">※ Please select a file only if you want to change uploaded image.</span>
 										<span class="help-block" style="padding-left: 5px; color: red;">※ When upload photos using camera please take a picture horizontally.</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-group">
+									<label class="col-md-2 control-label">Source</label>
+									<div class="col-md-9">
+										<input id="source" name="source" type="text" placeholder="source" class="form-control" value="${boardDTO.source }" readonly="readonly">
 									</div>
 								</div>
 							</div>

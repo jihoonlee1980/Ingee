@@ -154,6 +154,7 @@ public class BoardController {
 			@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(value = "remove_file", required = false) String remove_file) {
 		String boardPath = path + "/board";
+		boardDTO.setS_category(CATEGORY_NULL);
 		BoardDTO dbDTO = boardDAO.get(boardDTO.getNum());
 		boardDTO.setSubject(XssPreventer.escape(boardDTO.getSubject()));
 		boardDTO.setContent(XssPreventer.escape(boardDTO.getContent()));

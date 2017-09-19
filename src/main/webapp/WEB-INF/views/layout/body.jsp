@@ -39,9 +39,9 @@
 				<img class="img-responsive"
 					src="${root}/img/main/ingee810.jpg" alt=""></a><br>
 				<p>
-					We welcome you to visit the In Gee Fan Club Website where we all
+					We welcome you to visit the In Gee Fan Club Website where 
 					fans of InGee gather to share stories and photos and encourage
-					her with our supports.<br> It's a fun site full of In Gee's
+					her with our support.<br> It's a fun site full of In Gee's
 					smiles and comments with room reserved for your participation. <br>
 					In Gee is a wonderful humanitarian with world-class talent who is
 					dedicated to improving every day. <br> Let's show her she
@@ -99,7 +99,7 @@
 				</div>
 				<div class="sub-heading">
 					<p>
-						<a href="/board/network/west/list">Recent!</a>
+						<a href="/board/network/list">Recent!</a>
 					</p>
 					<img src="${root}/img/main/new2.png" width="50" height="50"
 						alt=""><br> <br>

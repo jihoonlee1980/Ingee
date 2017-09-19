@@ -20,21 +20,21 @@
 		        <span class="icon-bar"></span>
 		        <span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="/">InGee Fan Club</a>
+			<a class="navbar-brand" href="/">In Gee Fan Club</a>
 		</div>
 		<div>
 		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			    <nav>
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href="/board/ingee/list">INGEE</a></li>
-						<li><a href="/board/notice/list">NOTICE</a></li>
-						<li><a href="/board/photo/list">PHOTO</a></li>
-						<li><a href="/board/video/list">MOVIE</a></li>
+						<li><a href="/board/ingee/list">IN GEE</a></li>
+						<li><a href="/board/notice/list">NOTICES</a></li>
+						<li><a href="/board/photo/list">PHOTOS</a></li>
+						<li><a href="/board/video/list">MOVIES</a></li>
 						<li><a href="/board/tour/list">TOURNAMENTS</a></li>
 						<li><a href="/board/network/list">NETWORK</a></li>
 						<c:if test="${isLogin ne null }">
-							<li><a href="/message/">MESSAGE</a></li>
- 							<li><a href="/chat/">CHAT</a></li>
+							<li><a href="/message/">MESSAGES</a></li>
+ 							<li><a href="/chat/">CHATTING</a></li>
 						</c:if>
 						<c:if test="${isLogin eq null }">
 							<li><a href="/member/login">LOGIN</a></li>

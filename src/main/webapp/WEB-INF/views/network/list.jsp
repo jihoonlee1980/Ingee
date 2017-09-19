@@ -45,6 +45,16 @@ div.input-group{
 			$('.search-panel span#type').text(concept);
 			$('.input-group #search_type').val(param);
 		});
+		
+		$("#upload_file").change(function(){
+			if($(this).val() != ""){
+				$("#source").prop("required", true);
+				$("#source").prop("readonly", false)
+			} else {
+				$("#source").prop("required", false);
+				$("#source").prop("readonly", true)
+			}
+		});
 	});
 	
 	function validateFile(obj){
@@ -73,8 +83,8 @@ div.input-group{
 				<div style="margin-top: 10px;">
 					<a class="btn btn-info btn-outline" href="/board/network/list">All</a>
 					<a class="btn btn-primary btn-outline" href="/board/network/west/list">West</a>
-					<a class="btn btn-warning btn-outline" href="/board/network/midwest/list">MidWest</a>
-					<a class="btn btn-success btn-outline" href="/board/network/northeast/list">NorthEast</a>
+					<a class="btn btn-warning btn-outline" href="/board/network/midwest/list">Midwest</a>
+					<a class="btn btn-success btn-outline" href="/board/network/northeast/list">East</a>
 					<a class="btn btn-danger btn-outline" href="/board/network/south/list">South</a>
 				</div>
 		        <h1 class="text-center">Network</h1>
@@ -89,7 +99,14 @@ div.input-group{
 			        		</c:if>
 			        		
 			        		<a href="${href }" class="list-group-item">
-			                	<div class="col-md-9" style="margin-top: 2%">
+			                	<c:if test="${boardDTO.saved_filename != 'NO' }">
+				                	<div class="media col-md-3" style="margin-top: 2%">
+					                    <figure class="pull-left">
+				                        	<img class="media-object img-rounded img-responsive" src="${root}/board/${boardDTO.saved_filename}" alt="${boardDTO.subject}" style="max-height: 180px; max-width: 250px;">
+				                    	</figure>
+				                	</div>
+			                	</c:if>
+			                	<div class="col-md-${boardDTO.saved_filename != 'NO' ? 6 : 9}" style="margin-top: 2%">
 				                    <h4 class="list-group-item-heading"><span style="font-size: 10pt; font-weight: 600; color: #e69b0b">[${boardDTO.s_category.toUpperCase() }]&nbsp;&nbsp;&nbsp;</span>${boardDTO.subject}<span style="font-size: 10pt; font-weight: 600; color: red">&nbsp;&nbsp;&nbsp;[ ${boardDTO.comment_count } ]</span></h4>
 			                    	<hr style="width: 100%; height: 2px; background: #777; margin-top: 5px 5px;">
 			                    	 <p class="list-group-item-text" style="max-height: 70px; word-break: break-all; white-space: pre-line; overflow: hidden;">${boardDTO.content}</p>
@@ -229,10 +246,10 @@ div.input-group{
 	                                    	<input type="radio" name="s_category" value="west" required="required">West
 	                                    </div>
 	                                    <div class="radio-inline">
-	                                    	<input type="radio" name="s_category" value="midwest">MidWest
+	                                    	<input type="radio" name="s_category" value="midwest">Midwest
 	                                    </div>
 	                                    <div class="radio-inline">
-	                                    	<input type="radio" name="s_category" value="northeast">NorthEast
+	                                    	<input type="radio" name="s_category" value="northeast">East
 	                                    </div>
 	                                    <div class="radio-inline">
 	                                    	<input type="radio" name="s_category" value="south">South
@@ -245,6 +262,14 @@ div.input-group{
 									<label class="col-md-2 control-label">Image</label>
 									<div class="col-md-9">
 										<input type="file" class="form-control" name="upload_file" id="upload_file" onchange="validateFile(this);">
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-group">
+									<label class="col-md-2 control-label">Source</label>
+									<div class="col-md-9">
+										<input id="source" name="source" type="text" placeholder="source" class="form-control" readonly="readonly">
 									</div>
 								</div>
 							</div>

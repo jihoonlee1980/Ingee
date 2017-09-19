@@ -42,6 +42,16 @@ div.input-group{
 			$('.search-panel span#type').text(concept);
 			$('.input-group #search_type').val(param);
 		});
+		
+		$("#upload_file").change(function(){
+			if($(this).val() != ""){
+				$("#source").prop("required", true);
+				$("#source").prop("readonly", false)
+			} else {
+				$("#source").prop("required", false);
+				$("#source").prop("readonly", true)
+			}
+		});
 	});
 	
 	function maxLengthCheck(text, maxLength, type){
@@ -99,7 +109,7 @@ div.input-group{
 	<div class="container">
 		<div class="event-row" id="div_event">
 			<div class="well">
-		        <h1 class="text-center">InGee</h1>
+		        <h1 class="text-center">In Gee</h1>
 		        <div class="list-group" id="list_div">
 		        	<c:if test="${totalCount > 0 }">
 			        	<c:forEach items="${boardList}" var="boardDTO" varStatus="status">
@@ -235,7 +245,7 @@ div.input-group{
 				<div class="well well-sm">
 					<form class="form-horizontal" action="/board/ingee/insert" method="post" enctype="multipart/form-data" onabort="return boardInsert();">
 						<fieldset>
-							<legend class="text-center"><h1>InGee</h1></legend>
+							<legend class="text-center"><h1>In Gee</h1></legend>
 							<div class="form-group">
 								<div class="input-group">
 									<label class="col-md-2 control-label">Subject</label>
@@ -258,6 +268,14 @@ div.input-group{
 									<div class="col-md-9">
 										<input type="file" class="form-control" name="upload_file" id="upload_file" onchange="validateFile(this);">
 										<span class="help-block" style="padding-left: 5px; color: red;">※ When upload photos using camera please take a picture horizontally.</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-group">
+									<label class="col-md-2 control-label">Source</label>
+									<div class="col-md-9">
+										<input id="source" name="source" type="text" placeholder="source" class="form-control" readonly="readonly">
 									</div>
 								</div>
 							</div>

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com">
 	<insert id="insertBoard" parameterType="com.menu.model.BoardDTO">
-		insert into board values(0, #{writer}, #{b_category}, #{s_category}, #{subject}, #{content}, 0, 0, #{origin_filename}, #{saved_filename}, now())
+		insert into board values(0, #{writer}, #{b_category}, #{s_category}, #{subject}, #{content}, 0, 0, #{origin_filename}, #{saved_filename}, #{source}, now())
 	</insert>
 	<select id="boardCount" parameterType="HashMap" resultType="int">
 		select count(*) from board where b_category = #{b_category}
@@ -33,7 +33,7 @@
 		select * from board where ${column} = #{value}
 	</select>
 	<update id="updateBoard">
-		update board set subject = #{subject}, content = #{content}, origin_filename = #{origin_filename}, saved_filename = #{saved_filename} where num = #{num}
+		update board set subject = #{subject}, content = #{content}, origin_filename = #{origin_filename}, saved_filename = #{saved_filename}, source = #{source}, s_category = #{s_category} where num = #{num}
 	</update>
 	<update id="updateCommentCount">
 		update board set comment_count = (select count(*) from comment where <if test="board_num != null">board_num = #{board_num} and</if> comment_num=<choose><when test="comment_num == null">0</when><when test="comment_num != null">#{comment_num}</when></choose>) where num = #{board_num}

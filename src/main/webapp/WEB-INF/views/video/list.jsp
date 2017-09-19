@@ -250,6 +250,14 @@ div.input-group{
 									</div>
 								</div>
 							</div>
+							<div class="form-group">
+								<div class="input-group">
+									<label class="col-md-2 control-label">Source</label>
+									<div class="col-md-9">
+										<input id="source" name="source" type="text" placeholder="source" class="form-control" required="required">
+									</div>
+								</div>
+							</div>
 							<div class="panel-footer">
 								<input type="hidden" name="writer" value="${loginNick }">
 	                            <input type="submit" class="btn btn-success" value="OK"/>

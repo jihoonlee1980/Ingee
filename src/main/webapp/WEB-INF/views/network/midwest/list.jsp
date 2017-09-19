@@ -45,6 +45,16 @@ div.input-group{
 			$('.search-panel span#type').text(concept);
 			$('.input-group #search_type').val(param);
 		});
+		
+		$("#upload_file").change(function(){
+			if($(this).val() != ""){
+				$("#source").prop("required", true);
+				$("#source").prop("readonly", false)
+			} else {
+				$("#source").prop("required", false);
+				$("#source").prop("readonly", true)
+			}
+		});
 	});
 	
 	function validateFile(obj){
@@ -75,11 +85,11 @@ div.input-group{
 				<div style="margin-top: 10px;">
 					<a class="btn btn-info btn-outline" href="/board/network/list">All</a>
 					<a class="btn btn-primary btn-outline" href="/board/network/west/list">West</a>
-					<a class="btn btn-warning btn-outline" href="/board/network/midwest/list">MidWest</a>
-					<a class="btn btn-success btn-outline" href="/board/network/northeast/list">NorthEast</a>
+					<a class="btn btn-warning btn-outline" href="/board/network/midwest/list">Midwest</a>
+					<a class="btn btn-success btn-outline" href="/board/network/northeast/list">East</a>
 					<a class="btn btn-danger btn-outline" href="/board/network/south/list">South</a>
 				</div>
-		        <h1 class="text-center">MidWest</h1>
+		        <h1 class="text-center">Midwest</h1>
 		        <div class="list-group" id="list_div">
 		        	<c:if test="${totalCount > 0 }">
 			        	<c:forEach items="${boardList}" var="boardDTO" varStatus="status">
@@ -213,7 +223,7 @@ div.input-group{
 				<div class="well well-sm">
 					<form class="form-horizontal" action="/board/network/midwest/insert" method="post" enctype="multipart/form-data">
 						<fieldset>
-							<legend class="text-center"><h1>MidWest</h1></legend>
+							<legend class="text-center"><h1>Midwest</h1></legend>
 							<div class="form-group">
 								<div class="input-group">
 									<label class="col-md-2 control-label">Subject</label>
@@ -236,6 +246,14 @@ div.input-group{
 									<div class="col-md-9">
 										<input type="file" class="form-control" name="upload_file" id="upload_file" onchange="validateFile(this)">
 										<span class="help-block" style="padding-left: 5px; color: red;">※ When upload photos using camera please take a picture horizontally.</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-group">
+									<label class="col-md-2 control-label">Source</label>
+									<div class="col-md-9">
+										<input id="source" name="source" type="text" placeholder="source" class="form-control" readonly="readonly">
 									</div>
 								</div>
 							</div>

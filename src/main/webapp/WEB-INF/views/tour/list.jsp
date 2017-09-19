@@ -42,6 +42,16 @@ div.input-group{
 			$('.search-panel span#type').text(concept);
 			$('.input-group #search_type').val(param);
 		});
+		
+		$("#upload_file").change(function(){
+			if($(this).val() != ""){
+				$("#source").prop("required", true);
+				$("#source").prop("readonly", false)
+			} else {
+				$("#source").prop("required", false);
+				$("#source").prop("readonly", true)
+			}
+		});
 	});
 	
 	function maxLengthCheck(text, maxLength, type){
@@ -255,6 +265,14 @@ div.input-group{
 									<label class="col-md-2 control-label">Image</label>
 									<div class="col-md-9">
 										<input type="file" class="form-control" name="upload_file" id="upload_file" onchange="validateFile(this)">
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-group">
+									<label class="col-md-2 control-label">Source</label>
+									<div class="col-md-9">
+										<input id="source" name="source" type="text" placeholder="source" class="form-control" readonly="readonly">
 									</div>
 								</div>
 							</div>

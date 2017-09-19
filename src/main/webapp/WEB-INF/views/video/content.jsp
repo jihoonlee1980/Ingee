@@ -457,6 +457,7 @@ div.input-group{
 	            <c:if test="${boardDTO.saved_filename != 'NO' }">	            
 					<div class="content-div" id="content_img_div">
 	                   	<video src="${root }/board/${boardDTO.saved_filename}" autoplay="autoplay" controls="controls"></video>
+	                   	<span style="display: block;">source : <a target="_blank" href="${boardDTO.source }">${boardDTO.source }</a></span>
 					</div>
 				</c:if>
 				<div class="content-div">
@@ -609,6 +610,14 @@ div.input-group{
 										</c:if>
 										<span class="help-block" style="padding-left: 5px; color: red;">※ Please select a file only if you want to change uploaded image.</span>
 										<span class="help-block" style="padding-left: 5px; color: red;">※ When upload photos using camera please take a picture horizontally.</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-group">
+									<label class="col-md-2 control-label">Source</label>
+									<div class="col-md-9">
+										<input id="source" name="source" type="text" placeholder="source" class="form-control" value="${boardDTO.source }" required="required">
 									</div>
 								</div>
 							</div>

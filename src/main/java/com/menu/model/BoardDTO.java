@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class BoardDTO {
 	int num, readcount, comment_count;
-	String writer, b_category, m_category, s_category, subject, content, origin_filename, saved_filename;
+	String writer, b_category, m_category, s_category, subject, content, origin_filename, saved_filename, source;
 	MultipartFile upload_file;
 	Timestamp writedate;
 
@@ -96,6 +96,14 @@ public class BoardDTO {
 
 	public void setSaved_filename(String saved_filename) {
 		this.saved_filename = saved_filename;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
 	}
 
 	public Timestamp getWritedate() {
