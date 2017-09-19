@@ -48,7 +48,29 @@
 .list-li:hover{
 	background: #cad0a7;
 }
-
+#chatListMoreBtn{
+	display:none;
+	border:0;
+	border-radius:15px;
+}
+@media (max-width: 991px) {
+  #chatListWrap{
+  	margin-bottom:0;
+  }
+  #chatListForm{
+  	min-height:200px !important;
+  	max-height:200px !important;
+  	display:none !important;
+  }
+  #chatListMoreBtn{
+  	display:inline;
+  }
+  #panel-body{
+  	min-height:340px;
+  	max-height:340px;
+  }
+  
+}  
 </style>
 <script type="text/javascript" src="<c:url value="/resources/assets/jquery-3.2.1.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/sockjs.js"/>"></script>
@@ -68,6 +90,12 @@
 					$("#btn-input").val("");	
 				}
 			}
+		});
+		$("#chatListMoreBtn").click(function(){
+			if($("#chatListForm").css("display")=="none")
+				$("#chatListForm").slideDown("fast");
+			else
+				$("#chatListForm").slideUp("fast");
 		});
 	});	
 	function maxLengthCheck(){		
@@ -190,23 +218,23 @@
 					  var id = listJob.id[i]
 					  var profile = listJob.profile[i]
 					  var CHATLISTHTML = "<li class='left clearfix list-li' style='min-height:50px;'><span class='chat-img pull-left' ><img "
-							+ "src='"+imgPath+"/profile/"+profile+"' alt='User Avatar'"
-							+ "class='img-circle'></span>"
-							+ "<div class='chat-body clearfix'>"
-							+ "<div class='header dropdown'>"
-							+ "<strong class='primary-font dropdown-toggle message-id'"
-							+ "data-toggle='dropdown' title='"+id+"' style='font-size:0.8em; line-height:50px; white-space: nowrap; text-overflow:ellipsis;'>"+nick+"</strong>"										
-							+ "<ul class='dropdown-menu' role='menu' aria-labelledby='menu1' style='min-width:120px;'>"
-							+ "<li role='presentation' style='min-height: 0px;'><a"
-							+ "role='menuitem' tabindex='-1' href='#'"
-							+ "onclick='popupOpen(\""+id+"\")'>Profile</a></li>"
-							+ "<li role='presentation' style='min-height: 0px;'><a "
-							+ "role='menuitem' tabindex='-1'"
-							+ "href='/message/send?sendto="+id+"' target='_blank'>Reply</a></li>"
-							+ "</ul>"
-							+ "</div>"
-							+ "</div>"
-							+ "</li>";
+							+ " src='"+imgPath+"/profile/"+profile+"' alt='User Avatar'"
+							+ " class='img-circle'></span>"
+							+ " <div class='chat-body clearfix'>"
+							+ " <div class='header dropdown'>"
+							+ " <strong class='primary-font dropdown-toggle message-id'"
+							+ " data-toggle='dropdown' title='"+id+"' style='font-size:0.8em; line-height:50px; white-space: nowrap; text-overflow:ellipsis;'>"+nick+"</strong>"										
+							+ " <ul class='dropdown-menu' role='menu' aria-labelledby='menu1' style='min-width:120px;'>"
+							+ " <li role='presentation' style='min-height: 0px;'><a "
+							+ " role='menuitem' tabindex='-1' href='#'"
+							+ " onclick='popupOpen(\""+id+"\")'>Profile</a></li>"
+							+ " <li role='presentation' style='min-height: 0px;'><a "
+							+ " role='menuitem' tabindex='-1'"
+							+ " href='/message/send?sendto="+id+"' target='_blank'>Reply</a></li>"
+							+ " </ul>"
+							+ " </div>"
+							+ " </div>"
+							+ " </li>";
 					  $(CHATLISTHTML).appendTo("#chatList");
 				  }
 				  $("#chatTotal").text("("+listJob.nick.length+")");
@@ -231,11 +259,12 @@
 <div class="container">
     <div class="row">
     	<div class="col-md-2">
-    		<div class="panel panel-danger">
+    		<div class="panel panel-danger" id="chatListWrap">
                 <div class="panel-heading">
                     <i class="fa fa-users" aria-hidden="true"></i> List <span id="chatTotal"></span>
+                    <button class="btn btn-primary" type="button" id="chatListMoreBtn">More</button>                    
                 </div>
-                <div class="panel-body" style="padding:0;">
+                <div class="panel-body" id="chatListForm" style="padding:0; min-height:801px;">
                     <ul class="chat" id="chatList">
 					</ul>
                 </div>

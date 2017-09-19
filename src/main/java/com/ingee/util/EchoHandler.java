@@ -69,13 +69,10 @@ public class EchoHandler extends TextWebSocketHandler {
 		if (isChat) {
 			for (WebSocketSession sess : sessionList) {
 				if (session.getAttributes().get("userID").equals(sess.getAttributes().get("userID"))) {
-					session.sendMessage(new TextMessage("ConnectionMe|" + session.getAttributes().get("userNick") + "|"
-							+ session.getAttributes().get("userID") + "|" + session.getAttributes().get("userProfile")
-							+ "|Chat connection succeeded"));
+					session.sendMessage(new TextMessage("ConnectionMe|Chat Reconnection succeeded"));
 				} else {
-					sess.sendMessage(new TextMessage("ConnectionUser|" + session.getAttributes().get("userNick") + "|"
-							+ session.getAttributes().get("userID") + "|" + session.getAttributes().get("userProfile")
-							+ "|재접속"));
+					sess.sendMessage(new TextMessage("ConnectionUser|"+ session.getAttributes().get("userNick") + "("
+							+ session.getAttributes().get("userID") + ") Reconnected"));
 				}
 				sess.sendMessage(new TextMessage("userList|"+userList(sessionList)));
 			}
