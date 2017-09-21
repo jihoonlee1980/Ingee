@@ -13,6 +13,8 @@
 <script src="${root }/js/sweetalert-dev.js"></script>
 <script src="${root }/js/sweetalert.min.js"></script>
 <script src="/resources/js/popup.js"></script>
+<link href="http://vjs.zencdn.net/5.4.4/video-js.css" rel="stylesheet">
+<script src="http://vjs.zencdn.net/5.4.4/video.js"></script>
 <style>
 .span-date{
 	margin-left: 10px;
@@ -476,7 +478,9 @@ div.input-group{
 	            <hr style="height: 2px; background: #777; width: 100%;">
 	            <c:if test="${boardDTO.saved_filename != 'NO' }">	            
 					<div class="content-div" id="content_img_div">
-	                   	<video src="${root }/board/${boardDTO.saved_filename}" autoplay="autoplay" controls="controls"></video>
+						<video class="video-js vjs-default-skin" controls="controls" data-setup="{}" style="max-width: 100%" autoplay="autoplay">
+							<source src='${root }/board/${boardDTO.saved_filename}' type='video/mp4' />
+						</video>
 	                   	<span style="display: block;">source : <a target="_blank" href="${boardDTO.source }">${boardDTO.source }</a></span>
 					</div>
 				</c:if>
