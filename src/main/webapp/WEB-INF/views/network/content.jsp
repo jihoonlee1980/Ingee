@@ -76,7 +76,7 @@ div.input-group{
 				html += "<textarea rows='4' cols='' style='width: 100%' name='content' class='form=control'>";
 				html += current_content;
 				html += "</textarea>";
-				html += "<input type='file' class='form-control' name='upload_file' id='upload_file' onchange='validateFile(this)'>";
+				html += "<input type='file' class='form-control' name='upload_file' id='upload_file' accept='.png, .jpg, .jpeg, .bmp, .gif' onchange='validateFile(this)'>";
 				if(saved_filename != "NO"){
 					html += "<span class='help-block' style='margin-bottom: 0; color: red; font-size: 9pt;'>Delete the attachment(Please check what you want to delete).</span>";	
 					html += "<input type='checkbox' value='" + saved_filename + "' name='remove_file'> " + origin_filename;
@@ -201,7 +201,7 @@ div.input-group{
 					html += "<img src='${root }/profile/" + loggedInProfile + "' alt=''>";
 				html += "</div>";
 				html += "<div class='reply-textarea-div'>";
-				html += "<textarea class='reply-textarea' style='width: 100%; height: 75px' name='content' required='required' placeholder='  As fans of In Gee, let\'s politely offer encouragement.'></textarea>";
+				html += "<textarea class='reply-textarea' style='width: 100%; height: 75px' name='content' required='required' placeholder='  As fans of In Gee, let`s politely offer encouragement.'></textarea>";
 				html += "<div class='col-md-12'><input type='file' name='upload_file'></div>";
 				html += "</div>";
 				html += "<div style='background: #fff;' align='right'>";
@@ -313,7 +313,7 @@ div.input-group{
 			html += "<textarea rows='4' cols='' style='width: 100%' name='content' class='form=control'>";
 			html += current_content;
 			html += "</textarea>";
-			html += "<input type='file' class='form-control' name='upload_file' id='upload_file' onchange='validateFile(this)'>";
+			html += "<input type='file' class='form-control' name='upload_file' id='upload_file' accept='.png, .jpg, .jpeg, .bmp, .gif' onchange='validateFile(this)'>";
 			if(saved_filename != "NO"){
 				html += "<span class='help-block' style='margin-bottom: 0; color: red; font-size: 9pt;'>Delete the attachment(Please check what you want to delete).</span>";
 				html += "<input type='checkbox' value='" + saved_filename + "' name='remove_file'> " + origin_filename;
@@ -505,7 +505,7 @@ div.input-group{
 									<textarea class="comment-textarea" style="min-height: 100px; width: 100%;" name="content" required="required" placeholder="  As fans of In Gee, let's politely offer encouragement."></textarea>
 								</div>
 								<div class="col-md-12 col-md-offset-1">
-									<input type="file" name="upload_file">
+									<input type="file" name="upload_file" accept=".png, .jpg, .jpeg, .bmp, .gif" onchange="validateFile(this)">
 								</div>
 								<div style="background: #fff;" align="right">
 									<input type="hidden" name="board_num" value="${boardDTO.num }">
@@ -630,7 +630,7 @@ div.input-group{
 								<div class="input-group">
 									<label class="col-md-2 control-label">Image</label>
 									<div class="col-md-9">
-										<input type="file" class="form-control" name="upload_file" id="upload_file" onchange="validateFile(this)">
+										<input type="file" class="form-control" name="upload_file" id="upload_file" accept=".png, .jpg, .jpeg, .bmp, .gif" onchange="validateFile(this)">
 										<c:if test="${boardDTO.saved_filename != 'NO' }">
 											<span class="help-block" style="margin-bottom: 0; color: red; font-size: 9pt;">Delete the attachment(Please check what you want to delete).</span>
 											<c:set var="saved_file" value="${fn:split(boardDTO.saved_filename, ',') }"/>
