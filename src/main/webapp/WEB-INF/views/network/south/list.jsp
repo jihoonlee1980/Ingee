@@ -275,7 +275,7 @@ div.input-group{
 								<div class="input-group">
 									<label class="col-md-2 control-label">Image</label>
 									<div class="col-md-9">
-										<input type="file" class="form-control" name="upload_file" id="upload_file" onchange="validateFile(this)">
+										<input type="file" class="form-control" name="upload_file" id="upload_file" accept=".png, .jpg, .jpeg, .bmp, .gif" onchange="validateFile(this)">
 										<span class="help-block" style="padding-left: 5px; color: red;">※ When upload photos using camera please take a picture horizontally.</span>
 									</div>
 								</div>

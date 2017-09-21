@@ -76,7 +76,7 @@ div.input-group{
 				html += "<textarea rows='4' cols='' style='width: 100%' name='content' class='form=control'>";
 				html += current_content;
 				html += "</textarea>";
-				html += "<input type='file' class='form-control' name='upload_file' id='upload_file' accept='.png, .jpg, .jpeg, .bmp, .gif'  onchange='validateCommentFile(this)'>";
+				html += "<input type='file' class='form-control' name='upload_file' id='upload_file' accept='.png, .jpg, .jpeg, .bmp, .gif' onchange='validateCommentFile(this)'>";
 				if(saved_filename != "NO"){
 					html += "<span class='help-block' style='margin-bottom: 0; color: red; font-size: 9pt;'>Delete the attachment(Please check what you want to delete).</span>";	
 					html += "<input type='checkbox' value='" + saved_filename + "' name='remove_file'> " + origin_filename;
@@ -192,7 +192,7 @@ div.input-group{
 				html += "</div>";
 				html += "<div class='reply-textarea-div'>";
 				html += "<textarea class='reply-textarea' style='width: 100%; height: 75px' name='content' required='required' placeholder='  As fans of In Gee, let`s politely offer encouragement.'></textarea>";
-				html += "<div class='col-md-12'><input type='file' name='upload_file'></div>";
+				html += "<div class='col-md-12'><input type='file' name='upload_file' accept='.png, .jpg, .jpeg, .bmp, .gif' onchange='validateCommentFile(this)'></div>";
 				html += "</div>";
 				html += "<div style='background: #fff;' align='right'>";
 				html += "<input type='hidden' name='board_num' value='" + board_num + "'>";
