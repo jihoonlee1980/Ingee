@@ -121,7 +121,7 @@ public class EchoHandler extends TextWebSocketHandler {
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		for (WebSocketSession sess : sessionList) {
 			if (!session.getAttributes().get("userID").equals(sess.getAttributes().get("userID"))) {
-				sess.sendMessage(new TextMessage("Off|" + session.getAttributes().get("userID") + " was sent off."));
+				sess.sendMessage(new TextMessage("Off|" + session.getAttributes().get("userNick") + "("+session.getAttributes().get("userID")+") was sent off."));
 			}
 			//sess.sendMessage(new TextMessage("userList|"+userList(sessionList)));
 		}		
