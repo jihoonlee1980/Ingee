@@ -191,7 +191,7 @@ div.input-group{
 					html += "<img src='${root }/profile/" + loggedInProfile + "' alt=''>";
 				html += "</div>";
 				html += "<div class='reply-textarea-div'>";
-				html += "<textarea class='reply-textarea' style='width: 100%; height: 75px' name='content' required='required' placeholder='  As fans of In Gee, let's politely offer encouragement.'></textarea>";
+				html += "<textarea class='reply-textarea' style='width: 100%; height: 75px' name='content' required='required' placeholder='  As fans of In Gee, let\'s politely offer encouragement.'></textarea>";
 				html += "<div class='col-md-12'><input type='file' name='upload_file'></div>";
 				html += "</div>";
 				html += "<div style='background: #fff;' align='right'>";
