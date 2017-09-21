@@ -58,19 +58,20 @@ div.input-group{
 	});
 	
 	function validateFile(obj){
-		var maxSize = 1024 * 1024 * 100;
+		var maxSize = 1024 * 1024 * 10;
 		var fileSize = obj.files[0].size;
 		var fileName = obj.files[0].name;
-		var fileExtenstion = fileName.substring(fileName.lastIndexOf(".") + 1);
+		var fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
+		var imgExtension = ["png", "jpg", "jpeg", "bmp", "gif"];
 		
-		if(fileExtenstion.toLowerCase() != "mp4"){
-			alert('You must upload the file extension name to "mp4".');
+		if(!imgExtension.includes(fileExtension.toLowerCase())){
+			alert('You must upload the file extension name as one of “jpeg”," jpg "," bmp "," png ", or “ gif ”.');
 			obj.value = "";
 			return false;
 		}
 		
 		if(fileSize > maxSize){
-			alert("Please upload file size less than 100MB.");
+			alert("Please upload file size less than 10MB.");
 			obj.value = "";
 			return false;
 		}
