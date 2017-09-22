@@ -23,6 +23,9 @@
 	<select id="getCommentCountOnDeleteMember" parameterType="String" resultType="HashMap">
 		select board_num, count(*) count from comment where writer = #{writer} and comment_num = 0 group by board_num
 	</select>
+	<select id="getCommetnNumOnDeleteBoard" parameterType="int" resultType="int">
+		select num from comment where board_num = #{board_num}
+	</select>
 	<update id="updateReplyCountOnDeleteMember" parameterType="HashMap">
 		update comment set reply_count = reply_count + #{countValue} where num = #{num}
 	</update>

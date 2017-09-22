@@ -216,6 +216,14 @@ public class BoardController {
 		if (file.exists())
 			file.delete();
 
+		List<Integer> commentNumList = commentDAO.getCommetnNumOnDeleteBoard(num);
+
+		for (int j = 0; j < commentNumList.size(); j++) {
+			File commentFile = new File(path + "/comment/" + commentDAO.get(commentNumList.get(j)).getSaved_filename());
+			if (commentFile.exists())
+				commentFile.delete();
+		}
+
 		boardDAO.delete(num);
 
 		return "redirect:/board/" + b_category + "/list?page=" + page;
@@ -228,12 +236,20 @@ public class BoardController {
 		String[] numArr = nums.split(",");
 		for (int i = 0; i < numArr.length; i++) {
 			int num = Integer.parseInt(numArr[i]);
+			List<Integer> commentNumList = commentDAO.getCommetnNumOnDeleteBoard(num);
 
 			String savedFileName = boardDAO.get(num).getSaved_filename();
 			File file = new File(path + "/board/" + savedFileName);
 
 			if (file.exists())
 				file.delete();
+
+			for (int j = 0; j < commentNumList.size(); j++) {
+				File commentFile = new File(
+						path + "/comment/" + commentDAO.get(commentNumList.get(j)).getSaved_filename());
+				if (commentFile.exists())
+					commentFile.delete();
+			}
 
 			boardDAO.delete(num);
 		}
@@ -436,7 +452,43 @@ public class BoardController {
 		if (file.exists())
 			file.delete();
 
+		List<Integer> commentNumList = commentDAO.getCommetnNumOnDeleteBoard(num);
+
+		for (int j = 0; j < commentNumList.size(); j++) {
+			File commentFile = new File(path + "/comment/" + commentDAO.get(commentNumList.get(j)).getSaved_filename());
+			if (commentFile.exists())
+				commentFile.delete();
+		}
+
 		boardDAO.delete(num);
+
+		return "redirect:/board/" + b_category + "/" + s_category + "/list?page=" + page;
+	}
+
+	@RequestMapping(value = "/{b_category}/{s_category}/deletes")
+	public String boardDeletes(@PathVariable String b_category, @PathVariable String s_category,
+			@RequestParam(value = "nums", required = true) String nums,
+			@RequestParam(value = "page", defaultValue = "1") int page) {
+		String[] numArr = nums.split(",");
+		for (int i = 0; i < numArr.length; i++) {
+			int num = Integer.parseInt(numArr[i]);
+			List<Integer> commentNumList = commentDAO.getCommetnNumOnDeleteBoard(num);
+
+			String savedFileName = boardDAO.get(num).getSaved_filename();
+			File file = new File(path + "/board/" + savedFileName);
+
+			if (file.exists())
+				file.delete();
+
+			for (int j = 0; j < commentNumList.size(); j++) {
+				File commentFile = new File(
+						path + "/comment/" + commentDAO.get(commentNumList.get(j)).getSaved_filename());
+				if (commentFile.exists())
+					commentFile.delete();
+			}
+
+			boardDAO.delete(num);
+		}
 
 		return "redirect:/board/" + b_category + "/" + s_category + "/list?page=" + page;
 	}
