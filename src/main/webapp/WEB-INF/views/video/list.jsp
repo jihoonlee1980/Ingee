@@ -9,6 +9,9 @@
 <c:set var="root_" value="<%=request.getContextPath() %>" />
 <c:set var="root" value="${root_}/resources" />
 <link href="/assets/css/bootstrap.css?ver=2" rel="stylesheet">
+<link href="${root }/css/sweetalert.css" rel="stylesheet">
+<script src="${root }/js/sweetalert-dev.js"></script>
+<script src="${root }/js/sweetalert.min.js"></script>
 <style>
 a.list-group-item {
     height:auto;
@@ -41,6 +44,56 @@ div.input-group{
 			var concept = $(this).text();
 			$('.search-panel span#type').text(concept);
 			$('.input-group #search_type').val(param);
+		});
+		
+		$("#admin-delete-btn").click(function(){
+			var deleteNums = [];
+			
+			$("input[name='bulletin_check']:checked").each(function(i) {
+				deleteNums.push($(this).val());
+			});
+			
+			if(deleteNums.length == 0) {
+				swal("", "There are no checked bulletins.", "warning", "OK");
+				return;
+			}
+			
+			swal({
+				title : "Are you sure you want to delete the bulletin?",
+				text : "The bulletin deleted cannot be recovered.",
+				type : "warning",
+				showCancelButton : true,
+				confirmButtonColor : "#DD6B55",
+				confirmButtonText : "YES",
+				cancelButtonText : "NO",
+				closeOnConfirm : false,
+				closeOnCancel : false,
+				allowOutsideClick: true
+			}, function(isConfirm) {
+				if (isConfirm) {
+					swal("Complete", "The bulletins is deleted", "success");
+					location.href = "/board/video/deletes?nums=" + deleteNums;
+				} else {
+					swal("Cancel", "The editing the bulletins is cancelled.", "error");
+				}
+			});
+		});
+		
+		$("input[name='bulletin_check']").click(function(){
+			var checked = true;
+			$("input[name='bulletin_check']").each(function(){
+				if(!$(this).prop("checked"))
+					checked = false;
+			});
+			$("#checkAll").prop("checked", checked);
+		});
+		
+		$("#checkAll").click(function(){
+			if($("#checkAll").prop("checked")){
+	            $("input[name='bulletin_check']").prop("checked", true);
+	        }else{
+	            $("input[name='bulletin_check']").prop("checked", false);
+	        }
 		});
 	});
 	
@@ -100,8 +153,16 @@ div.input-group{
 			<div class="well">
 		        <h1 class="text-center">Movie</h1>
 		        <div class="list-group" id="list_div">
+		        	<div>
+		        		<input type="checkbox" id="checkAll">
+		        	</div>
 		        	<c:if test="${totalCount > 0 }">
 			        	<c:forEach items="${boardList}" var="boardDTO" varStatus="status">
+			        		<c:if test="${isAdmin ne null }">
+			        			<div style="position:absolute; width: 40px; height:40px; z-index: 9999; vertical-align: middle;" align="center">
+		        					<input type="checkbox" name="bulletin_check" value="${boardDTO.num }">
+		        				</div>
+		        			</c:if>
 			        		<c:if test="${param.search_type eq null}">
 			        			<c:set var="href" value="/board/video/${boardDTO.num }?page=${currentPage}"/>
 			        		</c:if>
@@ -209,11 +270,14 @@ div.input-group{
 				            </div>
 				        </div>
 					</form>
-					<c:if test="${isLogin ne null}">
-						<div class="col-md-6" align="right">
+					<div class="col-md-6" align="right">
+						<c:if test="${isAdmin ne null }">
+							<button class="btn btn-danger btn-sm" type="button" id="admin-delete-btn">Delete</button>
+						</c:if>
+						<c:if test="${isLogin ne null}">
 							<a class="btn btn-default btn-sm" data-toggle="modal" data-target="#write" data-original-title>Write</a>
-						</div>
-					</c:if>
+						</c:if>
+					</div>
 				</div>
 				<!-- search end/write start -->
 				<!-- write end -->

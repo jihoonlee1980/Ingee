@@ -468,7 +468,14 @@ div.input-group{
 	            <c:if test="${boardDTO.saved_filename != 'NO' }">	            
 					<div class="content-div" id="content_img_div">
 	                   	<img src="${root }/board/${boardDTO.saved_filename}" style="max-width: 100%; cursor: pointer;" onclick="imageView(this, '${boardDTO.saved_filename}')" title="Please click the image to see original size.">
-	                   	<span style="display: block;">source : <a target="_blank" href="${boardDTO.source }">${boardDTO.source }</a></span>
+	                   	<span style="display: block;">source :
+	                   		<c:if test="${fn:contains(boardDTO.source.toLowerCase(), 'https') || fn:contains(boardDTO.source.toLowerCase(), 'http') }">
+	                   			<a target="_blank" href="${boardDTO.source }">${boardDTO.source }</a>
+	                   		</c:if>
+	                   		<c:if test="${!fn:contains(boardDTO.source.toLowerCase(), 'https') && !fn:contains(boardDTO.source.toLowerCase(), 'http') }">
+	                   			${boardDTO.source }
+	                   		</c:if>
+	                   	</span>
 					</div>
 				</c:if>
 				<div class="content-div">
@@ -480,7 +487,9 @@ div.input-group{
 					<div class="content-div" style="width: 100%; text-align: right;">
 						<c:if test="${boardDTO.writer == loginNick}">
 						    <a class="btn btn-warning btn-sm" data-toggle="modal" data-target="#update" data-original-title>Modify</a>
-		       				<a class="btn btn-danger btn-sm" onclick="deleteCheck('${boardDTO.num}','${param.page }');">Delete</a>
+	       				</c:if>
+	       				<c:if test="${boardDTO.writer == loginNick || isAdmin != null}">
+	       					<a class="btn btn-danger btn-sm" onclick="deleteCheck('${boardDTO.num}','${param.page }');">Delete</a>
 	       				</c:if>
 	       				<c:if test="${param.search_type ne null }">
 							<a class="btn btn-default btn-sm" href="/board/network/midwest/list?page=${param.page }&search_type=${param.search_type}&keyword=${param.keyword}">List</a>
@@ -560,7 +569,7 @@ div.input-group{
 													</div>
 													<div class="comment-content">
 														<c:if test="${commentDTO.saved_filename != 'NO' }">
-															<img alt="" src="${root }/comment/${commentDTO.saved_filename }" style="max-width: 50%;">
+															<img alt="${boardDTO.subject }" src="${root }/comment/${commentDTO.saved_filename }" style="max-width: 50%;">
 														</c:if>
 														<p style="word-break: break-all; white-space: pre-line;">${commentDTO.content }</p>
 													</div>

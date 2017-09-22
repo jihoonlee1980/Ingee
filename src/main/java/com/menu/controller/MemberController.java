@@ -50,6 +50,7 @@ public class MemberController {
 	final String path = "/home/ubuntu/apache-tomcat-8.0.46/webapps/ROOT/resources";
 	// final String path =
 	// "C:\\Users\\jihyun\\Desktop\\egov\\eGovFrameDev-3.6.0-64bit\\workspace\\InGeeFanClub\\src\\main\\webapp\\resources";
+	// final String path =
 	// "C:\\Users\\뢰후니\\git\\Ingee\\src\\main\\webapp\\resources";
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)

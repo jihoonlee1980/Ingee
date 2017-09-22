@@ -6,6 +6,6 @@
 <link href="${root}/css/error.css" rel="stylesheet">
 <html>
 <body>
-	<img alt="aaasdf" src="${root }/board/${fileName }" title="Please click the image to close the window." onclick="javascript:window.close();" style="cursor: pointer;">
+	<img alt="In Gee Fan Club" src="${root }/board/${fileName }" title="Please click the image to close the window." onclick="javascript:window.close();" style="cursor: pointer;">
 </body>
 </html>

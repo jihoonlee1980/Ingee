@@ -221,6 +221,26 @@ public class BoardController {
 		return "redirect:/board/" + b_category + "/list?page=" + page;
 	}
 
+	@RequestMapping(value = "/{b_category}/deletes")
+	public String boardDeletes(@PathVariable String b_category,
+			@RequestParam(value = "nums", required = true) String nums,
+			@RequestParam(value = "page", defaultValue = "1") int page) {
+		String[] numArr = nums.split(",");
+		for (int i = 0; i < numArr.length; i++) {
+			int num = Integer.parseInt(numArr[i]);
+
+			String savedFileName = boardDAO.get(num).getSaved_filename();
+			File file = new File(path + "/board/" + savedFileName);
+
+			if (file.exists())
+				file.delete();
+
+			boardDAO.delete(num);
+		}
+
+		return "redirect:/board/" + b_category + "/list?page=" + page;
+	}
+
 	@RequestMapping(value = "/{b_category}/imageView")
 	public ModelAndView boardDelete(@PathVariable String b_category,
 			@RequestParam(value = "fileName", required = true) String fileName) {

@@ -468,7 +468,14 @@ div.input-group{
 	            <c:if test="${boardDTO.saved_filename != 'NO' }">	            
 					<div class="content-div" id="content_img_div">
 	                   	<img src="${root }/board/${boardDTO.saved_filename}" style="max-width: 100%; cursor: pointer;" onclick="imageView(this, '${boardDTO.saved_filename}')" title="Please click the image to see original size.">
-	                   	<span style="display: block;">source : <a target="_blank" href="${boardDTO.source }">${boardDTO.source }</a></span>
+	                   	<span style="display: block;">source :
+	                   		<c:if test="${fn:contains(boardDTO.source.toLowerCase(), 'https') || fn:contains(boardDTO.source.toLowerCase(), 'http') }">
+	                   			<a target="_blank" href="${boardDTO.source }">${boardDTO.source }</a>
+	                   		</c:if>
+	                   		<c:if test="${!fn:contains(boardDTO.source.toLowerCase(), 'https') && !fn:contains(boardDTO.source.toLowerCase(), 'http') }">
+	                   			${boardDTO.source }
+	                   		</c:if>
+	                   	</span>
 					</div>
 				</c:if>
 				<div class="content-div">
