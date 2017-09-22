@@ -153,9 +153,11 @@ div.input-group{
 			<div class="well">
 		        <h1 class="text-center">Movie</h1>
 		        <div class="list-group" id="list_div">
-		        	<div>
-		        		<input type="checkbox" id="checkAll">
-		        	</div>
+		        	<c:if test="${isAdmin ne null }">
+			        	<div>
+			        		<input type="checkbox" id="checkAll">
+			        	</div>
+		        	</c:if>
 		        	<c:if test="${totalCount > 0 }">
 			        	<c:forEach items="${boardList}" var="boardDTO" varStatus="status">
 			        		<c:if test="${isAdmin ne null }">
