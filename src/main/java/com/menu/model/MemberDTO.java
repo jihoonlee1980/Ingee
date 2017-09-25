@@ -6,7 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class MemberDTO {
 	int num, authority;
-	String nick, name, id, pass, zipcode, state, city, detailed_address, hp, saved_filename, origin_filename, region;
+	String nick, name, id, pass, zipcode, state, city, detailed_address, hp, saved_filename, origin_filename, region,
+			verification, complete_key;
 	MultipartFile profile_file;
 	Timestamp joindate;
 
@@ -120,6 +121,22 @@ public class MemberDTO {
 
 	public void setRegion(String zone) {
 		this.region = zone;
+	}
+
+	public String getVerification() {
+		return verification;
+	}
+
+	public void setVerification(String verification) {
+		this.verification = verification;
+	}
+
+	public String getComplete_key() {
+		return complete_key;
+	}
+
+	public void setComplete_key(String complete_key) {
+		this.complete_key = complete_key;
 	}
 
 	public MultipartFile getProfile_file() {

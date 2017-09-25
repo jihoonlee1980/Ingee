@@ -62,7 +62,7 @@
 		limit #{start}, #{perPage}
 	</select>
 	<insert id="insertMember">
-		insert into member values(0, #{nick}, #{name}, #{id}, md5(#{pass}), #{zipcode}, #{state}, #{city}, #{detailed_address}, #{hp}, #{saved_filename}, #{origin_filename}, #{authority}, now(), #{region})
+		insert into member values(0, #{nick}, #{name}, #{id}, md5(#{pass}), #{zipcode}, #{state}, #{city}, #{detailed_address}, #{hp}, #{saved_filename}, #{origin_filename}, #{authority}, now(), #{region}, 'N', #{complete_key})
 	</insert>
 	<delete id="deleteMember" parameterType="int">
 		delete from member where num = #{num}
@@ -88,4 +88,10 @@
 	<select id="findMember" parameterType="HashMap" resultType="com.menu.model.MemberDTO">
 		select * from member where ${column} = #{value}
 	</select>
+	<select id="joinComplete" parameterType="HashMap" resultType="com.menu.model.MemberDTO">
+		select * from member where id = #{id } and complete_key = #{complete_key }
+	</select>
+	<update id="updateVerfication" parameterType="String">
+		update member set verification = 'Y' where id = #{id}
+	</update>
 </mapper>

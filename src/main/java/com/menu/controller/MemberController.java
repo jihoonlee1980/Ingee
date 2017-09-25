@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMessage.RecipientType;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -138,10 +141,41 @@ public class MemberController {
 		}
 		memberDTO.setPass(memberDTO.getPass().toLowerCase());
 
+		try {
+			String receiver = memberDTO.getId();
+			String subject = "[InGee Fan Club] Complete your account registration.";
+			String complete_key = UUID.randomUUID().toString().replace("-", "");
+			String content = "You're almost done — just click the link below to verify your email address and you’re all set.<br>Then, you can use your email address as your InGeefanclub username to log in to your account online.<br><br>"
+					+ "To complete your registration, click the link below:<br><br>"
+					+ "<a target='_blank' href='http://192.168.0.6:8080/member/join/complete?id=" + receiver + "&complete_key=" + complete_key + "'>Confirm your account</a>";
+
+			memberDTO.setComplete_key(complete_key);
+			MimeMessage mimeMessage = mailSender.createMimeMessage();
+			mimeMessage.setFrom(new InternetAddress("ingeefanclub@gmail.com"));
+			mimeMessage.addRecipient(RecipientType.TO, new InternetAddress(receiver));
+			mimeMessage.setSubject(subject);
+			mimeMessage.setText(content, "UTF-8", "html");
+
+			mailSender.send(mimeMessage);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		memberDAO.insert(memberDTO);
 
 		redirectAttributes.addFlashAttribute("result", 2);
 
+		return "redirect:/member/login";
+	}
+
+	@RequestMapping(value = "/join/complete")
+	public String joinComplete(String id, String complete_key, RedirectAttributes redirectAttributes) {
+		if (memberDAO.joinComplete(id, complete_key) != null)
+			redirectAttributes.addFlashAttribute("result", 3);
+		else
+			redirectAttributes.addFlashAttribute("result", 4);
+		
 		return "redirect:/member/login";
 	}
 
@@ -150,7 +184,7 @@ public class MemberController {
 			@RequestParam(value = "saveID", required = false) String saveID, HttpServletResponse response,
 			HttpServletRequest request) {
 		String returnURL = "";
-		// 0일때 성공, 1일때 실패(아이디나 비밀번호가 틀림), 2일때 최초 회원가입
+		// 0일때 성공, 1일때 실패(아이디나 비밀번호가 틀림), 2일때 회원가입 + 인증 전, 3일때 회원가입 + 인증 완료, 4일때 인증만료
 		int loginResult = 0;
 		Cookie cookie1;
 		Cookie cookie2;
@@ -168,6 +202,10 @@ public class MemberController {
 		MemberDTO memberDTO = memberDAO.login(loginInfo);
 
 		if (memberDTO != null) {
+			if(memberDTO.getVerification().equals("N")){
+				redirectAttributes.addFlashAttribute("result", 2);
+				return "redirect:/member/login";
+			}
 			session.setAttribute("isLogin", "YES");
 			session.setAttribute("loginNick", memberDTO.getNick());
 			session.setAttribute("loggedInID", memberDTO.getId());

@@ -91,15 +91,26 @@
 	<div class="container">
 		<div class="row" style="margin:0;">
 			<c:if test="${not empty result }">
-			   	<c:if test="${result == 2 }">
+				<c:if test="${result == 2 }">
+					<script type="text/javascript">
+						alert("Please check your verification email and sign in.");
+					</script>
+				</c:if>
+			   	<c:if test="${result == 2 || result == 3 }">
 			   		<div style="width: 80%; padding-top: 30px; margin-left: 10%; white-space: pre-line; word-break: break-all;">
-			   			<h1 style="font-weight: bold;">Welcome to InGee fanclub.com</h1>
-						<p>We welcome you to be a member of InGee Fan Club website where fans of In​Gee gather to share stories and photos and encourage her with our supports. It's a fun site full of In Gee's smiles and comments with room reserved for your participation. 
+			   			<h1 style="font-weight: bold;">Welcome to In Gee fanclub.com</h1>
+						<p>We welcome you to be a member of In Gee Fan Club website where fans of In​Gee gather to share stories and photos and encourage her with our supports. It's a fun site full of In Gee's smiles and comments with room reserved for your participation. 
 			
-						Let’s thoroughly enjoy this fanclub website and root for InGee whenever and wherever she plays. Have fun!</p>
+						Let’s thoroughly enjoy this fanclub website and root for In Gee whenever and wherever she plays. Have fun!</p>
 			   		</div>			   		
 			   	</c:if>
-			   	<c:if test="${result != 2 }">
+			   	<c:if test="${result == 4 }">
+			   		<script type="text/javascript">
+			   			alert("The verification url is expired or broken.\n\nPlease start over with a new In Gee Fan Club Account registration. ");
+			   		</script>
+			   		<div style="height: 150px"></div>
+			   	</c:if>
+			   	<c:if test="${result < 2}">
 			   		<div style="height: 150px"></div>
 			   	</c:if>
 			</c:if>

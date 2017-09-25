@@ -28,16 +28,9 @@
 					<span>Intro</span>
 				</h3>
 			</div>
-			<div class="sub-heading">
-				<p>
-					<a href="/board/ingee/list">In Gee 
-				</p>
-				<img src="${root}/img/main/heart.png" width="50" height="50" alt=""><br> <br>
-			</div>
 			<br>
 			<center>
-				<img class="img-responsive"
-					src="${root}/img/main/ingee810.jpg" alt=""></a><br>
+				<br>
 				<p>
 					We welcome you to visit the In Gee Fan Club Website where 
 					fans of InGee gather to share stories and photos and encourage
@@ -48,6 +41,8 @@
 					has a huge US fan base ready to cheer for her whenever and
 					wherever she plays!<br> <span class='red'>♥</span>
 				</p>
+				<img class="img-responsive"
+					src="${root}/img/main/ingee810.jpg" alt=""></a><br>
 			</center>
 		</div>
 	</div>

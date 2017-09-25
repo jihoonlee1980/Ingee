@@ -38,7 +38,7 @@
 						</c:if>
 						<c:if test="${isLogin eq null }">
 							<li><a href="/member/login">LOGIN</a></li>
-							<li><a href="/member/join">JOIN US</a></li>
+							<li><a href="/member/join">JOIN</a></li>
 						</c:if>
 						<c:if test="${isLogin ne null }">
 							<li><a href="/member/logout">LOGOUT</a></li>

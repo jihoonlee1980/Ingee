@@ -83,7 +83,7 @@
 		var reg_email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
 
 		if(id == ""){
-			alert("Please enter your username(eamil address)");
+			alert("Please enter your username(eamil address).");
 			return;
 		}
 		
@@ -99,10 +99,15 @@
 			dataType : "json",
 			success : function(data){
 				if(data.isValid){
-					alert("Important : Please verify your email address\n Verify your email address\n\n You're almost done — just click the link below to verify your email address and you’re all set. Then, you can use your email address as your InGeefanclub username to log in to your account online.");
-					$("#IDCheckBtn").prop("disabled", true);
+					//alert("Important : You're almost done — just click the link below to verify your email address and you’re all set. Then, you can use your email address as your InGeefanclub username to log in to your account online.");
+					var check = confirm("A verification email will be sent to your email address.\nYou can not receive verification email if it is not valid.\n\nWould you like to use this email?\n(※ The verification email will be invalidated after 1 day and you will need to sign up again.)");
+					if(check){
+						$("#IDCheckBtn").prop("disabled", true);
+					} else {
+						$("#IDCheckBtn").prop("disabled", false);
+					}
 				} else {
-					alert(id + " is in use by others");
+					alert(id + " is in use by others.");
 				}
 			},
 			statusCode : {
@@ -121,7 +126,7 @@
 		var reg_nick = /[a-zA-Z0-9]{8,16}$/g;
 
 		if(nick == ""){
-			alert("Please enter your nickname");
+			alert("Please enter your nickname.");
 			return;
 		}
 		
@@ -140,7 +145,7 @@
 					alert("Available nickname.");
 					$("#nickCheckBtn").prop("disabled", true);
 				} else {
-					alert(nick + " is in use by others");
+					alert(nick + " is in use by others.");
 				}
 			},
 			statusCode : {
@@ -301,7 +306,7 @@
 										</div>
 										<input type="file" class="form-control" id="profile_file" name="profile_file" accept="image/*" onchange="validateFile(this)">
 									</div>
-									<span class="help-block" style="padding-left: 5px; color: red; font-size: 8pt;">※ When upload photos using camera please take a picture horizontally.</span>
+									<span class="help-block" style="padding-left: 5px; color: red; font-size: 8pt; width: 110%;">※ When upload photos using camera please take a picture horizontally.</span>
 								</div>   
 							</div>		
 							<div class="form-group">

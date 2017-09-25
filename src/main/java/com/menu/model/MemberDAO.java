@@ -108,4 +108,18 @@ public class MemberDAO extends SqlSessionDaoSupport {
 
 		return getSqlSession().selectOne("findMember", map);
 	}
+
+	public MemberDTO joinComplete(String id, String complete_key) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("id", id);
+		map.put("complete_key", complete_key);
+
+		MemberDTO memberDTO = getSqlSession().selectOne("joinComplete", map);
+
+		if (memberDTO != null)
+			getSqlSession().update("updateVerfication", id);
+
+		return memberDTO;
+	}
 }
