@@ -54,6 +54,28 @@ $(document).ready(function(){
     });
     $('[data-toggle="tooltip"]').tooltip();  
 });
+
+function maxLengthCheck(text, maxLength, type){
+	var check = true;
+	var textLength = text.length;
+	var byteCnt = 0;
+	
+	for (i = 0; i < textLength; i++) {
+		var charTemp = text.charAt(i);
+		if (escape(charTemp).length > 4)
+			byteCnt += 2;
+		else
+			byteCnt += 1;
+	}
+	
+	if (byteCnt > maxLength) {
+		check = false;
+		alert(type + " length can not exceed " + maxLength + " characters.");
+	}
+	
+	return check;
+}
+
 function recvAdd() {
 	var recvListArray = $("input[name='recvlist']").val().split(",")
 	var size = $("#recvAddForm").children(".input-group").size();
@@ -124,7 +146,6 @@ function idValidCheckAddBtn(){
 
 function idValidCheck(){	
 	var check = true;
-	
 	var receiver = $("input[name='receiver']").val();
 	var title = $("input[name='receiver']").attr("title");
 	var id = receiver.replace(" ", "");
@@ -133,21 +154,26 @@ function idValidCheck(){
 		var reg_email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
 		if(id == ""){
 			alert("Please enter your username(eamil address)");
-			check = false;
+			return false;
 		}
 		if(!reg_email.test(id)){
 			alert("It’s not a valid email form.");
-			check = false;
+			return false;
 		}
 	}
 	if(!($("#addAllRecvBtn").attr("check") == "true")){
 		var recvlist = id.split(",");
 		if(recvlist.length == 1 && check){
-			check = singleIdcheck(id);
+			if(!singleIdcheck(id))
+				return false;
 		}
+	}	
+	var subject = $("input[name='subject']").val();
+	var content = $("textarea[name='content']").val();
+	check = maxLengthCheck(subject , 100 , "subject");
+	if(check){
+		check = maxLengthCheck(content , 1000 , "content");
 	}
-	
-	
 	return check;
 }
 
@@ -425,14 +451,14 @@ function idCheck(){
                      </div>
                      <div class="form-group">
                          <label for="subject">Subject</label>
-                         <input type="text" class="form-control" name="subject" placeholder="Subject" required="required">
+                         <input type="text" class="form-control" name="subject" placeholder="Subject" required="required" >
                      </div>                        
                  </div>
          
                  <div class="col-md-6">
                      <div class="form-group">
                          <label for="message">Message</label>
-                         <textarea class="form-control" name="content" rows="11" placeholder="Enter Message" required="required"></textarea>
+                         <textarea class="form-control" name="content" rows="11" placeholder="Enter Message" required="required" ></textarea>
                      </div>
                      <div class="form-group" align="right">
                      	<button class="btn btn-warning" type="button" onclick="location.href='/message/'">Cancle</button>

@@ -526,17 +526,16 @@ a {
 										</c:otherwise>
 									</c:choose>		
     								</button>	  
-							      	</div> says : <b style="font-size:16px;">${messageDTO.subject}</b>
-							      		<div class="checkbox checkbox-success">
+							      	</div> says : <b style="font-size: 16px; width: 35%; display: inline-block; text-overflow: ellipsis; overflow: hidden; white-space: nowrap">${messageDTO.subject}</b>
+				<div class="checkbox checkbox-success">
 					                        <input id="checkbox${messageDTO.num}" num="${messageDTO.num}" type="checkbox">
 					                        <label for="checkbox${messageDTO.num}">
 					                            Select
 					                        </label>
 							              </div>						      					      	
 							      </p>
-							      <p>
+							      <p style="word-break: break-all; white-space: normal">
 							      	${messageDTO.content}
-							          
 							      </p>
 							  </div>
 							</li>
