@@ -6,19 +6,19 @@
 <%@ page session="false" %>
 <c:set var="root_" value="<%=request.getContextPath() %>"/>
 <c:set var="root" value="${root_ }/resources"/>
-<section id="slide"  style="padding: 0;">
-	<ul id="slippry-slider">
-		<li>
-			<a href="#slide1"><img src="/assets/img/slide/1.jpg"></a>
-		</li>
-		<li>
-			<a href="#slide2"><img src="/assets/img/slide/2.jpg"></a>
-		</li>
-		<li>
-			<a href="#slide3"><img src="/assets/img/slide/3.jpg"></a>
-		</li>
-	</ul>
-</section>
+<!-- <section id="slide"  style="padding: 0;"> -->
+<!-- 	<ul id="slippry-slider"> -->
+<!-- 		<li> -->
+<!-- 			<a href="#slide1"><img src="/assets/img/slide/1.jpg"></a> -->
+<!-- 		</li> -->
+<!-- 		<li> -->
+<!-- 			<a href="#slide2"><img src="/assets/img/slide/2.jpg"></a> -->
+<!-- 		</li> -->
+<!-- 		<li> -->
+<!-- 			<a href="#slide3"><img src="/assets/img/slide/3.jpg"></a> -->
+<!-- 		</li> -->
+<!-- 	</ul> -->
+<!-- </section> -->
 <section id="Intro" class="section">
 <div class="container">
 	<div class="row">

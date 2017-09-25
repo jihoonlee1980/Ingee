@@ -442,7 +442,7 @@ div.input-group{
 			<div class="col-md-4 well pricing-table" style="width: 100% ">
 	            <div class="pricing-table-holder">
 	                <center>
-	                    <h2>${boardDTO.subject }</h3>
+	                    <h2 style="white-space: pre-line; word-break: break-all; max-width: 1000px;">${boardDTO.subject }</h2>
 	                </center>
 	                <span style="width: 50%; display: inline-block; float: left">
 						views  :  ${boardDTO.readcount }
@@ -594,7 +594,7 @@ div.input-group{
 								<div class="input-group">
 									<label class="col-md-2 control-label">Subject</label>
 									<div class="col-md-9">
-										<input id="subject" name="subject" type="text" placeholder="subject" class="form-control" required="required" value=${boardDTO.subject }>
+										<input id="subject" name="subject" type="text" placeholder="subject" class="form-control" required="required" value="${boardDTO.subject }">
 									</div>
 								</div>
 							</div>

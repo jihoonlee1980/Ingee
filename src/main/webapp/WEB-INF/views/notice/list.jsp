@@ -29,6 +29,9 @@ div.input-group{
 		margin: 0;
 		padding: 0;
 	}
+	h4.list-group-item-heading{
+		max-width: 200px !important;
+	}
 }
 </style>
 <script type="text/javascript">
@@ -81,7 +84,6 @@ div.input-group{
 				allowOutsideClick: true
 			}, function(isConfirm) {
 				if (isConfirm) {
-					alert(deleteNums);
 					swal("Complete", "The bulletins is deleted", "success");
 					location.href = "/board/notice/deletes?nums=" + deleteNums;
 				} else {
@@ -183,25 +185,23 @@ div.input-group{
 			        		<c:if test="${param.search_type ne null}">
 			        			<c:set var="href" value="/board/notice/${boardDTO.num }?page=${currentPage}&search_type=${param.search_type }&keyword=${param.keyword }"/>
 			        		</c:if>
-			        		
 			        		<a href="${href }" class="list-group-item">
 			        			<c:if test="${boardDTO.saved_filename != 'NO' }">
-				                	<div class="media col-md-3" style="margin-top: 2%">
+				                	<div class="media col-md-3" style="margin-top: 2%; max-height: 200px;">
 					                    <figure class="pull-left">
 				                        	<img class="media-object img-rounded img-responsive" src="${root}/board/${boardDTO.saved_filename}" alt="${boardDTO.subject}" style="max-height: 180px; max-width: 250px;">
 				                    	</figure>
 				                	</div>
 			                	</c:if>
 			                	<div class="col-md-${boardDTO.saved_filename != 'NO' ? 6 : 9}" style="margin-top: 2%">
-				                    <h4 class="list-group-item-heading"><span style="font-size: 10pt; font-weight: 600; color: #e69b0b"></span>${boardDTO.subject}<span style="font-size: 10pt; font-weight: 600; color: red">&nbsp;&nbsp;&nbsp;[ ${boardDTO.comment_count } ]</span></h4>
+				                    <h4 class="list-group-item-heading" style="text-overflow:ellipsis; white-space: nowrap; overflow: hidden; max-width: 500px;">${boardDTO.subject}</h4>
 			                    	<hr style="width: 100%; height: 2px; background: #777; margin-top: 5px 5px;">
 			                    	 <p class="list-group-item-text" style="max-height: 70px; word-break: break-all; white-space: pre-line; overflow: hidden;">${boardDTO.content}</p>
 			                	</div>
 			                	<div class="col-md-3 text-center" style="margin-top: 2%">
-				                    <h4>${boardDTO.readcount}<small> Views </small></h4>
-			                    	<br>
-			                    	<p> Posted by: ${boardDTO.writer}</p>
-			                    	<br>
+			                		<h4 style="margin-bottom: 20px;">${boardDTO.comment_count }<small> Comments</small></h4>
+				                    <h4 style="margin-bottom: 20px;">${boardDTO.readcount}<small> Views</small></h4>
+			                    	<p style="margin-bottom: 20px;"> Posted by: ${boardDTO.writer}</p>
 			                    	<p><fmt:formatDate value="${boardDTO.writedate }" pattern="HH:mm, MMM dd, YYYY"/></p>
 			                	</div>
 			          		</a>

@@ -26,7 +26,7 @@
 		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			    <nav>
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href="/board/ingee/list">IN GEE</a></li>
+<!-- 						<li><a href="/board/ingee/list">IN GEE</a></li> -->
 						<li><a href="/board/notice/list">NOTICES</a></li>
 						<li><a href="/board/photo/list">PHOTOS</a></li>
 						<li><a href="/board/video/list">MOVIES</a></li>

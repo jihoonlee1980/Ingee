@@ -452,7 +452,8 @@ div.input-group{
 			<div class="col-md-4 well pricing-table" style="width: 100% ">
 	            <div class="pricing-table-holder">
 	                <center>
-	                    <h2><span style="font-size: 10pt; font-weight: 600; color: #e69b0b">[${fn:toUpperCase(boardDTO.s_category) }]&nbsp;&nbsp;&nbsp;</span>${boardDTO.subject }</h3>
+	                	<c:set var="s_category" value="${boardDTO.s_category == 'northeast' ? 'east': boardDTO.s_category}"/>
+	                    <h2 style="white-space: pre-line; word-break: break-all; max-width: 1000px;"><span style="font-size: 10pt; font-weight: 600; color: #e69b0b">[${fn:toUpperCase(s_category) }]&nbsp;&nbsp;&nbsp;</span>${boardDTO.subject }</h2>
 	                </center>
 	                <span style="width: 50%; display: inline-block; float: left">
 						views  :  ${boardDTO.readcount }
@@ -604,7 +605,7 @@ div.input-group{
 								<div class="input-group">
 									<label class="col-md-2 control-label">Subject</label>
 									<div class="col-md-9">
-										<input id="subject" name="subject" type="text" placeholder="subject" class="form-control" required="required" value=${boardDTO.subject }>
+										<input id="subject" name="subject" type="text" placeholder="subject" class="form-control" required="required" value="${boardDTO.subject }">
 									</div>
 								</div>
 							</div>
