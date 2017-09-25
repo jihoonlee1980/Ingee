@@ -36,6 +36,8 @@ import com.menu.model.MemberDAO;
 import com.menu.model.MemberDTO;
 import com.nhncorp.lucy.security.xss.XssPreventer;
 
+import net.sf.json.JSONObject;
+
 @Controller
 @RequestMapping("/member")
 public class MemberController {
