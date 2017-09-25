@@ -136,4 +136,8 @@
 		    ${arrData[index]}
 		</foreach>
 	</delete>
+	
+	<delete id="withdrawalDelete" parameterType="String">
+		delete from message where sender = (select id from member where nick = #{nick}) or receiver = (select id from member where nick = #{nick})
+	</delete>
 </mapper>

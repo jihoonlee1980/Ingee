@@ -83,6 +83,7 @@ public class MemberDAO extends SqlSessionDaoSupport {
 	}
 
 	public void delete(int num, String nick) {
+		getSqlSession().delete("withdrawalDelete", nick);
 		getSqlSession().delete("deleteMemberCascade", nick);
 		getSqlSession().delete("deleteMember", num);
 	}
