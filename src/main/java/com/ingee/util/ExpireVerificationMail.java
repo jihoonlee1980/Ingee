@@ -21,7 +21,7 @@ public class ExpireVerificationMail {
 	// final String path =
 	// "C:\\Users\\jihyun\\Desktop\\egov\\eGovFrameDev-3.6.0-64bit\\workspace\\InGeeFanClub\\src\\main\\webapp\\resources";
 
-	@Scheduled(cron = "0/30 * * * * *")
+	@Scheduled(cron = "0 0 * * * *")
 	public void expireVerificationMail() {
 		List<Integer> nums = memberDAO.expireMemberNum();
 
