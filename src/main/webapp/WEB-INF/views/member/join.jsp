@@ -324,8 +324,8 @@
 										</select>
 									</div>
 			                    </div>
-			                    <div class="col-sm-6">
-			                    	<span class="region" style="text-decoration: underline; cursor: pointer; line-height: 100%; vertical-align: bottom;">Unfold the regional network.</span>
+			                    <div class="col-sm-12" style="margin-left: 20px;">
+			                    	<span class="region" style="text-decoration: underline; cursor: pointer; font-size: 9pt;">• Please click below to find which group you belong to in the US. If you are not living in the US, please select " West"</span>
 			                    </div>
 			                    <div class="col-sm-12 region-div" style="display: none;">
 			                    	<img alt="" src="${root }/img/main/region.jpg" style="max-width: 100%;" onclick="imageView(this, 'img/main/region.jpg')">

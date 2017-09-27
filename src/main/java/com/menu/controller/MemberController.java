@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,13 +29,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.ingee.util.MailSender;
 import com.ingee.util.UploadFileWriter;
 import com.menu.model.BoardDAO;
-import com.menu.model.BoardDTO;
 import com.menu.model.CommentDAO;
 import com.menu.model.MemberDAO;
 import com.menu.model.MemberDTO;
-import com.nhncorp.lucy.security.xss.XssPreventer;
-
-import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/member")
@@ -52,9 +47,9 @@ public class MemberController {
 
 	// final String path =
 	// "/home/hosting_users/ingeefanclub/tomcat/webapps/ROOT/resources";
+	final String path = "/home/ubuntu/apache-tomcat-8.0.46/webapps/ROOT/resources";
 	// final String path =
-	// "/home/ubuntu/apache-tomcat-8.0.46/webapps/ROOT/resources";
-	final String path = "C:\\Users\\jihyun\\Desktop\\egov\\eGovFrameDev-3.6.0-64bit\\workspace\\InGeeFanClub\\src\\main\\webapp\\resources";
+	// "C:\\Users\\jihyun\\Desktop\\egov\\eGovFrameDev-3.6.0-64bit\\workspace\\InGeeFanClub\\src\\main\\webapp\\resources";
 	// final String path =
 	// "C:\\Users\\뢰후니\\git\\Ingee\\src\\main\\webapp\\resources";
 
@@ -149,7 +144,8 @@ public class MemberController {
 			String complete_key = UUID.randomUUID().toString().replace("-", "");
 			String content = "You're almost done — just click the link below to verify your email address and you’re all set.<br>Then, you can use your email address as your InGeefanclub username to log in to your account online.<br><br>"
 					+ "To complete your registration, click the link below:<br><br>"
-					+ "<a target='_blank' href='http://192.168.0.6:8080/member/join/complete?id=" + receiver + "&complete_key=" + complete_key + "'>Confirm your account</a>";
+					+ "<a target='_blank' href='http://192.168.0.6:8080/member/join/complete?id=" + receiver
+					+ "&complete_key=" + complete_key + "'>Confirm your account</a>";
 
 			memberDTO.setComplete_key(complete_key);
 			MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -177,7 +173,7 @@ public class MemberController {
 			redirectAttributes.addFlashAttribute("result", 3);
 		else
 			redirectAttributes.addFlashAttribute("result", 4);
-		
+
 		return "redirect:/member/login";
 	}
 
@@ -186,7 +182,8 @@ public class MemberController {
 			@RequestParam(value = "saveID", required = false) String saveID, HttpServletResponse response,
 			HttpServletRequest request) {
 		String returnURL = "";
-		// 0일때 성공, 1일때 실패(아이디나 비밀번호가 틀림), 2일때 회원가입 + 인증 전, 3일때 회원가입 + 인증 완료, 4일때 인증만료
+		// 0일때 성공, 1일때 실패(아이디나 비밀번호가 틀림), 2일때 회원가입 + 인증 전, 3일때 회원가입 + 인증 완료, 4일때
+		// 인증만료
 		int loginResult = 0;
 		Cookie cookie1;
 		Cookie cookie2;
@@ -204,7 +201,7 @@ public class MemberController {
 		MemberDTO memberDTO = memberDAO.login(loginInfo);
 
 		if (memberDTO != null) {
-			if(memberDTO.getVerification().equals("N")){
+			if (memberDTO.getVerification().equals("N")) {
 				redirectAttributes.addFlashAttribute("result", 2);
 				return "redirect:/member/login";
 			}

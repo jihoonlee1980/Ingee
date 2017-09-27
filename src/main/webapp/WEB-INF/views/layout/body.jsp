@@ -129,7 +129,7 @@
 					<a href="/board/network/northeast/list"> <img src="${root}/img/main/ingee2.png" alt="" class="img-responsive" />
 						<div class="roles">
 							<h5>
-								<strong>NorthEast</strong>
+								<strong>East</strong>
 							</h5>
 						</div>
 					</a>

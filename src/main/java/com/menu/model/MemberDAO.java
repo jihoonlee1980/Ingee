@@ -122,4 +122,12 @@ public class MemberDAO extends SqlSessionDaoSupport {
 
 		return memberDTO;
 	}
+
+	public List<Integer> expireMemberNum() {
+		return getSqlSession().selectList("expireMemberNum");
+	}
+
+	public void expireVerificationMail() {
+		getSqlSession().delete("expireVerificationMail");
+	}
 }

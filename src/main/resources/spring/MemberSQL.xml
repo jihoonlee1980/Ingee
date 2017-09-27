@@ -94,4 +94,10 @@
 	<update id="updateVerfication" parameterType="String">
 		update member set verification = 'Y' where id = #{id}
 	</update>
+	<select id="expireMemberNum" resultType="int">
+		<![CDATA[ select num from member where verification = 'N' and joindate < date_add(now(), interval-1 day)]]> 
+	</select>
+	<delete id="expireVerificationMail">
+		<![CDATA[ delete from member where verification = 'N' and joindate < date_add(now(), interval-1 day)]]> 
+	</delete>
 </mapper>
