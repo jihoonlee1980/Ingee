@@ -144,7 +144,7 @@ public class MemberController {
 			String complete_key = UUID.randomUUID().toString().replace("-", "");
 			String content = "You're almost done — just click the link below to verify your email address and you’re all set.<br>Then, you can use your email address as your InGeefanclub username to log in to your account online.<br><br>"
 					+ "To complete your registration, click the link below:<br><br>"
-					+ "<a target='_blank' href='http://192.168.0.6:8080/member/join/complete?id=" + receiver
+					+ "<a target='_blank' href='http://ingeefanclub.com/member/join/complete?id=" + receiver
 					+ "&complete_key=" + complete_key + "'>Confirm your account</a>";
 
 			memberDTO.setComplete_key(complete_key);
