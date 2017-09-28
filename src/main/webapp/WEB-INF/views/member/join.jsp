@@ -256,7 +256,7 @@
 										<div class="input-group-addon">
 											<i class="fa fa-smile-o"></i>
 			                            </div>
-			                            <input type="text" class="form-control join_text" id="nick" placeholder="nickname(Case insensitive)" name="nick" required="required">
+			                            <input type="text" class="form-control join_text" id="nick" placeholder="nickname(case insensitive)" name="nick" required="required">
 			                            <button type="button" id="nickCheckBtn" class="btn btn-success" onclick="nickValidCheck();">Verify</button>
 									</div>
 								</div>
@@ -278,7 +278,7 @@
 										<div class="input-group-addon">
 											<i class="fa fa-lock"></i>
 			                            </div>
-			                    		<input type="password" class="form-control" id="pass" placeholder="password(Case insensitive.)" name="pass" required="required" maxlength="20">
+			                    		<input type="password" class="form-control" id="pass" placeholder="password(case insensitive.)" name="pass" required="required" maxlength="20">
 			                        </div>
 								</div>  
 								 <div class="col-sm-6">
@@ -296,7 +296,7 @@
 										<div class="input-group-addon">
 											<i class="fa fa-mobile"></i>
 										</div>
-					                    <input type="text" class="form-control" id="hp" placeholder="HP(ex.123-123-1234)" name="hp" required="required">
+					                    <input type="text" class="form-control" id="hp" placeholder="cell phone(eg.123-123-1234)" name="hp" required="required">
 									</div>                                    
 								</div>
 								 <div class="col-sm-6">
@@ -340,7 +340,7 @@
 										<input type="text" class="form-control zipcode" id="detailed_address" placeholder="detailed_address" name="detailed_address" style="width: 100%;" required="required">
 										<input type="text" class="form-control zipcode" id="city" placeholder="city" name="city" style="width: 20%;" required="required" readonly="readonly">
 										<input type="text" class="form-control zipcode" id="state" placeholder="state" name="state" style="width: 20%;" required="required" readonly="readonly">
-										<input type="text" class="form-control zipcode" id="zipcode" name="zipcode" placeholder="zipcode" style="width: 25%;">
+										<input type="text" class="form-control zipcode" id="zipcode" name="zipcode" placeholder="zipcode(eg.10001)" style="width: 25%;">
 										<input type="button" class="btn btn-success form-control zipcode" id="zipcode_btn" value="Search" style="width: 10%">
 									</div>
 								</div>
@@ -348,7 +348,7 @@
 			                      
 							<div class="form-group">
 								<div class="col-sm-12">
-									<button id="contacts-submit" type="submit" class="btn btn-default btn-info" style="float:right;">sing up</button>
+									<button id="contacts-submit" type="submit" class="btn btn-default btn-info" style="float:right;">Sign up</button>
 								</div>
 							</div>
 						</form>
