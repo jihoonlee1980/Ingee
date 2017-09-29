@@ -362,6 +362,7 @@ public class MemberController {
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public ModelAndView profileUpdate(MemberDTO memberDTO, HttpSession session,
 			@RequestParam(value = "remove_file", required = false) String remove_file) {
+		String saved_filename = "";
 		String profilePath = path + "/profile";
 		MultipartFile profile_file = memberDTO.getProfile_file();
 		MemberDTO currentDTO = memberDAO.get(memberDTO.getNum());
@@ -394,7 +395,7 @@ public class MemberController {
 
 			String originFileName = profile_file.getOriginalFilename();
 			String extension = originFileName.substring(originFileName.lastIndexOf("."));
-			String saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000
+			saved_filename = UUID.randomUUID().toString().split("-")[0] + System.currentTimeMillis() % 10000000
 					+ extension;
 
 			while (memberDAO.find("saved_filename", saved_filename) != null) {
@@ -408,12 +409,15 @@ public class MemberController {
 			UploadFileWriter uploadFileWriter = new UploadFileWriter();
 			uploadFileWriter.writeFile(profile_file, profilePath, saved_filename);
 		} else {
-			memberDTO.setSaved_filename(dbDTO.getSaved_filename().equals("") ? "NO" : dbDTO.getSaved_filename());
-			memberDTO.setOrigin_filename(dbDTO.getSaved_filename().equals("") ? "" : dbDTO.getOrigin_filename());
+			if(dbDTO.getSaved_filename().equals(""))
+				dbDTO.setSaved_filename("NO");
+			saved_filename = dbDTO.getSaved_filename();
+			memberDTO.setSaved_filename(dbDTO.getSaved_filename());
+			memberDTO.setOrigin_filename(dbDTO.getSaved_filename().equals("NO") ? "" : dbDTO.getOrigin_filename());
 			// memberDTO.setSaved_filename(memberDAO.get(memberDTO.getNum()).getSaved_filename());
 			// memberDTO.setOrigin_filename(memberDAO.get(memberDTO.getNum()).getOrigin_filename());
 		}
-
+		session.setAttribute("profile", saved_filename);
 		ModelAndView modelAndView = new ModelAndView();
 
 		memberDTO = memberDAO.update(memberDTO, "profile");
