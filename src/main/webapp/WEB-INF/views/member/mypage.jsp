@@ -430,8 +430,8 @@
 								<select name="region" class="form-control">
 									<option value="">select..</option>
 									<option value="West" ${memberDTO.region == 'West' ? 'selected' : '' }>West</option>
-									<option value="MidWest" ${memberDTO.region == 'West' ? 'MidWest' : '' }>MidWest</option>
-									<option value="NorthEast" ${memberDTO.region == 'NorthEast' ? 'selected' : '' }>NorthEast</option>
+									<option value="MidWest" ${memberDTO.region == 'MidWest' ? 'MidWest' : '' }>MidWest</option>
+									<option value="NorthEast" ${memberDTO.region == 'NorthEast' ? 'selected' : '' }>East</option>
 									<option value="South" ${memberDTO.region == 'South' ? 'selected' : '' }>South</option>
 								</select>
 							</div>
