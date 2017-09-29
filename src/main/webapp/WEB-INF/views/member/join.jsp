@@ -123,7 +123,7 @@
 	
 	function nickValidCheck(){
 		var nick = $("#nick").val().replace(" ", "");
-		var reg_nick = /[a-zA-Z0-9]{8,16}$/g;
+		var reg_nick = /^[a-zA-Z0-9]{8,16}$/g;
 
 		if(nick == ""){
 			alert("Please enter your nickname.");
@@ -160,8 +160,8 @@
 	}
 	
 	function submitCheck(){
-		var reg_id = /[a-zA-Z0-9]{8,16}$/g;
-		var reg_pass = /[a-zA-Z0-9]{8,20}$/g;
+		var reg_id = /^[a-zA-Z0-9]{8,16}$/g;
+		var reg_pass = /^[a-zA-Z0-9]{8,20}$/g;
 		var reg_hp = /\d{3}-\d{3}-\d{4}/g;
 		var check = true;
 		

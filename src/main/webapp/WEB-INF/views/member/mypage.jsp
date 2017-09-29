@@ -198,47 +198,9 @@
 		}
 	}
 	
-	function idValidCheck(){
-		var id = $("#id").val().replace(" ", "");
-		var reg_email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
-
-		if(id == ""){
-			alert("Please enter your username(eamil address)");
-			return;
-		}
-		
-		if(!reg_email.test(id)){
-			alert("It’s not a valid email form.");
-			return;
-		}
-		
-		$.ajax({
-			url : "/member/check/id",
-			type : "get",
-			data : {"id" : id},
-			dataType : "json",
-			success : function(data){
-				if(data.isValid){
-					alert("Important : Please verify your email address\n Verify your email address\n\n You're almost done — just click the link below to verify your email address and you’re all set. Then, you can use your email address as your InGeefanclub username to log in to your account online.");
-					$("#IDCheckBtn").prop("disabled", true);
-				} else {
-					alert(id + " is in use by others");
-				}
-			},
-			statusCode : {
-				404 : function() {
-					alert("No data.");
-				},
-				500 : function() {
-					alert("Server or grammatical error.");
-				}
-			}
-		});
-	}
-	
 	function nickValidCheck(){
 		var nick = $("#nick").val().replace(" ", "");
-		var reg_nick = /[a-zA-Z0-9]{8,16}$/g;
+		var reg_nick = /^[a-zA-Z0-9]{8,16}$/g;
 
 		if(nick == ""){
 			alert("Please enter your nickname");

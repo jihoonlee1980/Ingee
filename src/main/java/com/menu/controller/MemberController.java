@@ -409,7 +409,7 @@ public class MemberController {
 			UploadFileWriter uploadFileWriter = new UploadFileWriter();
 			uploadFileWriter.writeFile(profile_file, profilePath, saved_filename);
 		} else {
-			if(dbDTO.getSaved_filename().equals(""))
+			if (dbDTO.getSaved_filename().equals(""))
 				dbDTO.setSaved_filename("NO");
 			saved_filename = dbDTO.getSaved_filename();
 			memberDTO.setSaved_filename(dbDTO.getSaved_filename());
