@@ -48,6 +48,10 @@
 .list-li:hover{
 	background: #cad0a7;
 }
+.chatlist-id {
+	overflow:hidden;
+	display:block;
+}
 #chatListMoreBtn{
 	display:none;
 	border:0;
@@ -162,7 +166,7 @@
 				+ "</span>"
 				+ "<div class='chat-body clearfix'>"
 				+ "<div class='header dropdown'>"
-				+ "<strong class='primary-font dropdown-toggle message-id' data-toggle='dropdown' title='"+data[2]+"'>"+data[1]+"</strong> <small class='pull-right text-muted'>"
+				+ "<strong class='primary-font dropdown-toggle chatlist-id' data-toggle='dropdown' title='"+data[1]+"("+data[2]+")'>"+data[1]+"</strong> <small class='pull-right text-muted'>"
 				+ "<i class='fa fa-clock-o' aria-hidden='true'></i> "+currentTime+"</small>"
 				+ "<ul class='dropdown-menu' role='menu' aria-labelledby='menu1'>"
 				+ "<li role='presentation' style='min-height:0px;'><a role='menuitem' tabindex='-1' href='#' onclick='popupOpen(\""+data[2]+"\")'>Profile</a></li>"
@@ -222,7 +226,7 @@
 							+ " class='img-circle'></span>"
 							+ " <div class='chat-body clearfix'>"
 							+ " <div class='header dropdown'>"
-							+ " <strong class='primary-font dropdown-toggle message-id'"
+							+ " <strong class='primary-font dropdown-toggle chatlist-id'"
 							+ " data-toggle='dropdown' title='"+id+"' style='font-size:0.8em; line-height:50px; white-space: nowrap; text-overflow:ellipsis;'>"+nick+"</strong>"										
 							+ " <ul class='dropdown-menu' role='menu' aria-labelledby='menu1' style='min-width:120px;'>"
 							+ " <li role='presentation' style='min-height: 0px;'><a "
